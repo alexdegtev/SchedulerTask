@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<InformationModel date_begin="01.04.2016 8:00:00" date_end="25.12.2016 17:00:00" xmlns= "http://tempuri.org/VariableData.xsd">
+  <WaresInformation>
+    <Product name="Стойка X">
+      <Part name="Стойка X01-1" num_products="1" num_plate="1" priority="1" date_begin="10.04.2016" date_end="2.05.2016">
+        <Operation id="11" name="Операция 1" state="SCHEDULED" date_begin="11.04.2016 08:00:00" date_end="19.04.2016 10:00:00" equipment="7" duration="50">
+        </Operation>
+        <Operation id="12" name="Операция 2" state="SCHEDULED" date_begin="11.04.2016 08:00:00" date_end="13.04.2016 12:00:00" equipment="3" duration="20">
+        </Operation>
+        <Operation id="13" name="Операция 3" state="SCHEDULED" date_begin="19.04.2016 10:00:00" date_end="25.04.2016 08:00:00" equipment="7" duration="30">
+          <Previous id="11" />
+          <Previous id="12" />
+        </Operation>
+	<SubPart name="Субблок X1" num_products="1">
+          <Operation id="14" name="Операция 4" state="SCHEDULED" date_begin="13.04.2016 12:00:00" date_end="02.5.2016 08:00:00" equipment="3" duration="100">
+          </Operation>
+	</SubPart>
+      </Part>
+    </Product>
+  </WaresInformation>
+  <AlgorithmInformation></AlgorithmInformation>
+</InformationModel>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<InformationModel xmlns="http://tempuri.org/PersistentData.xsd" date_begin="01.04.2016 8:00:00" date_end="25.12.2016">
+  <CalendarInformation date_begin="01.04.2016" date_end="25.12.2016">
+    <EquipmentGroup type="01">
+      <Include day_of_week="1"  time_period="8:00:00-17:00:00" />
+      <Include day_of_week="2"  time_period="8:00:00-17:00:00" />
+      <Include day_of_week="3"  time_period="8:00:00-17:00:00" />
+      <Include day_of_week="4"  time_period="8:00:00-17:00:00" />
+      <Include day_of_week="5"  time_period="8:00:00-17:00:00" />
+      <Exclude day_of_week="1"  time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="2"  time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="3"  time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="4"  time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="5"  time_period="13:00:00-14:00:00" />
+    </EquipmentGroup>
+  </CalendarInformation>
+  <EquipmentInformation>
+    <EquipmentGroup id="1" name="Токарные станки класса 1 и 2" type="01" workingmode="INTERUPTIONS">
+      <EquipmentGroup id="2" name="Токарные станки класса 1" type="01" workingmode="INTERUPTIONS">
+        <Equipment id="3" name="ТС1-3001-3" />
+      </EquipmentGroup>
+      <EquipmentGroup id="6" name="Токарные станки класса 2" type="01" workingmode="INTERUPTIONS">
+        <Equipment id="7" name="ТС2-3001-7" />
+      </EquipmentGroup>
+    </EquipmentGroup>
+  </EquipmentInformation>
+</InformationModel>
