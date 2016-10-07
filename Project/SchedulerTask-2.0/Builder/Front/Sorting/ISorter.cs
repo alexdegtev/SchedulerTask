@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Builder
+namespace Builder.Front.Sorting
 {
-    public class EquipmentManager
+    public interface ISorter
     {
+        void Sort();
     }
 }

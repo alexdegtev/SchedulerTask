@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Builder
 {
+    /// <summary>
+    /// Class for partys.
+    /// </summary>
     public class Party
     {
 

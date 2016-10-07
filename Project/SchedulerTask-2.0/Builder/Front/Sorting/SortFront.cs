@@ -4,16 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Builder
+namespace Builder.Front.Sorting
 {
     /// <summary>
-    /// Facade for Builder.
+    /// Класс сортировки фронта.
     /// </summary>
-    public class Builder
+    public class SortFront : ISorter
     {
-        public void Run()
-        {
-            
+        public void Sort()
+        {            
         }
     }
 }
