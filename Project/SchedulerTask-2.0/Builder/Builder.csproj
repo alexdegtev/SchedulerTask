@@ -43,7 +43,6 @@
   <ItemGroup>
     <Compile Include="Builder.cs" />
     <Compile Include="Calendar.cs" />
-    <Compile Include="EquipmentManager.cs" />
     <Compile Include="Equipment\EquipmentManager.cs" />
     <Compile Include="Equipment\GroupEquipment.cs" />
     <Compile Include="Equipment\IEquipment.cs" />
@@ -51,6 +50,8 @@
     <Compile Include="Front\Building\DefaultBuilder.cs" />
     <Compile Include="Front\Building\IBuilder.cs" />
     <Compile Include="Front\FrontBuilding.cs" />
+    <Compile Include="Front\Sorting\ISorter.cs" />
+    <Compile Include="Front\Sorting\SortFront.cs" />
     <Compile Include="IO\Reader.cs" />
     <Compile Include="IO\Writer.cs" />
     <Compile Include="Operation.cs" />
@@ -61,9 +62,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Front\Sorting\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

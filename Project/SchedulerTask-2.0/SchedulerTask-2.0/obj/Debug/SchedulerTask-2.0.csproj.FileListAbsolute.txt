@@ -1,1 +1,2 @@
 D:\projects\C#\SchedulerTask-2.0\SchedulerTask-2.0\bin\Debug\SchedulerTask-2.0.exe.config
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\bin\Debug\SchedulerTask-2.0.exe.config

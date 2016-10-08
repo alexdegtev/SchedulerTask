@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Builder
 {
+    /// <summary>
+    /// Class for calendar.
+    /// </summary>
     public class Calendar
     {
 
