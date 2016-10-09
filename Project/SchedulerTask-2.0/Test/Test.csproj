@@ -51,11 +51,10 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Builder\OperationTest.cs" />
+    <Compile Include="Builder\DecisionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Builder\Decision\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
