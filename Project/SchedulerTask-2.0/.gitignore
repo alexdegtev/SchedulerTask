@@ -2,3 +2,7 @@
 *.pdb
 SchedulerTask-2.0/bin/
 SchedulerTask-2.0/obj/
+Test/bin/
+Test/obj/
+Builder/bin/
+Builder/obj/
