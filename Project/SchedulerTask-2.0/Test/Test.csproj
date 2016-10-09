@@ -54,7 +54,12 @@
     <Compile Include="Builder\DecisionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Builder\Builder.csproj">
+      <Project>{fc6422c1-3a74-42bc-855a-6f522375fd8c}</Project>
+      <Name>Builder</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
