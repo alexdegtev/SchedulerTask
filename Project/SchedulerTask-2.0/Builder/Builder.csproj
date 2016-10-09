@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Builder.cs" />
     <Compile Include="Calendar.cs" />
+    <Compile Include="Decision.cs" />
     <Compile Include="Equipment\EquipmentManager.cs" />
     <Compile Include="Equipment\GroupEquipment.cs" />
     <Compile Include="Equipment\IEquipment.cs" />

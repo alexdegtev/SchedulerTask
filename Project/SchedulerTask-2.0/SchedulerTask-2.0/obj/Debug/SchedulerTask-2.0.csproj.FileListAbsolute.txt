@@ -1,2 +1,10 @@
 D:\projects\C#\SchedulerTask-2.0\SchedulerTask-2.0\bin\Debug\SchedulerTask-2.0.exe.config
 D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\bin\Debug\SchedulerTask-2.0.exe.config
+D:\SchedulerTask-2.0\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\bin\Debug\SchedulerTask-2.0.exe.config
+D:\SchedulerTask-2.0\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\bin\Debug\SchedulerTask-2.0.exe
+D:\SchedulerTask-2.0\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\bin\Debug\SchedulerTask-2.0.pdb
+D:\SchedulerTask-2.0\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\obj\Debug\SchedulerTask-2.0.csprojResolveAssemblyReference.cache
+D:\SchedulerTask-2.0\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\obj\Debug\SchedulerTask_2._0.Properties.Resources.resources
+D:\SchedulerTask-2.0\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\obj\Debug\SchedulerTask-2.0.csproj.GenerateResource.Cache
+D:\SchedulerTask-2.0\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\obj\Debug\SchedulerTask-2.0.exe
+D:\SchedulerTask-2.0\SchedulerTask\Project\SchedulerTask-2.0\SchedulerTask-2.0\obj\Debug\SchedulerTask-2.0.pdb
