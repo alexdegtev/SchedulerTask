@@ -11,7 +11,7 @@ namespace Builder.Front.Sorting
     /// </summary>
     public class SortFront : ISorter
     {
-        public void Sort()
+        public void Sort(List<IOperation> front)
         {            
         }
     }

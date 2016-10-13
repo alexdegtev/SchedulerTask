@@ -9,5 +9,7 @@ namespace Builder.Front.Sorting
     public interface ISorter
     {
         void Sort();
+
+        void Sort(List<IOperation> front);
     }
 }

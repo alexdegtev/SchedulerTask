@@ -10,7 +10,7 @@ namespace Builder
     /// <summary>
     /// Class for saved operation to decision
     /// </summary>
-    class Decision
+    public class Decision
     {
         private DateTime start_time;//real start time of operation in plan
         private DateTime end_time;// real end time of operation in plan
