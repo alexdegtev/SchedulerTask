@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +9,8 @@ namespace Builder.Equipment
     /// <summary>
     /// Implement IEquipment
     /// </summary>
-    class GroupEquipment
+    class GroupEquipment : IEquipment
     {
+        public int GetID();
     }
 }
