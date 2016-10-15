@@ -6,3 +6,5 @@ Test/bin/
 Test/obj/
 Builder/bin/
 Builder/obj/
+Debugger/obj/
+Debugger/bin/
