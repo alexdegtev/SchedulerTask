@@ -42,12 +42,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Builder.cs" />
-    <Compile Include="Calendar.cs" />
+    <Compile Include="TimeCalendar\Calendar.cs" />
+    <Compile Include="TimeCalendar\Interval.cs" />
     <Compile Include="Decision.cs" />
     <Compile Include="Equipment\EquipmentManager.cs" />
     <Compile Include="Equipment\GroupEquipment.cs" />
     <Compile Include="Equipment\IEquipment.cs" />
     <Compile Include="Equipment\SingleEquipment.cs" />
+    <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\EventList.cs" />
     <Compile Include="Front\Building\DefaultBuilder.cs" />
     <Compile Include="Front\Building\IBuilder.cs" />
     <Compile Include="Front\FrontBuilding.cs" />
