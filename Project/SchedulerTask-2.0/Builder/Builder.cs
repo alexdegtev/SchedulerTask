@@ -34,7 +34,7 @@ namespace Builder
             reader.ReadData(out partys, out operations, out equipments);
 
             FrontBuilding frontBuilding = new FrontBuilding(partys);
-            frontBuilding.Build();
+            frontBuilding.Build();            
 
             Writer writer = new Writer(outputDir);
             writer.WriteData(operations);
