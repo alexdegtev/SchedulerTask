@@ -16,6 +16,7 @@ namespace Builder.Front.Building
         private List<Party> party;
         private List<IOperation> operations;
         private ISorter frontSorter;
+        //private EquipmentManager equipmentManager;
 
         public DefaultBuilder(List<Party> party, /*EquipmentManager equipmentManager*/ ISorter frontSorter)
         {
@@ -41,7 +42,7 @@ namespace Builder.Front.Building
             List<DateTime> events = new List<DateTime>();
             foreach (Party i in party)
             {
-                events.Add(new DateTime(i.getStartTimeParty()));
+                events.Add(i.getStartTimeParty());
             }
 
             while (events.Count != 0)
