@@ -1,4 +1,6 @@
-﻿using Builder.Front.Building;
+﻿using Builder.Equipment;
+using Builder.Front.Building;
+using Builder.Front.Sorting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +13,17 @@ namespace Builder.Front
     {
 
         public IBuilder Builder { get; set; }
+        public ISorter Sorter { get; set; }
 
-        public FrontBuilding(List<Party> party, EquipmentManager equipmentManager)
+        public FrontBuilding(List<Party> party/*, EquipmentManager equipmentManager*/, ISorter sorter)
         {
-            Builder = new DefaultBuilder(party, equipmentManager);
+            Builder = new DefaultBuilder(party, sorter);
 
+        }
+
+        public FrontBuilding(List<Party> party)
+        {
+            Builder = new DefaultBuilder(party, new SortFront());            
         }
 
         public void setFrontBuildingBehaivor(IBuilder frontBuilding)

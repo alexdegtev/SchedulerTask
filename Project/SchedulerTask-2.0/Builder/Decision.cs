@@ -7,10 +7,18 @@ using Builder.Equipment;
 
 namespace Builder
 {
+    public interface IDecision
+    {
+        DateTime GetStartTime();
+        DateTime GetEndTime();
+        SingleEquipment GetEquipment();
+        Operation GetOperation();
+    }
+
     /// <summary>
     /// Class for saved operation to decision
     /// </summary>
-    class Decision
+    public class Decision:IDecision
     {
         private DateTime start_time;//real start time of operation in plan
         private DateTime end_time;// real end time of operation in plan

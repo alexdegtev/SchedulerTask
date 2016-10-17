@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Builder.Front.Sorting
+namespace Debugger
 {
-    public interface ISorter
+    class Program
     {
-        void Sort(List<IOperation> front);
+        static void Main(string[] args)
+        {
+        }
     }
 }

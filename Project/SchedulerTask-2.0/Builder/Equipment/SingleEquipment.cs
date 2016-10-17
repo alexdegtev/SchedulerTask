@@ -1,16 +1,98 @@
-пїњusing System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace Builder.Equipment
 {
     /// <summary>
     /// Implement IEquipment
     /// </summary>
-    public class SingleEquipment
+    public class SingleEquipment : IEquipment
     {
+        int index;
+        Calendar ca; //календарь дл€ текущего оборудовани€
+        int eqid; //id оборудовани€
+        bool occflag; //флаг зан€тости оборудовани€; true - свободно; false - зан€то;
+        string individualname;
+        //Dictionary<int, bool> eqtacts; //словарь часовых тактов; int - значение часа; bool - значение зан€тости оборудовани€ в течение часа 
+        //(true - свободно, false - зан€то); по умолчанию весь интервал, состо€щий из тактов времени считаетс€ свободным
+        DateTime OccupyT1 = DateTime.MinValue;
+        DateTime OccupyT2 = DateTime.MinValue;
 
+        public SingleEquipment(Calendar ca, int id, string individualname)
+        {
+            this.ca = ca;
+            eqid = id;
+            this.individualname = individualname;
+        }
+
+
+        /// <summary>
+        /// получить календарь оборудовани€ 
+        /// </summary>   
+        public Calendar GetCalendar()
+        {
+            return ca;
+        }
+
+        /// <summary>
+        /// получить id оборудовани€ (если оборудование групповое, то возвращаетс€ id группы оборудовани€)
+        /// </summary>      
+        public int GetID()
+        {
+            return eqid;
+        }
+
+
+        /// <summary>
+        /// проверка доступности оборудовани€ в такт времени T
+        /// true - оборудование доступно; false - зан€то
+        /// </summary>        
+        public bool IsNotOccupied(DateTime T)
+        {
+            return OccupyT2 < T;
+        }
+
+        /// <summary>
+        /// «ан€ть оборудование c t1 до t2
+        /// </summary>  
+        public void OccupyEquip(DateTime t1, DateTime t2)
+        {
+            //GetCalendar().OccupyHours(t1, t2);
+            OccupyT1 = t1;
+            OccupyT2 = t2;
+
+        }
+        public IEnumerator GetEnumerator()
+        {
+            return this;
+        }
+
+        public bool MoveNext()
+        {
+            if (index == 1)
+            {
+                return false;
+            }
+
+            index++;
+            return true;
+        }
+
+        public void Reset()
+        {
+            index = -1;
+        }
+
+        public object Current
+        {
+            get
+            {
+                return this;
+            }
+        }
     }
 }
