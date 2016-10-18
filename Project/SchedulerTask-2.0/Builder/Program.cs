@@ -13,24 +13,8 @@ namespace Builder
     {
         static void Main(string[] args)
         {
-            Reader reader = new Reader();
-
-            Dictionary<int, IEquipment> eqdic;
-            eqdic = reader.ReadSystemData();
-
-            List<Party> partlist;
-            Dictionary<int, IOperation> opdic;
-            reader.ReadTechData(out partlist, out opdic);
-
-            // eqdic.Values;
-
-            EquipmentManager em = new EquipmentManager();
-
-            FrontBuilding fb = new FrontBuilding(partlist);
-            fb.Build();
-
-            Writer w = new Writer();
-            w.WriteData(opdic);
+            Builder builder = new Builder("D:/SchedulerTask-2.0/SchedulerTask/Project/SchedulerTask-2.0/TestData/TestDataBuilder/test1/","D:/SchedulerTask-2.0/SchedulerTask/Project/SchedulerTask-2.0/TestData/TestDataBuilder/test1/");
+            builder.Run();
         }
     }
 }
