@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Builder;
 
 namespace SchedulerTask_2._0
 {
@@ -15,6 +16,12 @@ namespace SchedulerTask_2._0
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            BuilderScheduler builder = new BuilderScheduler("D:/SchedulerTask-2.0/SchedulerTask/Project/SchedulerTask-2.0/TestData/TestDataBuilder/test1/", "D:/SchedulerTask-2.0/SchedulerTask/Project/SchedulerTask-2.0/TestData/TestDataBuilder/test1/");
+            builder.Run();
         }
     }
 }
