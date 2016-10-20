@@ -201,7 +201,11 @@ namespace Builder.IO
                 int id = int.Parse(oper.Attribute("id").Value);
                 int duration = int.Parse(oper.Attribute("duration").Value);
                 int group = int.Parse(oper.Attribute("equipmentgroup").Value);
-                tmpop.Add(new Operation(id, oper.Attribute("name").Value, new TimeSpan(duration, 0, 0), pop, eqdic[group], parent));
+                string name = oper.Attribute("name").Value;
+                TimeSpan duration_t=new TimeSpan(duration, 0, 0);
+                IEquipment equipment_ = eqdic[group];
+                Operation tmp = new Operation(id, name,duration_t , pop, equipment_, parent);
+                tmpop.Add(tmp);//new Operation(id, oper.Attribute("name").Value, new TimeSpan(duration, 0, 0), pop, eqdic[group], parent));
                 opdic.Add(id, new Operation(id, oper.Attribute("name").Value, new TimeSpan(duration, 0, 0), pop, eqdic[group], parent));
             }
             return tmpop;
