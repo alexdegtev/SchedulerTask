@@ -1,0 +1,10 @@
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\bin\Debug\DebuggerConsole.exe.config
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\bin\Debug\DebuggerConsole.exe
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\bin\Debug\DebuggerConsole.pdb
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\bin\Debug\Debugger.dll
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\bin\Debug\Builder.dll
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\bin\Debug\Debugger.pdb
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\bin\Debug\Builder.pdb
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\obj\Debug\DebuggerConsole.csprojResolveAssemblyReference.cache
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\obj\Debug\DebuggerConsole.exe
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\DebuggerConsole\obj\Debug\DebuggerConsole.pdb
