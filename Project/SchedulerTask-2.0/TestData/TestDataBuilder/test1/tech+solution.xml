@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<InformationModel date_begin="01.04.2016 8:00:00" date_end="21.04.2017 17:00:00" xmlns="http://tempuri.org/VariableData.xsd">
+<InformationModel date_begin="01.04.2016 8:00:00" date_end="21.04.2017 17:00:00" xmlns= "http://tempuri.org/VariableData.xsd">
   <WaresInformation>
     <Product name="Стойка X">
       <Part name="Стойка X01-1" num_products="1" num_plate="1" priority="1" date_begin="10.04.2016" date_end="02.05.2017">
-        <Operation id="11" name="Операция 1" state="SCHEDULED" duration="50" equipment="3" date_begin="2016-04-11T08:00:00" date_end="2016-04-19T10:00:00"></Operation>
-        <Operation id="12" name="Операция 2" state="SCHEDULED" duration="20" equipment="3" date_begin="2016-04-27T12:00:00" date_end="2016-04-29T17:00:00"></Operation>
+        <Operation id="11" name="Операция 1" state="NOTSCHEDULED" duration="50" equipmentgroup="1">
+        </Operation>
+        <Operation id="12" name="Операция 2" state="NOTSCHEDULED" duration="20" equipmentgroup="2">
+        </Operation>
         <Operation id="13" name="Операция 3" state="NOTSCHEDULED" duration="30" equipmentgroup="6">
           <Previous id="11" />
           <Previous id="12" />
         </Operation>
-        <SubPart name="Субблок X1" num_products="1">
-          <Operation id="14" name="Операция 4" state="NOTSCHEDULED" duration="100" equipmentgroup="6"></Operation>
-        </SubPart>
+	<SubPart name="Субблок X1" num_products="1">
+          <Operation id="14" name="Операция 4" state="NOTSCHEDULED" duration="100" equipmentgroup="6">
+          </Operation>
+	</SubPart>
       </Part>
     </Product>
   </WaresInformation>
