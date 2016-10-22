@@ -59,7 +59,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Builder.cs" />
     <Compile Include="TimeCalendar\Calendar.cs" />
     <Compile Include="TimeCalendar\Interval.cs" />
     <Compile Include="Decision.cs" />
