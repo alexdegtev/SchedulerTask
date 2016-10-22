@@ -37,7 +37,7 @@ namespace Builder
             frontBuilding.Build();            
 
             Writer writer = new Writer(outputDir);
-            writer.WriteData(operations);
+            writer.WriteData(partys);
         }
     }
 }
