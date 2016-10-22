@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Builder.Events;
 using Builder.Front.Sorting;
 
 namespace Builder.Front.Building
@@ -39,10 +40,10 @@ namespace Builder.Front.Building
 
         public void Build()
         {
-            List<DateTime> events = new List<DateTime>();
+            EventList events = new EventList();
             foreach (Party i in party)
             {
-                events.Add(i.getStartTimeParty());
+                events.Add(new Event(i.getStartTimeParty()));
             }
 
             while (events.Count != 0)
@@ -52,18 +53,18 @@ namespace Builder.Front.Building
                 // Формирование фронта
                 foreach (IOperation operation in operations)
                 {
-                    if (!operation.IsEnabled() && operation.PreviousOperationIsEnd(events[0]) &&
-                        DateTime.Compare(operation.GetParty().getStartTimeParty(), events[0]) <= 0)
+                    if (!operation.IsEnabled() && operation.PreviousOperationIsEnd(events[0].Time) &&
+                        DateTime.Compare(operation.GetParty().getStartTimeParty(), events[0].Time) <= 0)
                     {
                         DateTime operationTime;
                         SingleEquipment equipment;
-                        if (EquipmentManager.IsFree(events[0], operation, out operationTime, out equipment))
+                        if (EquipmentManager.IsFree(events[0].Time, operation, out operationTime, out equipment))
                         {
                             front.Add(operation);
                         }
                         else
                         {
-                            events.Add(operationTime);
+                            events.Add(new Event(operationTime));
                         }
                     }
                 }
@@ -77,16 +78,16 @@ namespace Builder.Front.Building
                     DateTime operationTime;
                     SingleEquipment equipment;
 
-                    if (EquipmentManager.IsFree(events[0], operation, out operationTime, out equipment))
+                    if (EquipmentManager.IsFree(events[0].Time, operation, out operationTime, out equipment))
                     {
-                        operation.SetOperationInPlan(events[0], operationTime, equipment);
-                        equipment.OccupyEquip(events[0], operationTime);
+                        operation.SetOperationInPlan(events[0].Time, operationTime, equipment);
+                        equipment.OccupyEquip(events[0].Time, operationTime);
                     }
 
-                    events.Add(operationTime);
+                    events.Add(new Event(operationTime));
                 }
 
-                events.RemoveAt(0);
+                events.RemoveFirst();
             }
 
         }
