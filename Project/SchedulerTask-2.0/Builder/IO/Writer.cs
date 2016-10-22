@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Builder.IO
 {
-    class Writer
+    public class Writer
     {
         /// <summary>
         /// конструктор Writer

@@ -20,11 +20,12 @@ namespace SchedulerTask_2._0
 
         private void button1_Click(object sender, EventArgs e)
         {
-            BuilderScheduler builder = new BuilderScheduler(
+           /* BuilderScheduler builder = new BuilderScheduler(
                 @"..\..\..\TestData\TestDataBuilder\test1\", 
                 @"..\..\..\TestData\TestDataBuilder\test1\"
             );
             builder.Run();
+             */
         }
     }
 }
