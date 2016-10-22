@@ -58,7 +58,7 @@ namespace Builder.IO
         /// <param name="partys"> Список партий.</param>
         /// <param name="operations">Список операций.</param>
         /// <param name="equipments">Список оборудований.</param>
-        public void ReadData(out List<Party> partys, out Dictionary<int, IOperation> operations, out Dictionary<int, IEquipment> equipments)
+        public void ReadData(out List<Party> partys, out Dictionary<int, IOperation> operations, out Dictionary<int, IEquipment> _equipments)
         {
             partys = null;
             operations = null;
@@ -180,8 +180,8 @@ namespace Builder.IO
                     partys.Add(parent);
                 }
             }
-            
 
+            _equipments = equipments;
         }
 
 
@@ -203,10 +203,10 @@ namespace Builder.IO
                 int group = int.Parse(oper.Attribute("equipmentgroup").Value);
                 string name = oper.Attribute("name").Value;
                 TimeSpan duration_t=new TimeSpan(duration, 0, 0);
-                IEquipment equipment_ = eqdic[group];
+                IEquipment equipment_ = equipments[group];
                 Operation tmp = new Operation(id, name,duration_t , pop, equipment_, parent);
                 tmpop.Add(tmp);//new Operation(id, oper.Attribute("name").Value, new TimeSpan(duration, 0, 0), pop, eqdic[group], parent));
-                opdic.Add(id, new Operation(id, oper.Attribute("name").Value, new TimeSpan(duration, 0, 0), pop, eqdic[group], parent));
+                opdic.Add(id, new Operation(id, oper.Attribute("name").Value, new TimeSpan(duration, 0, 0), pop, equipments[group], parent));
             }
             return tmpop;
 
