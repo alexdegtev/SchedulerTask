@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Builder
+namespace Debugger.Exeptions
 {
-    /// <summary>
-    /// Class for calendar.
-    /// </summary>
-    public class Calendar
+    public interface IExeption
     {
-
     }
 }

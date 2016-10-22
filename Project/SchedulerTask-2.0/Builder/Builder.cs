@@ -13,12 +13,12 @@ namespace Builder
     /// <summary>
     /// Facade for Builder.
     /// </summary>
-    public class Builder
+    public class BuilderScheduler
     {
         private string inputDir;
         private string outputDir;
 
-        public Builder(string inputDir, string outputDir)
+        public BuilderScheduler(string inputDir, string outputDir)
         {
             this.inputDir = inputDir;
             this.outputDir = outputDir;
@@ -34,7 +34,7 @@ namespace Builder
             reader.ReadData(out partys, out operations, out equipments);
 
             FrontBuilding frontBuilding = new FrontBuilding(partys);
-            frontBuilding.Build();
+            frontBuilding.Build();            
 
             Writer writer = new Writer(outputDir);
             writer.WriteData(operations);
