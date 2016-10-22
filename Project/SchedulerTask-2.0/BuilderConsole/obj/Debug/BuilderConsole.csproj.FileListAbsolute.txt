@@ -1,0 +1,8 @@
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\BuilderConsole\bin\Debug\BuilderConsole.exe.config
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\BuilderConsole\bin\Debug\BuilderConsole.exe
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\BuilderConsole\bin\Debug\BuilderConsole.pdb
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\BuilderConsole\bin\Debug\Builder.dll
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\BuilderConsole\bin\Debug\Builder.pdb
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\BuilderConsole\obj\Debug\BuilderConsole.csprojResolveAssemblyReference.cache
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\BuilderConsole\obj\Debug\BuilderConsole.exe
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\BuilderConsole\obj\Debug\BuilderConsole.pdb

@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Debugger
+namespace DebuggerConsole
 {
+    /// <summary>
+    /// Клиентсий код для отладчика.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
