@@ -21,8 +21,8 @@ namespace SchedulerTask_2._0
         private void button1_Click(object sender, EventArgs e)
         {
             BuilderScheduler builder = new BuilderScheduler(
-                @"d:\str\SchedulerTask\Project\SchedulerTask-2.0\TestData\TestDataBuilder\test1\", 
-                @"d:\str\SchedulerTask\Project\SchedulerTask-2.0\TestData\TestDataBuilder\test1\"
+                @"..\..\..\TestData\TestDataBuilder\test1\", 
+                @"..\..\..\TestData\TestDataBuilder\test1\"
             );
             builder.Run();
         }
