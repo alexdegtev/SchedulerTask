@@ -17,7 +17,7 @@ namespace BuilderConsole
     {
         static void Main(string[] args)
         {
-            Reader reader = new Reader(args[1]);
+            Reader reader = new Reader(args[0]);
 
             List<Party> partys;
             Dictionary<int, IOperation> operations;
@@ -27,8 +27,8 @@ namespace BuilderConsole
             FrontBuilding frontBuilding = new FrontBuilding(partys);
             frontBuilding.Build();
 
-            //Writer writer = new Writer(args[2]);
-            //writer.WriteData(partys);
+            Writer writer = new Writer(args[1]);
+            writer.WriteData(partys);
         }
     }
 }
