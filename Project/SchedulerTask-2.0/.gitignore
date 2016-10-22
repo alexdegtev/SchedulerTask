@@ -8,3 +8,9 @@ Builder/bin/
 Builder/obj/
 Debugger/obj/
 Debugger/bin/
+BuilderConsole/obj/
+BuilderConsole/bin/
+DebuggerConsole/obj/
+DebuggerConsole/bin/
+Test/bin/
+Test/obj/
