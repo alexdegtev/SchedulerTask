@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Debugger.Exeptions
+namespace Debugger.Exceptions
 {
-    public interface IExeption
+    public interface IException
     {
     }
 }

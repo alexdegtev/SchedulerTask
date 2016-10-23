@@ -48,6 +48,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Builder\Builder.csproj">
+      <Project>{fc6422c1-3a74-42bc-855a-6f522375fd8c}</Project>
+      <Name>Builder</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Debugger\Debugger.csproj">
       <Project>{a2078a78-d9be-4fa4-b6ae-85e61e64ae8e}</Project>
       <Name>Debugger</Name>
