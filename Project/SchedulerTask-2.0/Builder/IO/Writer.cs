@@ -148,6 +148,10 @@ namespace Builder.IO
             foreach (var party in partys)
             {
                 WriteData(party.getPartyOperations());
+                foreach (var part in party.getSubParty())
+                {
+                    WriteData(part.getPartyOperations());
+                }
             }
         }
     }
