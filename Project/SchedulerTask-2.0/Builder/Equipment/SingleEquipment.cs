@@ -53,7 +53,7 @@ namespace Builder.Equipment
         /// </summary>        
         public bool IsNotOccupied(DateTime T)
         {
-            return OccupyT2 < T;
+            return OccupyT2 <= T;
         }
 
         /// <summary>
