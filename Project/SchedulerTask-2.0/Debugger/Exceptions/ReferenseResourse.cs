@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Debagger.Exeptions
+namespace Debugger.Exceptions
 {
     [Serializable]
     public class ReferenseResourse

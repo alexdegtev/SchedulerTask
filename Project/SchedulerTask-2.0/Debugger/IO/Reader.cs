@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Builder;
 
-namespace Debagger.IO
+namespace Debugger.IO
 {
     public class Reader
     {

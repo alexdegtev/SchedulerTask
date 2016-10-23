@@ -44,11 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Exeptions\Exeption.cs" />
-    <Compile Include="Exeptions\IExeption.cs" />
-    <Compile Include="Exeptions\ReferenseResourse.cs" />
-    <Compile Include="FindExeptions\ExeptionsSearch.cs" />
-    <Compile Include="FindExeptions\Seachers\IExeptionSearch.cs" />
+    <Compile Include="Exceptions\Exception.cs" />
+    <Compile Include="Exceptions\IException.cs" />
+    <Compile Include="Exceptions\ReferenseResourse.cs" />
+    <Compile Include="FindExceptions\ExceptionsSearch.cs" />
+    <Compile Include="FindExceptions\Seachers\ExceptionOperations.cs" />
+    <Compile Include="FindExceptions\Seachers\IExceptionSearch.cs" />
     <Compile Include="IO\Reader.cs" />
     <Compile Include="IO\Writer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

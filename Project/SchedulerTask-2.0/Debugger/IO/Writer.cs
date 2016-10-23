@@ -1,12 +1,11 @@
-﻿using Debagger.Exeptions;
-using Debugger.Exeptions;
+﻿using Debugger.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Debagger.IO
+namespace Debugger.IO
 {
     public class Writer
     {
@@ -18,7 +17,7 @@ namespace Debagger.IO
         /// Записать результат в .xml // XmlSerializer
         /// </summary>
         /// <param name="exeptionList"></param>
-        public void WriteLog(List<IExeption> exeptionList)
+        public void WriteLog(List<IException> exeptionList)
         {
 
         }
