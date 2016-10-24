@@ -144,5 +144,13 @@ namespace Builder
             {
                 return decision;
             }
+
+            /// <summary>
+            /// получить ссылку на список предыдущих операций
+            /// </summary>
+            public List<IOperation> GetPrevOperations()
+            {
+                return PreviousOperations;
+            }
     } 
 }
