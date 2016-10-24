@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Debugger;
 using Debugger.Exceptions;
 using Builder;
 using Builder.Equipment;
@@ -22,6 +23,7 @@ namespace Debugger.FindExceptions.Seachers
 
         public List<IException> Execute()
         {
+            ConsoleLogger.Log("Ищем несоответствия в начальных условиях и расписании...");
             List<IException> exceptions = new List<IException>();
 
             // количество совпадений

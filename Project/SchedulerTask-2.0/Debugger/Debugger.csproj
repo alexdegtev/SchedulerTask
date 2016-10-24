@@ -44,12 +44,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleLogger.cs" />
     <Compile Include="Exceptions\Exception.cs" />
     <Compile Include="Exceptions\IException.cs" />
     <Compile Include="Exceptions\ReferenseResourse.cs" />
     <Compile Include="FindExceptions\ExceptionsSearch.cs" />
+    <Compile Include="FindExceptions\Seachers\ExceptionEquipment.cs" />
+    <Compile Include="FindExceptions\Seachers\ExceptionInvalidDate.cs" />
+    <Compile Include="FindExceptions\Seachers\ExceptionInvalidStartDate.cs" />
+    <Compile Include="FindExceptions\Seachers\ExceptionOperationDuration.cs" />
     <Compile Include="FindExceptions\Seachers\ExceptionOperations.cs" />
+    <Compile Include="FindExceptions\Seachers\ExceptionOperationsChain.cs" />
+    <Compile Include="FindExceptions\Seachers\ExceptionSimultaneityCondition.cs" />
+    <Compile Include="FindExceptions\Seachers\ExceptionTimePeriod.cs" />
     <Compile Include="FindExceptions\Seachers\IExceptionSearch.cs" />
+    <Compile Include="FindExceptions\Seachers\WarningEquipmentDowntime.cs" />
+    <Compile Include="FindExceptions\Seachers\WarningNotSheduled.cs" />
+    <Compile Include="FindExceptions\Seachers\WarningTimePeriod.cs" />
     <Compile Include="IO\Reader.cs" />
     <Compile Include="IO\Writer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -38,11 +38,16 @@ namespace Debugger
             exceptionsSeachers = new List<IExceptionSearch>();
             //exceptionsSeachers.Add(new MockupException());
             exceptionsSeachers.Add(new ExceptionOperations(operations, decisions));
-
-            // Находим ошибки и добавляем их в список
-            exceptions = new List<IException>();
-            foreach (var search in exceptionsSeachers)
-                exceptions.AddRange(search.Execute());
+            exceptionsSeachers.Add(new ExceptionEquipment());
+            exceptionsSeachers.Add(new ExceptionOperationDuration());
+            exceptionsSeachers.Add(new ExceptionInvalidStartDate());
+            exceptionsSeachers.Add(new ExceptionOperationsChain(operations, decisions));
+            exceptionsSeachers.Add(new ExceptionSimultaneityCondition());
+            exceptionsSeachers.Add(new ExceptionTimePeriod());
+            exceptionsSeachers.Add(new ExceptionInvalidDate());
+            exceptionsSeachers.Add(new WarningTimePeriod());
+            exceptionsSeachers.Add(new WarningEquipmentDowntime());
+            exceptionsSeachers.Add(new WarningNotSheduled(operations, decisions));
         }
 
         public List<IException> Execute()
