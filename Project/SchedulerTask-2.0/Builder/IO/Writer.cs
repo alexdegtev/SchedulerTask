@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
+using System.IO;
 
 namespace Builder.IO
 {
@@ -22,9 +23,9 @@ namespace Builder.IO
         public Writer(string folderParth)
         {
             this.folderPath = folderParth;
-            //TODO: Создать файл
-            document = XDocument.Load(folderParth + "tech+solution.xml");
-            //document = new XDocument();
+            if (File.Exists(folderParth + "tech + solution.xml")) File.Delete(folderParth + "tech + solution.xml");
+            File.Copy(folderParth + "tech.xml", folderParth + "tech + solution.xml");
+            document = XDocument.Load(folderParth + "tech + solution.xml");
         }
 
         /// <summary>
