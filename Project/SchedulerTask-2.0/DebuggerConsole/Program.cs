@@ -63,9 +63,9 @@ namespace DebuggerConsole
         static void Main(string[] args)
         {
             string pathToFolder = "";
-            TestScheduleA testA = new TestScheduleA();
+            TestScheduleA testA = new TestScheduleA();            
 
-            ExceptionsSearch search = new ExceptionsSearch(testA.GetOperations(), testA.GetEquipment(), testA.GetDecisions());
+            ExceptionsSearch search = new ExceptionsSearch(testA.GetOperations(), testA.GetEquipment(), testA.GetDecisions(), null);
 
             Writer writer = new Writer(pathToFolder);
             List<IException> exceptions = search.Execute();
