@@ -1,5 +1,7 @@
 *.exe
 *.pdb
+SchedulerTask-2.0.v12.suo
+*.suo
 SchedulerTask-2.0/bin/
 SchedulerTask-2.0/obj/
 Test/bin/
