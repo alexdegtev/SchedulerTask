@@ -6,7 +6,6 @@ using Debugger.FindExceptions.Seachers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Debugger
 {
@@ -28,11 +27,14 @@ namespace Debugger
 
         List<IException> exceptions;
 
-        public ExceptionsSearch(Dictionary<int, Operation> operations, Dictionary<int, IEquipment> equipments, List<Decision> decisions)
+        List<Party> partys;
+
+        public ExceptionsSearch(Dictionary<int, Operation> operations, Dictionary<int, IEquipment> equipments, List<Decision> decisions, List<Party> partys)
         {
             this.operations = operations;
             this.equipments = equipments;
             this.decisions = decisions;
+            this.partys = partys;
 
             // Создание списка объектов поиска ошибок
             exceptionsSeachers = new List<IExceptionSearch>();
