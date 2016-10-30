@@ -69,6 +69,18 @@ namespace DebuggerConsole
                 Console.ReadKey();
                 System.Environment.Exit(1);
             }
+            if (!System.IO.Directory.Exists(args[0]))
+            {
+                Console.WriteLine("Указанный путь к входным данным не существует");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
+            if (!System.IO.Directory.Exists(args[1]))
+            {
+                Console.WriteLine("Указанный путь к выходным данным не существует");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
             Reader reader = null;
             try
             {
