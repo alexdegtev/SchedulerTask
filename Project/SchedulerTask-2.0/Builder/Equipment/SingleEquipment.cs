@@ -94,5 +94,11 @@ namespace Builder.Equipment
                 return this;
             }
         }
+
+        public TimeSpan GetTimeWorkInTwentyFourHours()
+        {
+            TimeSpan hours = ca.GetTimeInTwentyFourHours();
+            return hours;
+        }
     }
 }
