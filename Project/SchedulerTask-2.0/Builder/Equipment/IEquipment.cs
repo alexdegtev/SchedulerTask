@@ -11,6 +11,7 @@ namespace Builder.Equipment
         int GetID();
         Calendar GetCalendar();
         //string ToString();
+        TimeSpan GetTimeWorkInTwentyFourHours();
         //bool IsOccupied(DateTime T);
         //void OccupyEquip(DateTime t1, DateTime t2);
     }
