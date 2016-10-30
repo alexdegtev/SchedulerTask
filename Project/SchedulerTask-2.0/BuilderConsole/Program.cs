@@ -16,7 +16,30 @@ namespace BuilderConsole
     {
         static void Main(string[] args)
         {
-            Reader reader = new Reader(args[0]);
+            if (args == null)
+            {
+                Console.WriteLine("Входные данные не указаны");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
+            Reader reader = null;
+            try
+            {
+                reader = new Reader(args[0]);
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                Console.WriteLine("По указанному пути файл не найден");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
+            catch (System.ArgumentException)
+            {
+                Console.WriteLine("Путь содержит недопустимые символы");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
+
 
             List<Party> partys;
             Dictionary<int, IOperation> operations;
@@ -25,8 +48,21 @@ namespace BuilderConsole
 
             FrontBuilding frontBuilding = new FrontBuilding(partys);
             frontBuilding.Build();
-
-            Writer writer = new Writer(args[1]);
+            Writer writer = null;
+            try
+            {
+                writer = new Writer(args[1]);
+            }
+            catch (System.ArgumentException)
+            {
+                Console.WriteLine("Путь содержит недопустимые символы");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
+            catch (System.IO.FileNotFoundException) //игнорируем ошибку т.к. файл создается райтером
+            {
+                
+            }
             writer.WriteData(partys);
         }
     }
