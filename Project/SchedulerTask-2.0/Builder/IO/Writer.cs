@@ -10,21 +10,24 @@ namespace Builder.IO
 {
     public class Writer
     {
-        /// <summary>
-        /// конструктор Writer
-        /// </summary>
-        /// <param name="folderParth"> Путь к сохранению. </param>
-        /// 
-
         XDocument document;
         string folderPath;
 
-        public Writer(string folderParth)
+        /// <summary>
+        /// конструктор Writer
+        /// </summary>
+        /// <param name="output"> Путь к сохранению. </param>
+        /// <param name="input"> Путь к входным данным </param>
+        /// 
+
+
+
+        public Writer(string input, string output)
         {
-            this.folderPath = folderParth;
-            if (File.Exists(folderParth + "tech+solution.xml")) File.Delete(folderParth + "tech+solution.xml");
-            File.Copy(folderParth + "tech.xml", folderParth + "tech+solution.xml");
-            document = XDocument.Load(folderParth + "tech+solution.xml");
+            this.folderPath = output;
+            if (File.Exists(output + "tech+solution.xml")) File.Delete(output + "tech+solution.xml");
+            File.Copy(input + "tech.xml", output + "tech+solution.xml");
+            document = XDocument.Load(output + "tech+solution.xml");
         }
 
         /// <summary>

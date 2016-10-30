@@ -63,7 +63,7 @@ namespace BuilderConsole
             Writer writer = null;
             try
             {
-                writer = new Writer(args[1]);
+                 writer = new Writer(args[0],args[1]);
             }
             catch (System.ArgumentException)
             {
