@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Builder.Events;
 using Builder.Front.Sorting;
 
@@ -41,6 +40,11 @@ namespace Builder.Front.Building
         public void Build()
         {
             EventList events = new EventList();
+            List<IOperation> operations_tmp = new List<IOperation>();
+            foreach (IOperation operation in operations)
+            {
+                operations_tmp.Add(operation);
+            }
             foreach (Party i in party)
             {
                 events.Add(new Event(i.getStartTimeParty()));
@@ -51,7 +55,7 @@ namespace Builder.Front.Building
                 List<IOperation> front = new List<IOperation>();
 
                 // Формирование фронта
-                foreach (IOperation operation in operations)
+                foreach (IOperation operation in operations_tmp)
                 {
                     if (!operation.IsEnabled() && operation.PreviousOperationIsEnd(events[0].Time) &&
                         DateTime.Compare(operation.GetParty().getStartTimeParty(), events[0].Time) <= 0)
@@ -82,6 +86,7 @@ namespace Builder.Front.Building
                     {
                         operation.SetOperationInPlan(events[0].Time, operationTime, equipment);
                         equipment.OccupyEquip(events[0].Time, operationTime);
+                        operations_tmp.Remove(operation);
                     }
 
                     events.Add(new Event(operationTime));
