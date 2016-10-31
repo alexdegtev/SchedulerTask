@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Debugger;
 using Debugger.Exceptions;
 using Builder;
 using Builder.Equipment;
@@ -10,10 +11,10 @@ namespace Debugger.FindExceptions.Seachers
 {
     class ExceptionOperations : IExceptionSearch
     {
-        Dictionary<int, Operation> operations;
+        Dictionary<int, IOperation> operations;
         List<Decision> decisions;
 
-        public ExceptionOperations(Dictionary<int, Operation> operations, List<Decision> decisions)
+        public ExceptionOperations(Dictionary<int, IOperation> operations, List<Decision> decisions)
         {
             this.operations = operations;
             this.decisions = decisions;
@@ -21,6 +22,7 @@ namespace Debugger.FindExceptions.Seachers
 
         public List<IException> Execute()
         {
+            ConsoleLogger.Log("Ищем несоответствия в начальных условиях и расписании...");
             List<IException> exceptions = new List<IException>();
 
             // количество совпадений
