@@ -11,10 +11,10 @@ namespace Debugger.FindExceptions.Seachers
 {
     class WarningNotSheduled : IExceptionSearch
     {
-        Dictionary<int, Operation> operations;
+        Dictionary<int, IOperation> operations;
         List<Decision> decisions;
 
-        public WarningNotSheduled(Dictionary<int, Operation> operations, List<Decision> decisions)
+        public WarningNotSheduled(Dictionary<int, IOperation> operations, List<Decision> decisions)
         {
             // Конструктор
             this.operations = operations;

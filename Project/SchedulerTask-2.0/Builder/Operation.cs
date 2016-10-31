@@ -16,6 +16,8 @@ namespace Builder
             IEquipment GetEquipment();
             Party GetParty();
             Decision GetDecision();
+            List<IOperation> GetPrevOperations();
+            int GetID();
         }
 
         /// <summary>

@@ -11,10 +11,10 @@ namespace Debugger.FindExceptions.Seachers
 {
     class ExceptionOperationsChain : IExceptionSearch
     {
-        Dictionary<int, Operation> operations;
+        Dictionary<int, IOperation> operations;
         List<Decision> decisions;
 
-        public ExceptionOperationsChain(Dictionary<int, Operation> operations, List<Decision> decisions)
+        public ExceptionOperationsChain(Dictionary<int, IOperation> operations, List<Decision> decisions)
         {
             // Конструктор
             this.operations = operations;
