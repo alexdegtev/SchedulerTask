@@ -16,6 +16,8 @@ namespace Builder
             IEquipment GetEquipment();
             Party GetParty();
             Decision GetDecision();
+            List<IOperation> GetPrevOperations();
+            int GetID();
         }
 
         /// <summary>
@@ -143,6 +145,14 @@ namespace Builder
             public Decision GetDecision()
             {
                 return decision;
+            }
+
+            /// <summary>
+            /// получить ссылку на список предыдущих операций
+            /// </summary>
+            public List<IOperation> GetPrevOperations()
+            {
+                return PreviousOperations;
             }
     } 
 }

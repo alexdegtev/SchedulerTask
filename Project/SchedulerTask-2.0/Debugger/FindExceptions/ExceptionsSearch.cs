@@ -14,7 +14,7 @@ namespace Debugger
         /// <summary>
         /// 
         /// </summary>
-        Dictionary<int, Operation> operations;
+        Dictionary<int, IOperation> operations;
 
         /// <summary>
         /// 
@@ -29,7 +29,7 @@ namespace Debugger
 
         List<Party> partys;
 
-        public ExceptionsSearch(Dictionary<int, Operation> operations, Dictionary<int, IEquipment> equipments, List<Decision> decisions, List<Party> partys)
+        public ExceptionsSearch(Dictionary<int, IOperation> operations, Dictionary<int, IEquipment> equipments, List<Decision> decisions, List<Party> partys)
         {
             this.operations = operations;
             this.equipments = equipments;
@@ -40,11 +40,16 @@ namespace Debugger
             exceptionsSeachers = new List<IExceptionSearch>();
             //exceptionsSeachers.Add(new MockupException());
             exceptionsSeachers.Add(new ExceptionOperations(operations, decisions));
-
-            // Находим ошибки и добавляем их в список
-            exceptions = new List<IException>();
-            foreach (var search in exceptionsSeachers)
-                exceptions.AddRange(search.Execute());
+            exceptionsSeachers.Add(new ExceptionEquipment());
+            exceptionsSeachers.Add(new ExceptionOperationDuration());
+            exceptionsSeachers.Add(new ExceptionInvalidStartDate(operations, decisions));
+            exceptionsSeachers.Add(new ExceptionOperationsChain(operations, decisions));
+            exceptionsSeachers.Add(new ExceptionSimultaneityCondition(operations, decisions));
+            exceptionsSeachers.Add(new ExceptionTimePeriod(decisions));
+            exceptionsSeachers.Add(new ExceptionInvalidDate());
+            exceptionsSeachers.Add(new WarningTimePeriod());
+            exceptionsSeachers.Add(new WarningEquipmentDowntime());
+            exceptionsSeachers.Add(new WarningNotSheduled(operations, decisions));
         }
 
         public List<IException> Execute()
