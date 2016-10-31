@@ -87,6 +87,41 @@ namespace DebuggerConsole
             CommandLineParser argsParser = new CommandLineParser(args);
 
             string pathToFolder = "";
+            if (args == null)
+            {
+                Console.WriteLine("Пути к данным не указаны");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
+            if (!System.IO.Directory.Exists(args[0]))
+            {
+                Console.WriteLine("Указанный путь к входным данным не существует");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
+            if (!System.IO.Directory.Exists(args[1]))
+            {
+                Console.WriteLine("Указанный путь к выходным данным не существует");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
+            Reader reader = null;
+            try
+            {
+                reader = new Reader(args[0]);
+            }
+            catch (System.IO.FileNotFoundException)
+            {
+                Console.WriteLine("По указанному пути файл не найден");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
+            catch (System.ArgumentException)
+            {
+                Console.WriteLine("Путь содержит недопустимые символы");
+                Console.ReadKey();
+                System.Environment.Exit(1);
+            }
             TestScheduleA testA = new TestScheduleA();            
 
             ExceptionsSearch search = new ExceptionsSearch(testA.GetOperations(), testA.GetEquipment(), testA.GetDecisions(), null);
