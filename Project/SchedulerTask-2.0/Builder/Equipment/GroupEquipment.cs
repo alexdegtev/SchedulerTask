@@ -21,7 +21,6 @@ namespace Builder.Equipment
             eqid = id;
             this.name = name;
             equiplist = new List<IEquipment>();
-
         }
 
         public void AddEquipment(IEquipment e)
@@ -59,6 +58,13 @@ namespace Builder.Equipment
             }
 
             return false;
+        }
+
+
+        public override string ToString()
+        {
+            return String.Format("<EquipmentGroup id=\"{0}\" name=\"{1}\" workingmode=\"INTERUPTIONS\" />",
+                eqid, name);
         }
 
 

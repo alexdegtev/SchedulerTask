@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
 namespace Builder
 {
     public interface IOperation
@@ -139,6 +140,7 @@ namespace Builder
             return parent_party;
         }
 
+
         /// <summary>
         /// получить ссылку решение для данной операции
         /// </summary>
@@ -154,5 +156,29 @@ namespace Builder
         {
             return PreviousOperations;
         }
-    }
+    
+
+            /// <summary>
+            /// получить ссылку решение для данной операции
+            /// </summary>
+            public Decision GetDecision()
+            {
+                return decision;
+            }
+
+ 
+
+            public override string ToString()
+            {
+                return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\"",
+                    id, name, duration, equipment.GetID());
+
+
+               // return "<Operation id= " + id + " " + "name=" + name + " " + "state=\"NOTSCHEDULED\"" + " " + "duration=" + duration + " "
+                  //  + "equipmentgroup=" + equipment.GetID()+ " " + "\r\n" + foreach (Operation o in PreviousOperations) "<Previous id=" + o.GetID() 
+                  //      +"/>" + "\r\n </Operation>";
+
+            }
+    } 
+
 }
