@@ -16,7 +16,7 @@ namespace BuilderConsole
     {
         static void Main(string[] args)
         {
-            if (args == null)
+            if (args == null || args.GetLength(0) < 2)
             {
                 Console.WriteLine("Входные данные не указаны");
                 Console.ReadKey();
