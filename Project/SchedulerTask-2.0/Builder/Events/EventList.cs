@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Builder.Events
 {
@@ -10,7 +7,8 @@ namespace Builder.Events
     /// </summary>
     public class EventList
     {
-        List<Event> events;
+        private List<Event> events;
+
         public EventList()
         {
             events = new List<Event>();

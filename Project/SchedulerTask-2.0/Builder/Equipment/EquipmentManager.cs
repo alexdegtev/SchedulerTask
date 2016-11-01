@@ -1,35 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Builder.Equipment
 {
    static class EquipmentManager
     {
-
-        /// <summary>
-        /// Поиск свободного оборудования в списке; (возвращаем true, если находим свободное оборудование, false - иначе);
-        /// Доп. выходные параметры:
-        /// operationtime - время окончания операции (для первого случая) или  ближайшее время начала операции (для второго случая); 
-        /// </summary>       
-
         /// <summary>
         /// Поиск свободного оборудования в списке; (возвращаем true, если находим свободное оборудование, false - иначе);
         /// Доп. выходные параметры:
         /// operationtime - время окончания операции (для первого случая) или  ближайшее время начала операции (для второго случая); 
         /// </summary>
-        internal static bool IsFree(DateTime T, IOperation o, out DateTime operationtime, out SingleEquipment equip)
+        internal static bool IsFree(DateTime T, IOperation o, out DateTime operationTime, out SingleEquipment equip)
         {
             TimeSpan t = o.GetDuration();
-            int intervalindex;
 
             foreach (SingleEquipment e in o.GetEquipment())
             {
-                if ((e.IsNotOccupied(T)) && (e.GetCalendar().IsInterval(T, out intervalindex)))
+                int intervalIndex;
+                if ((e.IsNotOccupied(T)) && (e.GetCalendar().IsInterval(T, out intervalIndex)))
                 {
                     equip = e;
-                    operationtime = e.GetCalendar().GetTimeofRelease(T, t, intervalindex);
+                    operationTime = e.GetCalendar().GetTimeofRelease(T, t, intervalIndex);
                     return true;
                 }
             }
@@ -38,7 +28,7 @@ namespace Builder.Equipment
             DateTime mintime = DateTime.MaxValue;
             foreach (SingleEquipment e in o.GetEquipment())
                 if (e.GetCalendar().GetNearestStart(T) <= mintime) mintime = e.GetCalendar().GetNearestStart(T);
-            operationtime = mintime;
+            operationTime = mintime;
 
             return false;
         }

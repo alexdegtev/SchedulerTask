@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Builder.TimeCalendar;
 
-namespace Builder
+namespace Builder.TimeCalendar
 {
     public interface ICalendar
     {
@@ -12,11 +9,11 @@ namespace Builder
     }
 
     /// <summary>
-    /// Class for calendar.
+    /// Class for calendar
     /// </summary>
     public class Calendar
     {
-        List<Interval> calendar;
+        private List<Interval> calendar;
 
         public Calendar(List<Interval> intervallist)
         {
@@ -58,7 +55,11 @@ namespace Builder
             }
 
             for (int i = 0; i < calendar.Count; i++)
-                if ((T > calendar[i].GetEndTime()) && (T < calendar[i + 1].GetStartTime())) { flag = false; return i + 1; }
+                if ((T > calendar[i].GetEndTime()) && (T < calendar[i + 1].GetStartTime()))
+                {
+                    flag = false; 
+                    return i + 1;
+                }
 
             flag = false;
             return -1;

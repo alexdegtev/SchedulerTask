@@ -1,20 +1,17 @@
-﻿using Builder;
+﻿using System.Collections.Generic;
+using Builder;
 using Builder.Equipment;
 using Debugger.Exceptions;
 using Debugger.FindExceptions.Seachers;
-//using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Debugger
+namespace Debugger.FindExceptions
 {
     public class ExceptionsSearch
     {
         /// <summary>
         /// 
         /// </summary>
-        Dictionary<int, Operation> operations;
+        Dictionary<int, IOperation> operations;
 
         /// <summary>
         /// 
@@ -29,7 +26,7 @@ namespace Debugger
 
         List<Party> partys;
 
-        public ExceptionsSearch(Dictionary<int, Operation> operations, Dictionary<int, IEquipment> equipments, List<Decision> decisions, List<Party> partys)
+        public ExceptionsSearch(Dictionary<int, IOperation> operations, Dictionary<int, IEquipment> equipments, List<Decision> decisions, List<Party> partys)
         {
             this.operations = operations;
             this.equipments = equipments;
@@ -42,10 +39,10 @@ namespace Debugger
             exceptionsSeachers.Add(new ExceptionOperations(operations, decisions));
             exceptionsSeachers.Add(new ExceptionEquipment());
             exceptionsSeachers.Add(new ExceptionOperationDuration());
-            exceptionsSeachers.Add(new ExceptionInvalidStartDate());
+            //exceptionsSeachers.Add(new ExceptionInvalidStartDate(operations, decisions));
             exceptionsSeachers.Add(new ExceptionOperationsChain(operations, decisions));
-            exceptionsSeachers.Add(new ExceptionSimultaneityCondition());
-            exceptionsSeachers.Add(new ExceptionTimePeriod());
+            //exceptionsSeachers.Add(new ExceptionSimultaneityCondition(operations, decisions));
+            exceptionsSeachers.Add(new ExceptionTimePeriod(decisions));
             exceptionsSeachers.Add(new ExceptionInvalidDate());
             exceptionsSeachers.Add(new WarningTimePeriod());
             exceptionsSeachers.Add(new WarningEquipmentDowntime());

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Debugger;
+﻿using System.Collections.Generic;
 using Debugger.Exceptions;
-using Builder;
-using Builder.Equipment;
 
 namespace Debugger.FindExceptions.Seachers
 {

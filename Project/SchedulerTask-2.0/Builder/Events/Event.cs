@@ -1,28 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Builder
+namespace Builder.Events
 {
     public class Event: IComparable
     {
-        private DateTime time;
-        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="time">Время возникновения события</param>
         public Event(DateTime time)
         {
-            this.time = time;
+            Time = time;
         }
 
-        public DateTime Time
-        {
-            get { return time; }
-            set { }
-        }
+        public DateTime Time { get; private set; }
 
         public int CompareTo(object obj)
         {

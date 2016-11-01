@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
+using Builder.TimeCalendar;
 
 namespace Builder.Equipment
 {
@@ -11,24 +10,22 @@ namespace Builder.Equipment
     /// </summary>
     class GroupEquipment : IEquipment
     {
-        int index;
-        List<IEquipment> equiplist;
-        int eqid; //id оборудования
-        string name;
+        private int index;
+        private List<IEquipment> equipList;
+        private int eqId; //id оборудования
+        private string name;
 
         public GroupEquipment(Calendar ca, int id, string name)
         {
-            eqid = id;
+            eqId = id;
             this.name = name;
-            equiplist = new List<IEquipment>();
-
+            equipList = new List<IEquipment>();
         }
 
         public void AddEquipment(IEquipment e)
         {
-            equiplist.Add(e);
+            equipList.Add(e);
         }
-
 
         ///// <summary>
         ///// Занять оборудование c t1 до t2
@@ -43,9 +40,8 @@ namespace Builder.Equipment
         /// </summary>      
         public int GetID()
         {
-            return eqid;
+            return eqId;
         }
-
 
         /// <summary>
         /// проверка доступности оборудования в такт времени T
@@ -61,7 +57,6 @@ namespace Builder.Equipment
             return false;
         }
 
-
         public IEnumerator GetEnumerator()
         {
             Reset();
@@ -70,17 +65,17 @@ namespace Builder.Equipment
 
         public bool MoveNext()
         {
-            bool res = equiplist[index].MoveNext();
+            bool res = equipList[index].MoveNext();
             if (!res)
             {
                 index++;
 
-                if (index == equiplist.Count)
+                if (index == equipList.Count)
                 {
                     return false;
                 }
 
-                equiplist[index].MoveNext();
+                equipList[index].MoveNext();
             }
 
             return true;
@@ -89,7 +84,7 @@ namespace Builder.Equipment
         public void Reset()
         {
             index = 0;
-            foreach (IEquipment e in equiplist)
+            foreach (IEquipment e in equipList)
                 e.Reset();
         }
 
@@ -97,7 +92,7 @@ namespace Builder.Equipment
         {
             get
             {
-                return equiplist[index].Current;
+                return equipList[index].Current;
             }
         }
     }

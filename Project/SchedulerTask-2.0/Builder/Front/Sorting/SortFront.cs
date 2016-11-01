@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Builder.Front.Sorting
 {
@@ -13,11 +10,11 @@ namespace Builder.Front.Sorting
         private static int comparision(IOperation a, IOperation b)
         {
             int res = 0;
-            if (a.GetParty().getPriority() > b.GetParty().getPriority())
+            if (a.GetParty().GetPriority() > b.GetParty().GetPriority())
                 res = 1;
-            if (a.GetParty().getPriority() == b.GetParty().getPriority())
+            if (a.GetParty().GetPriority() == b.GetParty().GetPriority())
                 res = 0;
-            if (a.GetParty().getPriority() < b.GetParty().getPriority())
+            if (a.GetParty().GetPriority() < b.GetParty().GetPriority())
                 res = -1;
 
             return res;

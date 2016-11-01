@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Xml.Linq;
 using System.IO;
 
@@ -16,22 +14,19 @@ namespace Builder.IO
         /// <summary>
         /// конструктор Writer
         /// </summary>
-        /// <param name="output"> Путь к сохранению. </param>
-        /// <param name="input"> Путь к входным данным </param>
+        /// <param name="output">Путь к сохранению</param>
+        /// <param name="input">Путь к входным данным</param>
         /// 
-
-
-
         public Writer(string input, string output)
         {
-            this.folderPath = output;
+            folderPath = output;
             if (File.Exists(output + "tech+solution.xml")) File.Delete(output + "tech+solution.xml");
             File.Copy(input + "tech.xml", output + "tech+solution.xml");
             document = XDocument.Load(output + "tech+solution.xml");
         }
 
         /// <summary>
-        /// Записать результат.
+        /// Записать результат
         /// </summary>
         /// <param name="operations"></param>
         public void WriteData(Dictionary<int, IOperation> operations)
@@ -42,7 +37,7 @@ namespace Builder.IO
             {
                 Decision d = o.Value.GetDecision();
                 if (d == null) continue;
-                string id = Convert.ToString(d.GetOperation().GetID());
+                string id = Convert.ToString(d.GetOperation().GetId());
                 bool found = false;
                 foreach (XElement product in root.Descendants(df + "Product"))
                 {
@@ -98,7 +93,7 @@ namespace Builder.IO
             {
                 Decision d = o.GetDecision();
                 if (d == null) continue;
-                string id = Convert.ToString(d.GetOperation().GetID());
+                string id = Convert.ToString(d.GetOperation().GetId());
                 bool found = false;
                 foreach (XElement product in root.Descendants(df + "Product"))
                 {
@@ -150,10 +145,10 @@ namespace Builder.IO
         {
             foreach (var party in partys)
             {
-                WriteData(party.getPartyOperations());
-                foreach (var part in party.getSubParty())
+                WriteData(party.GetPartyOperations());
+                foreach (var part in party.GetSubParty())
                 {
-                    WriteData(part.getPartyOperations());
+                    WriteData(part.GetPartyOperations());
                 }
             }
         }
