@@ -170,14 +170,21 @@ namespace Builder
 
             public override string ToString()
             {
-                return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\"",
+                if (PreviousOperations.Count == 0)
+                    return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\" />",
                     id, name, duration, equipment.GetID());
 
+                else
+                {
+                    string operation_info = String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\"",
+                    id, name, duration, equipment.GetID());
 
-               // return "<Operation id= " + id + " " + "name=" + name + " " + "state=\"NOTSCHEDULED\"" + " " + "duration=" + duration + " "
-                  //  + "equipmentgroup=" + equipment.GetID()+ " " + "\r\n" + foreach (Operation o in PreviousOperations) "<Previous id=" + o.GetID() 
-                  //      +"/>" + "\r\n </Operation>";
+                    foreach (Operation o in PreviousOperations)
+                        operation_info += "\r\n<Previous id=" + o.GetID() + "/>";
 
+                    operation_info += "\r\n </Operation>";
+                    return operation_info;
+                }
             }
     } 
 

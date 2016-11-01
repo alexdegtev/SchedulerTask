@@ -67,8 +67,12 @@ namespace Builder
         
         public override string ToString()
         {
-            return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"SCHEDULED\" date_begin=\"{2}\" date_end=\"{3}\" equipment=\"{4}\" duration=\"{5}\"> </Operation>",
-                equipment_id, GetOperation().GetName(),start_time,end_time, GetOperation().GetEquipment(),GetOperation().GetDuration());
+            string isscheduled;
+            if (GetOperation()!= null) isscheduled = "SCHEDULED";
+            else isscheduled = "NOTSCHEDULED";
+
+            return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"{2}\" date_begin=\"{3}\" date_end=\"{4}\" equipment=\"{4}\" duration=\"{5}\"> </Operation>",
+                equipment_id, GetOperation().GetName(), isscheduled, start_time,end_time, GetOperation().GetEquipment(),GetOperation().GetDuration());
         }
     }
 }
