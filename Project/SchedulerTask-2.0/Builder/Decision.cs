@@ -64,5 +64,12 @@ namespace Builder
         {
             return op;
         }
+
+        
+        public override string ToString()
+        {
+            return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"SCHEDULED\" date_begin=\"{2}\" date_end=\"{3}\" equipment=\"{4}\" duration=\"{5}\"> </Operation>",
+                equipment_id, GetOperation().GetName(),start_time,end_time, GetOperation().GetEquipment(),GetOperation().GetDuration());
+        }
     }
 }
