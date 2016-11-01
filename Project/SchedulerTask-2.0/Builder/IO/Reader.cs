@@ -1,12 +1,11 @@
 using Builder.Equipment;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Xml.Linq;
 using System.Globalization;
 using Builder.TimeCalendar;
-
+using System.IO;
+using Calendar = Builder.TimeCalendar.Calendar;
 
 namespace Builder.IO
 {
@@ -42,21 +41,36 @@ namespace Builder.IO
 
 
         /// <summary>
-        /// констуктор ридера
+        /// Констуктор ридера
         /// </summary>
-        /// <param name="folderPath"> Путь к .xml файлам.</param>
+        /// <param name="folderPath">Путь к .xml файлам</param>
         public Reader(string folderPath)
         {
+            try
+            {
+                sdata = XDocument.Load(folderPath + "system.xml");
+            }
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("По указанному пути файл system.xml не найден");
+            }
 
-            sdata = XDocument.Load(folderPath + "system.xml");
-            tdata = XDocument.Load(folderPath + "tech.xml");
+            try
+            {
+                tdata = XDocument.Load(folderPath + "tech.xml");
+            }
+            catch (FileNotFoundException)
+            {
+                throw new FileNotFoundException("По указанному пути файл tech.xml не найден");
+            }
         }
+
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="partys"> Список партий.</param>
-        /// <param name="operations">Список операций.</param>
-        /// <param name="equipments">Список оборудований.</param>
+        /// <param name="partys">Список партий</param>
+        /// <param name="operations">Список операций</param>
+        /// <param name="equipments">Список оборудований</param>
         public void ReadData(out List<Party> partys, out Dictionary<int, IOperation> operations, out Dictionary<int, IEquipment> _equipments)
         {
             partys = null;
@@ -163,7 +177,7 @@ namespace Builder.IO
                     tmpop = ReadOperations(part, parent, operations);
                     foreach (IOperation op in tmpop)
                     {
-                        parent.addOperationToForParty(op);
+                        parent.AddOperationToForParty(op);
                     }
                     foreach (XElement subpart in part.Elements(df + "SubPart"))
                     {
@@ -171,9 +185,9 @@ namespace Builder.IO
                         tmpop = ReadOperations(subpart, parent, operations);
                         foreach (IOperation op in tmpop)
                         {
-                            sp.addOperationToForParty(op);
+                            sp.AddOperationToForParty(op);
                         }
-                        parent.addSubPArty(sp);
+                        parent.AddSubPArty(sp);
                         //partys.Add(sp);
                     }
                     partys.Add(parent);
@@ -182,7 +196,6 @@ namespace Builder.IO
 
             _equipments = equipments;
         }
-
 
         private List<IOperation> ReadOperations(XElement part, Party parent, Dictionary<int, IOperation> opdic)
         {
@@ -210,6 +223,7 @@ namespace Builder.IO
             return tmpop;
 
         }
+
         private Interval SeparateInterval(Interval ii, DateTime start, DateTime end, out Interval oi)
         {
             oi = new Interval(end, ii.GetEndTime());
@@ -217,4 +231,3 @@ namespace Builder.IO
         }
     }
 }
-

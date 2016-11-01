@@ -4,54 +4,48 @@ using Builder.Front;
 using Builder.IO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 
 namespace BuilderConsole
 {
     /// <summary>
-    /// Клиентский код для построителя.
+    /// Клиентский код для построителя
     /// </summary>
     class Program
     {
         static void Main(string[] args)
         {
-            if (args == null)
+            if (args == null || args.Length == 0)
             {
-                Console.WriteLine("Входные данные не указаны");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Console.WriteLine("Пути к данным не указаны");
+                Environment.Exit(1);
             }
-            if (!System.IO.Directory.Exists(args[0]))
+            if (args.Length > 0 && !Directory.Exists(args[0]))
             {
                 Console.WriteLine("Указанный путь к входным данным не существует");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
             }
-            if (!System.IO.Directory.Exists(args[1]))
+            if (args.Length > 1 && !Directory.Exists(args[1]))
             {
                 Console.WriteLine("Указанный путь к выходным данным не существует");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
             }
+
             Reader reader = null;
             try
             {
                 reader = new Reader(args[0]);
             }
-            catch (System.IO.FileNotFoundException)
+            catch (FileNotFoundException exception)
             {
-                Console.WriteLine("По указанному пути файл не найден");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Console.WriteLine(exception.Message);
+                Environment.Exit(1);
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
                 Console.WriteLine("Путь содержит недопустимые символы");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
             }
-
 
             List<Party> partys;
             Dictionary<int, IOperation> operations;
@@ -60,20 +54,21 @@ namespace BuilderConsole
 
             FrontBuilding frontBuilding = new FrontBuilding(partys);
             frontBuilding.Build();
+
             Writer writer = null;
             try
             {
-                 writer = new Writer(args[0],args[1]);
+                // Если передан один аргумент, то его используем как директорию для результирующих файлов
+                writer = args.Length <= 1 ? new Writer(args[0], args[0]) : new Writer(args[0], args[1]);
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
                 Console.WriteLine("Путь содержит недопустимые символы");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
             }
-            catch (System.IO.FileNotFoundException) //игнорируем ошибку т.к. файл создается райтером
+            catch (FileNotFoundException) //игнорируем ошибку т.к. файл создается райтером
             {
-                
+
             }
             writer.WriteData(partys);
         }

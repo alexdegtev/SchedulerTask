@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.IO;
 using Debugger;
 using Debugger.IO;
 using Debugger.Exceptions;
 using Builder;
 using Builder.Equipment;
+using Debugger.FindExceptions;
 
 namespace DebuggerConsole
 {
@@ -41,9 +41,14 @@ namespace DebuggerConsole
             decisions.Add(new Decision(new DateTime(0), new DateTime(200), new SingleEquipment(null, 1, "Станок 3"), invalidOperation));
         }
 
-        public Dictionary<int, Operation> GetOperations()
+        public Dictionary<int, IOperation> GetOperations()
         {
-            return operations;
+            Dictionary<int, IOperation> out_operations = new Dictionary<int, IOperation>();
+            foreach (var operation in operations)
+            {
+                out_operations.Add(operation.Key, operation.Value);
+            }
+            return out_operations;
         }
 
         public Dictionary<int, IEquipment> GetEquipment()
@@ -57,76 +62,158 @@ namespace DebuggerConsole
         }
     }
 
-    /// <summary>
-    /// Клиентсий код для отладчика.
-    /// </summary>
-    class Program
+    public class CommandLineParser
     {
-        public class CommandLineParser
+        private string[] comm_args;
+        private bool is_correct;
+        private string input_dir;
+        private string output_dir;
+
+        public CommandLineParser(string[] args)
         {
-            private string[] comm_args;
+            comm_args = args;
+            input_dir = "";
+            output_dir = "";
 
-            public CommandLineParser(string[] comm_args)
+            switch (comm_args.Length)
             {
-                this.comm_args = comm_args;
-            }
+                case 0:
+                    comm_args = Environment.GetCommandLineArgs();
+                    if (comm_args.Length != 0)
+                    {
+                        int position = comm_args[0].LastIndexOf("\\");
+                        if (position == -1)
+                        {
+                            comm_args[0] = Directory.GetCurrentDirectory();
+                            position = comm_args[0].LastIndexOf("\\");
+                        }
 
-            public string GetInputDir()
-            {
-                return "";
-            }
-
-            public string GetOutputDir()
-            {
-                return "";
+                        for (int i = 0; i <= position; i++)
+                        {
+                            input_dir += comm_args[0][i];
+                            output_dir += comm_args[0][i];
+                        }
+                        is_correct = true;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Не удалось получить параметры");
+                        is_correct = false;
+                    }
+                    break;
+                case 1:
+                    if (Directory.Exists(comm_args[0]))
+                    {
+                        input_dir = comm_args[0];
+                        output_dir = Directory.GetCurrentDirectory();
+                        is_correct = true;
+                    }
+                    else
+                    {
+                        is_correct = false;
+                    }
+                    break;
+                case 2:
+                    if (Directory.Exists(comm_args[0]) && Directory.Exists(comm_args[1]))
+                    {
+                        input_dir = comm_args[0];
+                        output_dir = comm_args[1];
+                        is_correct = true;
+                    }
+                    else
+                    {
+                        is_correct = false;
+                    }
+                    break;
             }
         }
 
+        public string GetInputDir()
+        {
+            return input_dir;
+        }
+
+        public string GetOutputDir()
+        {
+            return output_dir;
+        }
+
+        public bool IsCorrect()
+        {
+            return is_correct;
+        }
+    }
+
+
+    /// <summary>
+    /// Клиентсий код для отладчика
+    /// </summary>
+    class Program
+    {
         static void Main(string[] args)
         {
-            CommandLineParser argsParser = new CommandLineParser(args);
+            //CommandLineParser argsParser = new CommandLineParser(args);
 
-            string pathToFolder = "";
-            if (args == null)
+            if (args == null || args.Length == 0)
             {
                 Console.WriteLine("Пути к данным не указаны");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
             }
-            if (!System.IO.Directory.Exists(args[0]))
+            if (args.Length > 0 && !Directory.Exists(args[0]))
             {
                 Console.WriteLine("Указанный путь к входным данным не существует");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
             }
-            if (!System.IO.Directory.Exists(args[1]))
+            if (args.Length > 1 && !Directory.Exists(args[1]))
             {
                 Console.WriteLine("Указанный путь к выходным данным не существует");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
             }
+
             Reader reader = null;
             try
             {
                 reader = new Reader(args[0]);
             }
-            catch (System.IO.FileNotFoundException)
+            catch (FileNotFoundException exception)
             {
-                Console.WriteLine("По указанному пути файл не найден");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Console.WriteLine(exception.Message);
+                Environment.Exit(1);
             }
-            catch (System.ArgumentException)
+            catch (ArgumentException)
             {
                 Console.WriteLine("Путь содержит недопустимые символы");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Environment.Exit(1);
             }
-            TestScheduleA testA = new TestScheduleA();            
 
+            TestScheduleA testA = new TestScheduleA();
             ExceptionsSearch search = new ExceptionsSearch(testA.GetOperations(), testA.GetEquipment(), testA.GetDecisions(), null);
 
-            Writer writer = new Writer(pathToFolder);
+
+            //Dictionary<int, IOperation> operations;
+            //Dictionary<int, IEquipment> equipments;
+            //List<Decision> decisions;
+            //reader.ReadData(out operations, out equipments, out decisions);
+            //ExceptionsSearch search = new ExceptionsSearch()
+
+
+
+            Writer writer = null;
+            try
+            {
+                // Если передан один аргумент, то его используем как директорию для результирующих файлов
+                writer = args.Length <= 1 ? new Writer(args[0]) : new Writer(args[1]);
+            }
+            catch (ArgumentException)
+            {
+                Console.WriteLine("Путь содержит недопустимые символы");
+                Environment.Exit(1);
+            }
+            catch (FileNotFoundException) //игнорируем ошибку т.к. файл создается райтером
+            {
+
+            }
+
             List<IException> exceptions = search.Execute();
             ConsoleLogger.Log("Найдено ошибок : " + exceptions.Count);
             writer.WriteLog(exceptions);

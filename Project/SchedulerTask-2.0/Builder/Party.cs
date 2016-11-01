@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 
 namespace Builder
 {
@@ -22,7 +19,7 @@ namespace Builder
         //name партии
         private String name;
         //num продукта
-        private int num_products;
+        private int numProducts;
         //родитель(в случае с подпартиями - деревья)
         private Party parent;
         //подпартии
@@ -38,24 +35,24 @@ namespace Builder
         /// <param name="endTime"> Директивный срок(познее время окончания).</param>
         /// <param name="priority"> Приоритет. </param>
         /// <param name="name"> Название партии. </param>
-        /// <param name="num_products"> Номер партии. </param>
-        public Party(DateTime startTime, DateTime endTime, int priority, String name, int num_products)
+        /// <param name="numProducts"> Номер партии. </param>
+        public Party(DateTime startTime, DateTime endTime, int priority, string name, int numProducts)
         {
             this.startTimeParty = startTime;
             this.endTimeParty = endTime;
             this.priority = priority;
             this.name = name;
-            this.num_products = num_products;
+            this.numProducts = numProducts;
             operationsForParty = new List<IOperation>();
             subParty = new List<Party>();
 
         }
 
         //конструктор для подпартий
-        public Party(String name, int num_products)
+        public Party(string name, int numProducts)
         {
             this.name = name;
-            this.num_products = num_products;
+            this.numProducts = numProducts;
             subParty = new List<Party>();
         }
 
@@ -64,7 +61,7 @@ namespace Builder
         }
 
         //добавлениее операций партии
-        public void addOperationToForParty(IOperation operation)
+        public void AddOperationToForParty(IOperation operation)
         {
             if (operationsForParty == null)
             {
@@ -74,7 +71,7 @@ namespace Builder
 
         }
 
-        public void addSubPArty(Party subPart)
+        public void AddSubPArty(Party subPart)
         {
             if (subParty == null)
             {
@@ -82,24 +79,25 @@ namespace Builder
             }
             subParty.Add(subPart);
 
-            if (subPart.getParent() == null)
+            if (subPart.GetParent() == null)
             {
-                subPart.setParent(this);
+                subPart.SetParent(this);
             }
         }
 
-        public Party getParent()
+        public Party GetParent()
         {
             return parent;
         }
-        public void setParent(Party parent)
+
+        public void SetParent(Party parent)
         {
             this.parent = parent;
         }
 
-        public Party getRoot()
+        public Party GetRoot()
         {
-            if (this.parent == null)
+            if (parent == null)
             {
                 return null;
             }
@@ -108,31 +106,31 @@ namespace Builder
                 Party tmp = this;
                 while (true)
                 {
-                    if (tmp.getParent() == null)
+                    if (tmp.GetParent() == null)
                     {
                         // tmp = this;
                         break;
                     }
                     else
                     {
-                        tmp = tmp.getParent();
+                        tmp = tmp.GetParent();
                     }
                 }
                 return tmp;
             }
         }
 
-        public TreeIterator getIterator()
+        public TreeIterator GetIterator()
         {
             if (iterator == null)
             {
-                return new TreeIterator(getRoot());
+                return new TreeIterator(GetRoot());
             }
             return iterator;
 
         }
 
-        public TreeIterator getIterator(Party aRoot)
+        public TreeIterator GetIterator(Party aRoot)
         {
             if (iterator == null)
             {
@@ -142,57 +140,62 @@ namespace Builder
 
         }
 
-        public void setStartTimeParty(DateTime start)
+        public void SetStartTimeParty(DateTime start)
         {
             this.startTimeParty = start;
         }
 
-        public void setEndTimeParty(DateTime end)
+        public void SetEndTimeParty(DateTime end)
         {
             this.endTimeParty = end;
         }
 
-        public void setPriority(int pr)
+        public void SetPriority(int pr)
         {
             this.priority = pr;
         }
 
-        public int getPriority()
+        public int GetPriority()
         {
             return priority;
         }
 
-        public DateTime getStartTimeParty()
+        public DateTime GetStartTimeParty()
         {
             return startTimeParty;
         }
-        public DateTime getEndTimeParty()
+
+        public DateTime GetEndTimeParty()
         {
             return endTimeParty;
         }
-        public string getPartyName()
+
+        public string GetPartyName()
         {
             return name;
         }
-        public void setPartyName(string name)
+
+        public void SetPartyName(string name)
         {
             this.name = name;
         }
-        public void setNum_products(int num)
+
+        public void SetNumProducts(int num)
         {
-            this.num_products = num;
-        }
-        public int getNum_products()
-        {
-            return num_products;
+            numProducts = num;
         }
 
-        public List<IOperation> getPartyOperations()
+        public int GetNumProducts()
+        {
+            return numProducts;
+        }
+
+        public List<IOperation> GetPartyOperations()
         {
             return operationsForParty;
         }
 
-        public List<Party> getSubParty()
+        public List<Party> GetSubParty()
         {
             return subParty;
         }

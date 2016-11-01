@@ -1,21 +1,21 @@
 ﻿using Builder.Equipment;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Builder
 {
         public interface IOperation
         {
             TimeSpan GetDuration();
-            void SetOperationInPlan(DateTime real_start_time, DateTime real_end_time, SingleEquipment real_equipment_id);
-            bool IsEnd(DateTime time_);
+            void SetOperationInPlan(DateTime realStartTime, DateTime realEndTime, SingleEquipment realEquipmentId);
+            bool IsEnd(DateTime time);
             bool IsEnabled();
-            bool PreviousOperationIsEnd(DateTime time_);
+            bool PreviousOperationIsEnd(DateTime time);
             IEquipment GetEquipment();
             Party GetParty();
             Decision GetDecision();
+            List<IOperation> GetPrevOperations();
+            int GetId();
         }
 
         /// <summary>
@@ -26,31 +26,31 @@ namespace Builder
             private int id;//id of operation
             private string name;//name of operatiion
             private TimeSpan duration;//duration of operation
-            private List<IOperation> PreviousOperations;//list of previous operations fo this operation
+            private List<IOperation> previousOperations;//list of previous operations fo this operation
             private bool enable;//flag, if operation in plan-true, else - false
             private IEquipment equipment;//equipment or group of equipment for this operation
             private Decision decision = null;//decision for this operation
-            private Party parent_party;//link to parent party for this operation
+            private Party parentParty;//link to parent party for this operation
             
-            public Operation(int id_, string name_, TimeSpan duration_, List<IOperation> Prev, IEquipment equipment_, Party party)
+            public Operation(int id, string name, TimeSpan duration, List<IOperation> previous, IEquipment equipment, Party party)
             {
-                id = id_;
-                name = name_;
-                duration = duration_;
-                PreviousOperations = new List<IOperation>();
-                foreach (IOperation prev in Prev)
+                this.id = id;
+                this.name = name;
+                this.duration = duration;
+                previousOperations = new List<IOperation>();
+                foreach (IOperation prev in previous)
                 {
-                    PreviousOperations.Add(prev);
+                    previousOperations.Add(prev);
                 }
                 enable = false;
-                equipment = equipment_;
-                parent_party = party;
+                this.equipment = equipment;
+                parentParty = party;
             }
 
             /// <summary>
             /// Get id of operation
             /// </summary>   
-            public int GetID()
+            public int GetId()
             {
                 return id;
             }
@@ -74,10 +74,10 @@ namespace Builder
             /// <summary>
             /// Set operation in plan
             /// </summary>   
-            public void SetOperationInPlan(DateTime real_start_time, DateTime real_end_time, SingleEquipment real_equipment_id)
+            public void SetOperationInPlan(DateTime realStartTime, DateTime realEndTime, SingleEquipment realEquipmentId)
             {
                 enable = true;
-                decision = new Decision(real_start_time, real_end_time, real_equipment_id, this);
+                decision = new Decision(realStartTime, realEndTime, realEquipmentId, this);
             }
 
             /// <summary>
@@ -91,12 +91,12 @@ namespace Builder
             /// <summary>
             /// выполнилась ли операция к тому времени,которое подано на вход
             /// </summary>  
-            public bool IsEnd(DateTime time_)
+            public bool IsEnd(DateTime time)
             {
                 bool end = false;
-                if (this.IsEnabled())
+                if (IsEnabled())
                 {
-                    if (time_ >= decision.GetEndTime())
+                    if (time >= decision.GetEndTime())
                     {
                         end = true;
                     }
@@ -107,12 +107,12 @@ namespace Builder
             /// <summary>
             /// выполнены ли предыдущие операции
             /// </summary>  
-            public bool PreviousOperationIsEnd(DateTime time_)
+            public bool PreviousOperationIsEnd(DateTime time)
             {
                 bool flag = true;
-                foreach (IOperation prev in PreviousOperations)
+                foreach (IOperation prev in previousOperations)
                 {
-                    if (prev.IsEnd(time_) == false)
+                    if (prev.IsEnd(time) == false)
                     {
                         flag = false;
                         break;
@@ -134,7 +134,7 @@ namespace Builder
             /// </summary>   
             public Party GetParty()
             {
-                return parent_party;
+                return parentParty;
             }
 
             /// <summary>
@@ -150,7 +150,7 @@ namespace Builder
             /// </summary>
             public List<IOperation> GetPrevOperations()
             {
-                return PreviousOperations;
+                return previousOperations;
             }
     } 
 }

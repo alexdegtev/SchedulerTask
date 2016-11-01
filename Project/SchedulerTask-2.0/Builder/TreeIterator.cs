@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 
 namespace Builder
 {
     public class TreeIterator
     {
+        private readonly Queue<Party> nodeQueue = new Queue<Party>();
+
         public Party Current { get; set; }
 
         public TreeIterator(Party aRoot)
@@ -15,14 +13,14 @@ namespace Builder
             NodeQueue.Enqueue(aRoot);
         }
 
-        public bool next()
+        public bool Next()
         {
             if (NodeQueue == null || NodeQueue.Count == 0)
                 return false;
 
             Current = NodeQueue.Dequeue();
 
-            foreach (Party subPart in Current.getSubParty())
+            foreach (Party subPart in Current.GetSubParty())
             {
                 NodeQueue.Enqueue(subPart);
             }
@@ -33,9 +31,7 @@ namespace Builder
 
         private Queue<Party> NodeQueue
         {
-            get { return mNodeQueue; }
+            get { return nodeQueue; }
         }
-        private readonly Queue<Party> mNodeQueue = new Queue<Party>();
-
     }
 }

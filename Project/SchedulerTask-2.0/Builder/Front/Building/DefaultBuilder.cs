@@ -1,8 +1,6 @@
 ﻿using Builder.Equipment;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Builder.Events;
 using Builder.Front.Sorting;
 
@@ -26,10 +24,10 @@ namespace Builder.Front.Building
             operations = new List<IOperation>();
             foreach (Party i in party)
             {
-                TreeIterator partyIterator = i.getIterator(i);
-                while (partyIterator.next())
+                TreeIterator partyIterator = i.GetIterator(i);
+                while (partyIterator.Next())
                 {
-                    operations.AddRange(partyIterator.Current.getPartyOperations());
+                    operations.AddRange(partyIterator.Current.GetPartyOperations());
                 }
             }
 
@@ -40,14 +38,14 @@ namespace Builder.Front.Building
         public void Build()
         {
             EventList events = new EventList();
-            List<IOperation> operations_tmp = new List<IOperation>();
+            List<IOperation> operationsTmp = new List<IOperation>();
             foreach (IOperation operation in operations)
             {
-                operations_tmp.Add(operation);
+                operationsTmp.Add(operation);
             }
             foreach (Party i in party)
             {
-                events.Add(new Event(i.getStartTimeParty()));
+                events.Add(new Event(i.GetStartTimeParty()));
             }
 
             while (events.Count != 0)
@@ -55,10 +53,10 @@ namespace Builder.Front.Building
                 List<IOperation> front = new List<IOperation>();
 
                 // Формирование фронта
-                foreach (IOperation operation in operations_tmp)
+                foreach (IOperation operation in operationsTmp)
                 {
                     if (!operation.IsEnabled() && operation.PreviousOperationIsEnd(events[0].Time) &&
-                        DateTime.Compare(operation.GetParty().getStartTimeParty(), events[0].Time) <= 0)
+                        DateTime.Compare(operation.GetParty().GetStartTimeParty(), events[0].Time) <= 0)
                     {
                         DateTime operationTime;
                         SingleEquipment equipment;
@@ -86,7 +84,7 @@ namespace Builder.Front.Building
                     {
                         operation.SetOperationInPlan(events[0].Time, operationTime, equipment);
                         equipment.OccupyEquip(events[0].Time, operationTime);
-                        operations_tmp.Remove(operation);
+                        operationsTmp.Remove(operation);
                     }
 
                     events.Add(new Event(operationTime));

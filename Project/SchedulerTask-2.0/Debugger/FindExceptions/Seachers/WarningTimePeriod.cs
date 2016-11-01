@@ -1,11 +1,5 @@
-﻿//using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Debugger;
+﻿using System.Collections.Generic;
 using Debugger.Exceptions;
-using Builder;
-using Builder.Equipment;
 
 namespace Debugger.FindExceptions.Seachers
 {
@@ -20,8 +14,6 @@ namespace Debugger.FindExceptions.Seachers
         {
             ConsoleLogger.Log("Ищем нарушения директивных сроков...");
             List<IException> exceptions = new List<IException>();
-
-
 
             return exceptions;
         }

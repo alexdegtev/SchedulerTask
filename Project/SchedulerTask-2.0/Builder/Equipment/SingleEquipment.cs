@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using System.Collections;
+using Builder.TimeCalendar;
 
 namespace Builder.Equipment
 {
@@ -12,23 +9,22 @@ namespace Builder.Equipment
     /// </summary>
     public class SingleEquipment : IEquipment
     {
-        int index;
-        Calendar ca; //календарь для текущего оборудования
-        int eqid; //id оборудования
-        bool occflag; //флаг занятости оборудования; true - свободно; false - занято;
-        string individualname;
+        private int index;
+        private Calendar ca; //календарь для текущего оборудования
+        private int eqid; //id оборудования
+        private bool occflag; //флаг занятости оборудования; true - свободно; false - занято;
+        private string individualName;
         //Dictionary<int, bool> eqtacts; //словарь часовых тактов; int - значение часа; bool - значение занятости оборудования в течение часа 
         //(true - свободно, false - занято); по умолчанию весь интервал, состоящий из тактов времени считается свободным
-        DateTime OccupyT1 = DateTime.MinValue;
-        DateTime OccupyT2 = DateTime.MinValue;
+        private DateTime OccupyT1 = DateTime.MinValue;
+        private DateTime OccupyT2 = DateTime.MinValue;
 
-        public SingleEquipment(Calendar ca, int id, string individualname)
+        public SingleEquipment(Calendar ca, int id, string individualName)
         {
             this.ca = ca;
             eqid = id;
-            this.individualname = individualname;
+            this.individualName = individualName;
         }
-
 
         /// <summary>
         /// получить календарь оборудования 
@@ -45,7 +41,6 @@ namespace Builder.Equipment
         {
             return eqid;
         }
-
 
         /// <summary>
         /// проверка доступности оборудования в такт времени T
