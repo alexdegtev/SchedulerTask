@@ -49,50 +49,72 @@ namespace Builder.Front.Building
             {
                 events.Add(new Event(i.getStartTimeParty()));
             }
-
-            while (events.Count != 0)
+            while (operations_tmp.Count != 0) 
             {
-                List<IOperation> front = new List<IOperation>();
-
-                // Формирование фронта
-                foreach (IOperation operation in operations_tmp)
+                while (events.Count != 0)
                 {
-                    if (!operation.IsEnabled() && operation.PreviousOperationIsEnd(events[0].Time) &&
-                        DateTime.Compare(operation.GetParty().getStartTimeParty(), events[0].Time) <= 0)
+                    List<IOperation> front = new List<IOperation>();
+
+                    // Формирование фронта
+                    foreach (IOperation operation in operations_tmp)
+                    {
+                        if (!operation.IsEnabled() && operation.PreviousOperationIsEnd(events[0].Time) &&
+                            DateTime.Compare(operation.GetParty().getStartTimeParty(), events[0].Time) <= 0)
+                        {
+                            DateTime operationTime;
+                            SingleEquipment equipment;
+                            if (EquipmentManager.IsFree(events[0].Time, operation, out operationTime, out equipment))
+                            {
+                                front.Add(operation);
+                            }
+                            else
+                            {
+                                events.Add(new Event(operationTime));
+                            }
+                        }
+                    }
+
+                    // Сортировка фронта
+                    frontSorter.Sort(front);
+
+                    // Назначение операций
+                    foreach (IOperation operation in front)
                     {
                         DateTime operationTime;
                         SingleEquipment equipment;
+
                         if (EquipmentManager.IsFree(events[0].Time, operation, out operationTime, out equipment))
                         {
-                            front.Add(operation);
+                            operation.SetOperationInPlan(events[0].Time, operationTime, equipment);
+                            equipment.OccupyEquip(events[0].Time, operationTime);
+                            operations_tmp.Remove(operation);
                         }
-                        else
-                        {
-                            events.Add(new Event(operationTime));
-                        }
+
+                        events.Add(new Event(operationTime));
                     }
+
+                    events.RemoveFirst();
                 }
-
-                // Сортировка фронта
-                frontSorter.Sort(front);
-
-                // Назначение операций
-                foreach (IOperation operation in front)
+                if (operations_tmp.Count != 0)
                 {
-                    DateTime operationTime;
-                    SingleEquipment equipment;
-
-                    if (EquipmentManager.IsFree(events[0].Time, operation, out operationTime, out equipment))
+                    DateTime new_start_data = new DateTime();
+                    DateTime new_end_data ;
+                    foreach (Party i in party)
                     {
-                        operation.SetOperationInPlan(events[0].Time, operationTime, equipment);
-                        equipment.OccupyEquip(events[0].Time, operationTime);
-                        operations_tmp.Remove(operation);
+                        if (i.getEndTimeParty()>new_start_data)
+                        {
+                            new_start_data = i.getEndTimeParty();
+                        }
                     }
-
-                    events.Add(new Event(operationTime));
+                    double hours = 0;
+                    foreach (IOperation operation in operations_tmp)
+                    { 
+                        hours = hours + ((operation.GetDuration().TotalHours * 24)/(operation.GetEquipment().GetTimeWorkInTwentyFourHours().TotalHours));
+                    }
+                    new_end_data = new_start_data + (new TimeSpan((int)hours, 0, 0));
+                    events.Add(new Event(new_start_data));
+                    //вызвать функцию для дописывания календаря с новыми старт и енд дата
                 }
-
-                events.RemoveFirst();
             }
 
         }

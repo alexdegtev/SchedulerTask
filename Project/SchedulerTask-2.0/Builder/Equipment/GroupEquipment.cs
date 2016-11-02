@@ -100,5 +100,18 @@ namespace Builder.Equipment
                 return equiplist[index].Current;
             }
         }
+
+        public TimeSpan GetTimeWorkInTwentyFourHours()
+        {
+            TimeSpan hours = equiplist[0].GetTimeWorkInTwentyFourHours();
+            foreach (IEquipment i in equiplist)
+            {
+                if (i.GetTimeWorkInTwentyFourHours() < hours)
+                {
+                    hours = i.GetTimeWorkInTwentyFourHours();
+                }
+            }
+            return hours;
+        }
     }
 }

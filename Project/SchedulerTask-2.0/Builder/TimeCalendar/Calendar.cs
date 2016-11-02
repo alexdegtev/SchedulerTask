@@ -105,5 +105,27 @@ namespace Builder
         {
             return calendar[index];
         }
+
+        public TimeSpan GetTimeInTwentyFourHours()
+        {
+            TimeSpan hours=new TimeSpan(0,0,0);
+            DateTime flag = new DateTime(calendar[0].GetStartTime().Year, calendar[0].GetStartTime().Month, calendar[0].GetStartTime().Day);
+            foreach (Interval i in calendar)
+            {
+                if ((i.GetEndTime().Year == flag.Year) && (i.GetEndTime().Month == flag.Month) && (i.GetEndTime().Day == flag.Day))
+                {
+                    hours = hours + (i.GetEndTime() - i.GetStartTime());
+                }
+                else
+                {
+                    if ((i.GetStartTime().Year == flag.Year) && (i.GetStartTime().Month == flag.Month) && (i.GetStartTime().Day == flag.Day))
+                    {
+                        hours = hours + ((flag + new TimeSpan(1,0,0,0)) - i.GetStartTime());
+                    }
+                    break;
+                }
+            }
+            return hours;
+        }
     }
 }
