@@ -11,10 +11,10 @@ namespace Debugger.FindExceptions.Seachers
 {
     class ExceptionOperationsChain : IExceptionSearch
     {
-        Dictionary<int, Operation> operations;
+        Dictionary<int, IOperation> operations;
         List<Decision> decisions;
 
-        public ExceptionOperationsChain(Dictionary<int, Operation> operations, List<Decision> decisions)
+        public ExceptionOperationsChain(Dictionary<int, IOperation> operations, List<Decision> decisions)
         {
             // Конструктор
             this.operations = operations;
@@ -29,18 +29,18 @@ namespace Debugger.FindExceptions.Seachers
             DateTime max_end_date = new DateTime(0);
             DateTime date_begin = new DateTime(0);
             List<IOperation> prev_operations = new List<IOperation>();
-            foreach(var operation in operations)
+            foreach (var operation in operations)
             {
                 // Получаем список всех предшествующих операций текущей операции
                 prev_operations = operation.Value.GetPrevOperations();
 
                 // Находим для текущей операции максимальное время окончания всех её предшествующих операций
-                foreach(var prev_operation in prev_operations)
+                foreach (var prev_operation in prev_operations)
                 {
                     // Находим каждую предыдущую операцию в построенном расписании
-                    foreach(var decision in decisions)
+                    foreach (var decision in decisions)
                     {
-                        if(decision.GetOperation() == prev_operation)
+                        if (decision.GetOperation() == prev_operation)
                         {
                             // Если нашли, то проверяем её время окончания
                             if (decision.GetEndTime() > max_end_date)
@@ -60,7 +60,7 @@ namespace Debugger.FindExceptions.Seachers
                 }
 
                 // Сверяем время завершения
-                if(date_begin < max_end_date)
+                if (date_begin < max_end_date)
                 {
                     exceptions.Add(new Debugger.Exceptions.Exception("R00",
                                                  "Error",
