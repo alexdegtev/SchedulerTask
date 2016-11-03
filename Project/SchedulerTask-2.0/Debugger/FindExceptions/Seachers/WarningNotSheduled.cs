@@ -40,11 +40,11 @@ namespace Debugger.FindExceptions.Seachers
 
                 if (!found)
                 {
-                    exceptions.Add(new Exception("Q01",
-                                                 "Warning",
-                                                 "Операции номер " + operation.Value.GetID() + " нет в расписании",
-                                                 null,
-                                                 null));
+                    exceptions.Add(new Exception("R04",
+                                                 "Error",
+                                                 "Не все операции были назначены",
+                                                 " ",
+                                                 " "));
                 }
             }
 
