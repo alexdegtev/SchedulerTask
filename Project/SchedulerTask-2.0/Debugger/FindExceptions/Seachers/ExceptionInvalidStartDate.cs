@@ -38,7 +38,7 @@ namespace Debugger.FindExceptions.Seachers
                     exceptions.Add(new Exception("V04",
                                                  "Error",
                                                  "Операция в построенном расписании не может быть начата раньше указанной даты в файле с исходными данными",
-                                                 null,
+                                                 " ",
                                                  "Номер операции : " + decision.GetOperation().GetID()));
                 }
 

@@ -31,8 +31,8 @@ namespace Debugger.FindExceptions.Seachers
                     exceptions.Add(new Exception("R02",
                                                  "Error",
                                                  "Произошло нарушение временных характеристик",
-                                                 "Время начала операции : " + decision.GetStartTime().ToString(),
-                                                 "Время окончания операции : " + decision.GetEndTime().ToString()));
+                                                 " ",
+                                                 decision.ToString()));
                 }
             }
 
