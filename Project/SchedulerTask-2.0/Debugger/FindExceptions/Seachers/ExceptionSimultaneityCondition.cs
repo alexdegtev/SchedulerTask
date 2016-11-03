@@ -56,8 +56,8 @@ namespace Debugger.FindExceptions.Seachers
                     exceptions.Add(new Exception("R01",
                                                  "Error",
                                                  "Запрещено одновременное использование ресурса несколькими операциями",
-                                                 "Операция " + pairOperations.Key.GetOperation().GetID(),
-                                                 "Операция " + pairOperations.Value.GetOperation().GetID()));
+                                                 pairOperations.Key.ToString(),
+                                                 pairOperations.Value.ToString()));
                 }
             }
 

@@ -39,9 +39,9 @@ namespace Debugger.FindExceptions.Seachers
                 {
                     exceptions.Add(new Exception("V00",
                                                  "Error",
-                                                 "Несоответствие набора исходных операций операциям в расписании : индентификатора операции " + decision.GetOperation().GetID() + " нет в исходных данных",
-                                                 null,
-                                                 null));
+                                                 "Несоответствие набора исходных операций операциям в расписании",
+                                                 " ",
+                                                 decision.ToString()));
                 }
             }
 

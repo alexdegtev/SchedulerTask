@@ -157,18 +157,8 @@ namespace Builder
             return PreviousOperations;
         }
     
-
-            /// <summary>
-            /// получить ссылку решение для данной операции
-            /// </summary>
-            public Decision GetDecision()
-            {
-                return decision;
-            }
-
- 
-
-            public override string ToString()
+        
+        public override string ToString()
             {
                 if (PreviousOperations.Count == 0)
                     return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\" />",
