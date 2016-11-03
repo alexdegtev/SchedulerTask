@@ -221,6 +221,64 @@ namespace Builder.IO
             oi = new Interval(end, ii.GetEndTime());
             return new Interval(ii.GetStartTime(), start);
         }
+        public static void UpdateCalendars(DateTime start_data, DateTime end_data)
+        {
+            List<Interval> intlist = new List<Interval>();
+            List<Interval> doneintlist = new List<Interval>();
+            XElement root = sdata.Root;
+            foreach (XElement elm in root.Descendants(df + "CalendarInformation"))
+            {
+                foreach (XElement eg in elm.Elements(df + "EquipmentGroup"))
+                {
+                    foreach (XElement inc in eg.Elements(df + "Include"))
+                    {
+                        DateTime tmpdata = start_data;
+                        while (tmpdata != end_data)
+                        {
+                            if ((int)tmpdata.DayOfWeek == int.Parse(inc.Attribute("day_of_week").Value))
+                            {
+                                int ind = inc.Attribute("time_period").Value.IndexOf("-");
+                                int sh = int.Parse(inc.Attribute("time_period").Value.Substring(0, 1));
+                                int eh = int.Parse(inc.Attribute("time_period").Value.Substring(ind + 1, 2));
+
+                                intlist.Add(new Interval(new DateTime(tmpdata.Year, tmpdata.Month, tmpdata.Day, sh, 0, 0), new DateTime(tmpdata.Year, tmpdata.Month, tmpdata.Day, eh, 0, 0)));
+                            }
+                            tmpdata = tmpdata.AddDays(1);
+                        }
+                    }
+                    foreach (XElement exc in eg.Elements(df + "Exclude"))
+                    {
+
+                        foreach (Interval t in intlist)
+                        {
+                            if ((int)t.GetStartTime().DayOfWeek == int.Parse(exc.Attribute("day_of_week").Value))
+                            {
+                                int ind = exc.Attribute("time_period").Value.IndexOf("-");
+                                int sh = int.Parse(exc.Attribute("time_period").Value.Substring(0, 2));
+                                int eh = int.Parse(exc.Attribute("time_period").Value.Substring(ind + 1, 2));
+
+                                DateTime dt = t.GetStartTime().AddHours(-t.GetStartTime().Hour);
+                                Interval tmpint;
+                                doneintlist.Add(SeparateInterval(t, dt.AddHours(sh), dt.AddHours(eh), out tmpint));
+                                doneintlist.Add(tmpint);
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (XElement elm in root.Descendants(df + "EquipmentInformation").Elements(df + "EquipmentGroup"))
+            {
+                foreach (XElement eg in elm.Elements(df + "EquipmentGroup"))
+                {
+                    foreach (XElement eq in eg.Elements(df + "Equipment"))
+                    {
+                        equipments[int.Parse(eq.Attribute("id").Value)].GetCalendar().AddIntervals(doneintlist);
+                    }
+                }
+            }
+        }
     }
 }
 
