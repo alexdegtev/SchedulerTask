@@ -10,54 +10,61 @@ using Builder.TimeCalendar;
 
 namespace Builder.IO
 {
-    public class Reader
+    public static class Reader
     {
         /// <summary>
         /// Список для хранения партий
         /// </summary>
-        List<Party> partys;
+        private static List<Party> partys;
 
         /// <summary>
         /// 
         /// </summary>
-        Dictionary<int, Operation> operations;
+        private static Dictionary<int, Operation> operations;
 
         /// <summary>
         /// 
         /// </summary>
-        Dictionary<int, IEquipment> equipments;
+        private static Dictionary<int, IEquipment> equipments;
 
 
 
-        XDocument sdata;
-        XDocument tdata;
-        DateTime begin;
-        DateTime end;
-        string datapattern = "dd.MM.yyyy";
-        string dtpattern = "MM.dd.yyy H:mm:ss";
-        Dictionary<int, IEquipment> eqdic;
-        Dictionary<int, IOperation> opdic;
-        List<Party> partlist;
-        XNamespace df;
+        private static XDocument sdata;
+        private static XDocument tdata;
+        private static DateTime begin;
+        private static DateTime end;
+        private static string datapattern = "dd.MM.yyyy";
+        private static string dtpattern = "MM.dd.yyy H:mm:ss";
+        private static Dictionary<int, IEquipment> eqdic;
+        private static Dictionary<int, IOperation> opdic;
+        private static List<Party> partlist;
+        private static XNamespace df;
 
 
         /// <summary>
         /// констуктор ридера
         /// </summary>
         /// <param name="folderPath"> Путь к .xml файлам.</param>
-        public Reader(string folderPath)
-        {
+        //public Reader(string folderPath)
+        //{
 
+        //    sdata = XDocument.Load(folderPath + "system.xml");
+        //    tdata = XDocument.Load(folderPath + "tech.xml");
+        //}
+
+        public static void SetFolderPath(string folderPath)
+        {
             sdata = XDocument.Load(folderPath + "system.xml");
             tdata = XDocument.Load(folderPath + "tech.xml");
         }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="partys"> Список партий.</param>
         /// <param name="operations">Список операций.</param>
         /// <param name="equipments">Список оборудований.</param>
-        public void ReadData(out List<Party> partys, out Dictionary<int, IOperation> operations, out Dictionary<int, IEquipment> _equipments)
+        public static void ReadData(out List<Party> partys, out Dictionary<int, IOperation> operations, out Dictionary<int, IEquipment> _equipments)
         {
             partys = null;
             operations = null;
@@ -183,7 +190,7 @@ namespace Builder.IO
         }
 
 
-        private List<IOperation> ReadOperations(XElement part, Party parent, Dictionary<int, IOperation> opdic)
+        private static List<IOperation> ReadOperations(XElement part, Party parent, Dictionary<int, IOperation> opdic)
         {
             List<IOperation> tmpop = new List<IOperation>();
             foreach (XElement oper in part.Elements(df + "Operation"))
@@ -209,7 +216,7 @@ namespace Builder.IO
             return tmpop;
 
         }
-        private Interval SeparateInterval(Interval ii, DateTime start, DateTime end, out Interval oi)
+        private static Interval SeparateInterval(Interval ii, DateTime start, DateTime end, out Interval oi)
         {
             oi = new Interval(end, ii.GetEndTime());
             return new Interval(ii.GetStartTime(), start);
