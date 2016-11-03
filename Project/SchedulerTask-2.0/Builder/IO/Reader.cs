@@ -179,7 +179,6 @@ namespace Builder.IO
                     partys.Add(parent);
                 }
             }
-
             _equipments = equipments;
         }
 
@@ -204,8 +203,8 @@ namespace Builder.IO
                 TimeSpan duration_t=new TimeSpan(duration, 0, 0);
                 IEquipment equipment_ = equipments[group];
                 Operation tmp = new Operation(id, name,duration_t , pop, equipment_, parent);
-                tmpop.Add(tmp);//new Operation(id, oper.Attribute("name").Value, new TimeSpan(duration, 0, 0), pop, eqdic[group], parent));
-                opdic.Add(id, new Operation(id, oper.Attribute("name").Value, new TimeSpan(duration, 0, 0), pop, equipments[group], parent));
+                tmpop.Add(tmp);
+                opdic.Add(id, tmp);
             }
             return tmpop;
 
