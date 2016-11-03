@@ -173,7 +173,7 @@ namespace DebuggerConsole
             Dictionary<int, IOperation> operations = null;
             Dictionary<int, IEquipment> equipment = null;
             Reader reader = null;
-            Builder.IO.Reader builder_reader = null;
+            //Builder.IO.Reader builder_reader = null;
             Writer writer = null;
             if (Options.is_debug)
             {
@@ -186,7 +186,8 @@ namespace DebuggerConsole
             try
             {
                 reader = new Reader(argsParser.GetInputDir());
-                builder_reader = new Builder.IO.Reader(argsParser.GetInputDir());
+                //builder_reader = new Builder.IO.Reader(argsParser.GetInputDir());
+                Builder.IO.Reader.SetFolderPath(argsParser.GetInputDir());
                 writer = new Writer(argsParser.GetOutputDir());
             }
             catch (System.IO.FileNotFoundException)
@@ -203,7 +204,7 @@ namespace DebuggerConsole
             }
 
             reader.ReadData(out decisions);
-            builder_reader.ReadData(out parties, out operations, out equipment);
+            Builder.IO.Reader.ReadData(out parties, out operations, out equipment);
             if (decisions.Count == 0)
             {
                 Console.WriteLine("Предупреждение : Построенное расписание не содержит операций");
