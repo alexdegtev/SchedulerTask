@@ -23,6 +23,10 @@ namespace Builder.Equipment
             equiplist = new List<IEquipment>();
         }
 
+        public Calendar GetCalendar()
+        {
+            return null;
+        }
         public void AddEquipment(IEquipment e)
         {
             equiplist.Add(e);
