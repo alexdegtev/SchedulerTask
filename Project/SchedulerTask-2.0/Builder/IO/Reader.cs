@@ -178,7 +178,6 @@ namespace Builder.IO
             _equipments = equipments;
         }
 
-
         private static void ReadEquipment(XElement group, GroupEquipment parent)
         {
             GroupEquipment tmp = new GroupEquipment(calendar, int.Parse(group.Attribute("id").Value), group.Attribute("name").Value);
@@ -198,6 +197,7 @@ namespace Builder.IO
                 
             }
         }
+
         private static List<IOperation> ReadOperations(XElement part, Party parent, Dictionary<int, IOperation> opdic)
         {
             Dictionary<int, List<int>> pop = new Dictionary<int, List<int>>();
@@ -236,11 +236,13 @@ namespace Builder.IO
             return tmpop;
 
         }
+        
         private static Interval SeparateInterval(Interval ii, DateTime start, DateTime end, out Interval oi)
         {
             oi = new Interval(end, ii.GetEndTime());
             return new Interval(ii.GetStartTime(), start);
         }
+        
         public static void UpdateCalendars(DateTime start_data, DateTime end_data)
         {
             List<Interval> intlist = new List<Interval>();
