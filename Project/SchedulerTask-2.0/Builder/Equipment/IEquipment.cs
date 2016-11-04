@@ -9,6 +9,7 @@ namespace Builder.Equipment
     public interface IEquipment : IEnumerable, IEnumerator
     {
         int GetID();
+        Calendar GetCalendar();
         //string ToString();
         //bool IsOccupied(DateTime T);
         //void OccupyEquip(DateTime t1, DateTime t2);
