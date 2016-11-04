@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Builder.Events;
 using Builder.Front.Sorting;
+using Builder.IO;
 
 namespace Builder.Front.Building
 {
@@ -113,7 +114,7 @@ namespace Builder.Front.Building
                     }
                     new_end_data = new_start_data + (new TimeSpan((int)hours, 0, 0));
                     events.Add(new Event(new_start_data));
-                    //вызвать функцию для дописывания календаря с новыми старт и енд дата
+                    Builder.IO.Reader.UpdateCalendars(new_start_data, new_end_data);
                 }
             }
 
