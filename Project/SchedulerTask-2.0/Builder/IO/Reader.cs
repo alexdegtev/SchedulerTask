@@ -189,7 +189,6 @@ namespace Builder.IO
             _equipments = equipments;
         }
 
-
         private static List<IOperation> ReadOperations(XElement part, Party parent, Dictionary<int, IOperation> opdic)
         {
             List<IOperation> tmpop = new List<IOperation>();
@@ -216,11 +215,13 @@ namespace Builder.IO
             return tmpop;
 
         }
+        
         private static Interval SeparateInterval(Interval ii, DateTime start, DateTime end, out Interval oi)
         {
             oi = new Interval(end, ii.GetEndTime());
             return new Interval(ii.GetStartTime(), start);
         }
+        
         public static void UpdateCalendars(DateTime start_data, DateTime end_data)
         {
             List<Interval> intlist = new List<Interval>();

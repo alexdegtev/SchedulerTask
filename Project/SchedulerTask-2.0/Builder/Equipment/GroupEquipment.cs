@@ -23,6 +23,10 @@ namespace Builder.Equipment
             equiplist = new List<IEquipment>();
         }
 
+        public Calendar GetCalendar()
+        {
+            return null;
+        }
         public void AddEquipment(IEquipment e)
         {
             equiplist.Add(e);
@@ -105,6 +109,19 @@ namespace Builder.Equipment
             {
                 return equiplist[index].Current;
             }
+        }
+
+        public TimeSpan GetTimeWorkInTwentyFourHours()
+        {
+            TimeSpan hours = equiplist[0].GetTimeWorkInTwentyFourHours();
+            foreach (IEquipment i in equiplist)
+            {
+                if (i.GetTimeWorkInTwentyFourHours() < hours)
+                {
+                    hours = i.GetTimeWorkInTwentyFourHours();
+                }
+            }
+            return hours;
         }
     }
 }
