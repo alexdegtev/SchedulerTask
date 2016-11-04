@@ -66,6 +66,15 @@ namespace Builder.Equipment
             OccupyT2 = t2;
 
         }
+
+
+        public override string ToString()
+        {
+            return String.Format("<Equipment id=\"{0}\" name=\"{1}\" />",
+                eqid, individualname);
+        }
+
+        
         public IEnumerator GetEnumerator()
         {
             return this;

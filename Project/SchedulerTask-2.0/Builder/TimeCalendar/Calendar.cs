@@ -24,6 +24,12 @@ namespace Builder
             calendar.Sort();
         }
 
+        public void AddIntervals(List<Interval> intervallist)
+        {
+            calendar.AddRange(intervallist);
+            calendar.Sort();
+        }
+
         /// <summary>
         /// возвращаем true, если попали хоть в один из интервалов календаря;
         /// false - иначе;

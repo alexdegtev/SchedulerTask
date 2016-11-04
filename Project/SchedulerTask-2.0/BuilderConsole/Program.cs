@@ -34,10 +34,11 @@ namespace BuilderConsole
                 Console.ReadKey();
                 System.Environment.Exit(1);
             }
-            Reader reader = null;
+            //Reader reader = null;
             try
             {
-                reader = new Reader(args[0]);
+                //reader = new Reader(args[0]);
+                Reader.SetFolderPath(args[0]);
             }
             catch (System.IO.FileNotFoundException)
             {
@@ -56,7 +57,7 @@ namespace BuilderConsole
             List<Party> partys;
             Dictionary<int, IOperation> operations;
             Dictionary<int, IEquipment> equipments;
-            reader.ReadData(out partys, out operations, out equipments);
+            Reader.ReadData(out partys, out operations, out equipments);
 
             FrontBuilding frontBuilding = new FrontBuilding(partys);
             frontBuilding.Build();
