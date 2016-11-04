@@ -49,6 +49,31 @@ namespace Builder
             return false;
         }
 
+        public bool WillRelease(DateTime T, TimeSpan t, int intervalindex)
+        {
+            bool isRelease = true;
+            TimeSpan intervallasting = calendar[intervalindex].GetEndTime() - T;
+            TimeSpan tmptime = t;
+
+            if (t <= intervallasting) return true;
+
+            while (tmptime > intervallasting)
+            {
+                tmptime = tmptime - intervallasting;
+                //if (intervalindex == calendar.Count - 1) intervalindex = 0;
+                intervalindex += 1;
+                if (intervalindex < calendar.Count)
+                {
+                    intervallasting = calendar[intervalindex].GetEndTime() - calendar[intervalindex].GetStartTime();
+                }
+                else
+                {
+                    isRelease = false;
+                }
+            }
+            return isRelease;
+        }
+
         /// <summary>
         /// вернуть индекс интервала в календаре, в который попадает заданное время T
         /// если не попадает ни в один из интервалов - найти индекс ближайшего возможного
@@ -90,7 +115,6 @@ namespace Builder
                 intervalindex += 1;
                 intervallasting = calendar[intervalindex].GetEndTime() - calendar[intervalindex].GetStartTime();
             }
-
             return calendar[intervalindex].GetStartTime() + tmptime;
         }
 
