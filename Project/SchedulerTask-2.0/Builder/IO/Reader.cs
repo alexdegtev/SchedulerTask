@@ -289,16 +289,9 @@ namespace Builder.IO
                     }
                 }
             }
-
-            foreach (XElement elm in root.Descendants(df + "EquipmentInformation").Elements(df + "EquipmentGroup"))
+            foreach (XElement eq in root.Descendants(df + "Equipment"))
             {
-                foreach (XElement eg in elm.Elements(df + "EquipmentGroup"))
-                {
-                    foreach (XElement eq in eg.Elements(df + "Equipment"))
-                    {
-                        equipments[int.Parse(eq.Attribute("id").Value)].GetCalendar().AddIntervals(doneintlist);
-                    }
-                }
+                equipments[int.Parse(eq.Attribute("id").Value)].GetCalendar().AddIntervals(doneintlist);
             }
         }
     }
