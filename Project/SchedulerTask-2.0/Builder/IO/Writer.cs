@@ -1,38 +1,159 @@
-using Debugger.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml;
-using System.Xml.Serialization;
+using System.Xml.Linq;
 using System.IO;
 
-namespace Debugger.IO
+namespace Builder.IO
 {
     public class Writer
     {
+        XDocument document;
         string folderPath;
-        public Writer(string folderPath)
-        {
-            this.folderPath = folderPath;
-        }
+
         /// <summary>
-        /// Записать результат в .xml // XmlSerializer
+        /// конструктор Writer
         /// </summary>
-        /// <param name="exeptionList"></param>
-        public void WriteLog(List<IException> exeptionList)
+        /// <param name="output"> Путь к сохранению. </param>
+        /// <param name="input"> Путь к входным данным </param>
+        /// 
+
+
+
+        public Writer(string input, string output)
         {
-            if (File.Exists(folderPath + "exceptions.xml")) File.Delete(folderPath + "exceptions.xml");
+            this.folderPath = output;
+            if (File.Exists(output + "tech+solution.xml")) File.Delete(output + "tech+solution.xml");
+            File.Copy(input + "tech.xml", output + "tech+solution.xml");
+            document = XDocument.Load(output + "tech+solution.xml");
+        }
 
-            using (var myFile = File.Create(folderPath + "exceptions.xml")) { }
-            foreach (IException e in exeptionList)
+        /// <summary>
+        /// Записать результат.
+        /// </summary>
+        /// <param name="operations"></param>
+        public void WriteData(Dictionary<int, IOperation> operations)
+        {
+            XElement root = document.Root;
+            XNamespace df = root.Name.Namespace;
+            foreach (KeyValuePair<int, IOperation> o in operations)
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Debugger.Exceptions.Exception));
-
-                using (TextWriter writer = new StreamWriter(folderPath + "exceptions.xml"))
+                Decision d = o.Value.GetDecision();
+                if (d == null) continue;
+                string id = Convert.ToString(d.GetOperation().GetID());
+                bool found = false;
+                foreach (XElement product in root.Descendants(df + "Product"))
                 {
+                    foreach (XElement part in product.Elements(df + "Part"))
+                    {
+                        foreach (XElement op in part.Elements(df + "Operation"))
+                        {
+                            if (op.Attribute("id").Value == id)
+                            {
+                                found = true;
+                                op.Add(new XAttribute("equipment", d.GetEquipment().GetID()));
+                                op.Add(new XAttribute("date_begin", d.GetStartTime()));
+                                op.Add(new XAttribute("date_end", d.GetEndTime()));
+                                op.Attribute("state").Value = "SCHEDULED";
+                                XAttribute attr = op.Attribute("equipmentgroup");
+                                attr.Remove();
+                                break;
+                            }
+                        }
+                        if (found) break;
+                        foreach (XElement sp in part.Elements(df + "SubPart"))
+                        {
+                            foreach (XElement op in sp.Elements(df + "Operation"))
+                            {
+                                if (op.Attribute("id").Value == id)
+                                {
+                                    found = true;
+                                    op.Add(new XAttribute("equipment", d.GetEquipment().GetID()));
+                                    op.Add(new XAttribute("date_begin", d.GetStartTime()));
+                                    op.Add(new XAttribute("date_end", d.GetEndTime()));
+                                    XAttribute attr = op.Attribute("equipmentgroup");
+                                    attr.Remove();
+                                    op.Attribute("state").Value = "SCHEDULED";
+                                    break;
+                                }
+                            }
+                            if (found) break;
+                        }
+                        if (found) break;
+                    }
+                    if (found) break;
+                }
+            }
+            document.Save(folderPath + "tech+solution.xml");
 
-                    serializer.Serialize(writer, e);
+        }
+
+        public void WriteData(List<IOperation> operations)
+        {
+            XElement root = document.Root;
+            XNamespace df = root.Name.Namespace;
+            foreach (IOperation o in operations)
+            {
+                Decision d = o.GetDecision();
+                if (d == null) continue;
+                string id = Convert.ToString(d.GetOperation().GetID());
+                bool found = false;
+                foreach (XElement product in root.Descendants(df + "Product"))
+                {
+                    foreach (XElement part in product.Elements(df + "Part"))
+                    {
+                        foreach (XElement op in part.Elements(df + "Operation"))
+                        {
+                            if (op.Attribute("id").Value == id)
+                            {
+                                found = true;
+                                op.Add(new XAttribute("equipment", d.GetEquipment().GetID()));
+                                op.Add(new XAttribute("date_begin", d.GetStartTime()));
+                                op.Add(new XAttribute("date_end", d.GetEndTime()));
+                                op.Attribute("state").Value = "SCHEDULED";
+                                XAttribute attr = op.Attribute("equipmentgroup");
+                                attr.Remove();
+                                break;
+                            }
+                        }
+                        if (found) break;
+                        foreach (XElement sp in part.Elements(df + "SubPart"))
+                        {
+                            foreach (XElement op in sp.Elements(df + "Operation"))
+                            {
+                                if (op.Attribute("id").Value == id)
+                                {
+                                    found = true;
+                                    op.Add(new XAttribute("equipment", d.GetEquipment().GetID()));
+                                    op.Add(new XAttribute("date_begin", d.GetStartTime()));
+                                    op.Add(new XAttribute("date_end", d.GetEndTime()));
+                                    XAttribute attr = op.Attribute("equipmentgroup");
+                                    attr.Remove();
+                                    op.Attribute("state").Value = "SCHEDULED";
+                                    break;
+                                }
+                            }
+                            if (found) break;
+                        }
+                        if (found) break;
+                    }
+                    if (found) break;
+                }
+            }
+            document.Save(folderPath + "tech+solution.xml");
+
+        }
+
+        public void WriteData(List<Party> partys)
+        {
+            foreach (var party in partys)
+            {
+                WriteData(party.getPartyOperations());
+                foreach (var part in party.getSubParty())
+                {
+                    WriteData(part.getPartyOperations());
                 }
             }
         }
