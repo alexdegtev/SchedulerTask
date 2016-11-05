@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+
 namespace Builder
 {
     public interface IOperation
@@ -18,6 +19,7 @@ namespace Builder
         Decision GetDecision();
         List<IOperation> GetPrevOperations();
         int GetID();
+        void AddPrevOperation(IOperation op);
     }
 
     /// <summary>
@@ -139,6 +141,7 @@ namespace Builder
             return parent_party;
         }
 
+
         /// <summary>
         /// получить ссылку решение для данной операции
         /// </summary>
@@ -154,5 +157,32 @@ namespace Builder
         {
             return PreviousOperations;
         }
-    }
+
+        public void AddPrevOperation(IOperation op)
+        {
+            PreviousOperations.Add(op);
+        }
+          
+        public override string ToString()
+            {
+                if (PreviousOperations.Count == 0)
+                    return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\" />",
+                    id, name, duration, equipment.GetID());
+
+                else
+                {
+                    string operation_info = String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\"",
+                    id, name, duration, equipment.GetID());
+
+                    foreach (Operation o in PreviousOperations)
+                        operation_info += "\r\n<Previous id=" + o.GetID() + "/>";
+
+                    operation_info += "\r\n </Operation>";
+                    return operation_info;
+                }
+
+            }
+        }
+    
+
 }

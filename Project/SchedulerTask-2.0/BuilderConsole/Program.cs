@@ -25,10 +25,9 @@ namespace BuilderConsole
             Console.WriteLine("Директория с входными файлами : " + argsParser.GetInputDir());
             Console.WriteLine("Директория для записи лога    : " + argsParser.GetOutputDir());
 
-            Reader reader = null;
             try
             {
-                reader = new Reader(argsParser.GetInputDir());
+                Reader.SetFolderPath(argsParser.GetInputDir());
             }
             catch (System.IO.FileNotFoundException)
             {
@@ -44,7 +43,7 @@ namespace BuilderConsole
             List<Party> partys;
             Dictionary<int, IOperation> operations;
             Dictionary<int, IEquipment> equipments;
-            reader.ReadData(out partys, out operations, out equipments);
+            Reader.ReadData(out partys, out operations, out equipments);
 
             FrontBuilding frontBuilding = new FrontBuilding(partys);
             frontBuilding.Build();

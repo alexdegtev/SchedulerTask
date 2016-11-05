@@ -73,8 +73,8 @@ namespace Debugger.FindExceptions.Seachers
                     exceptions.Add(new Debugger.Exceptions.Exception("R00",
                                                  "Error",
                                                  "Было нарушено условие последовательного выполнения операций",
-                                                 null,
-                                                 null));
+                                                 decision.GetOperation().ToString(),
+                                                 " "));
                 }
             }
 

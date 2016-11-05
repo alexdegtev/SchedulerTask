@@ -11,7 +11,7 @@
         <Operation id="3" name="Операция 3" state="NOTSCHEDULED" duration="30" equipmentgroup="6">
           <Previous id="1" />
         </Operation>
-		<Operation id="4" name="Операция 4" state="NOTSCHEDULED" duration="100" equipmentgroup="2"
+		<Operation id="4" name="Операция 4" state="NOTSCHEDULED" duration="100" equipmentgroup="2">
 		    <Previous id="3" />
         </Operation>
 		<Operation id="5" name="Операция 5" state="NOTSCHEDULED" duration="70" equipmentgroup="3">

@@ -63,5 +63,16 @@ namespace Builder
         {
             return op;
         }
+
+        
+        public override string ToString()
+        {
+            string isscheduled;
+            if (GetOperation()!= null) isscheduled = "SCHEDULED";
+            else isscheduled = "NOTSCHEDULED";
+
+            return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"{2}\" date_begin=\"{3}\" date_end=\"{4}\" equipment=\"{4}\" duration=\"{5}\"> </Operation>",
+                equipment_id, GetOperation().GetName(), isscheduled, start_time,end_time, GetOperation().GetEquipment(),GetOperation().GetDuration());
+        }
     }
 }
