@@ -19,6 +19,7 @@ namespace Builder
         Decision GetDecision();
         List<IOperation> GetPrevOperations();
         int GetID();
+        void AddPrevOperation(IOperation op);
     }
 
     /// <summary>
@@ -157,6 +158,10 @@ namespace Builder
             return PreviousOperations;
         }
 
+        public void AddPrevOperation(IOperation op)
+        {
+            PreviousOperations.Add(op);
+        }
           
         public override string ToString()
             {
