@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IO\CommandLineParser.cs" />
     <Compile Include="TimeCalendar\Calendar.cs" />
     <Compile Include="TimeCalendar\Interval.cs" />
     <Compile Include="Decision.cs" />

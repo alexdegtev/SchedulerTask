@@ -32,14 +32,17 @@ namespace Debugger.FindExceptions.Seachers
                 startDate = decision.GetStartTime();
 
                 // TODO : Получить доступ к дате начала расписания
-                System.DateTime beginDate = decision.GetOperation().GetParty().getStartTimeParty();
-                if (beginDate > startDate)
+                if (decision.GetOperation().GetParty() != null)
                 {
-                    exceptions.Add(new Exception("V04",
-                                                 "Error",
-                                                 "Операция в построенном расписании не может быть начата раньше указанной даты в файле с исходными данными",
-                                                 null,
-                                                 "Номер операции : " + decision.GetOperation().GetID()));
+                    System.DateTime beginDate = decision.GetOperation().GetParty().getStartTimeParty();
+                    if (beginDate > startDate)
+                    {
+                        exceptions.Add(new Exception("V04",
+                                                     "Error",
+                                                     "Операция в построенном расписании не может быть начата раньше указанной даты в файле с исходными данными",
+                                                     null,
+                                                     "Номер операции : " + decision.GetOperation().GetID()));
+                    }
                 }
 
             }
