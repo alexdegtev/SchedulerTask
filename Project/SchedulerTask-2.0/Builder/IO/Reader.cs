@@ -34,11 +34,12 @@ namespace Builder.IO
         private static DateTime begin;
         private static DateTime end;
         private static string datapattern = "dd.MM.yyyy";
-        private static string dtpattern = "MM.dd.yyy H:mm:ss";
+        private static string dtpattern = "MM.dd.yyyy H:mm:ss";
         private static Dictionary<int, IEquipment> eqdic;
         private static Dictionary<int, IOperation> opdic;
         private static List<Party> partlist;
         private static XNamespace df;
+        private static Calendar calendar;
 
 
         /// <summary>
@@ -134,24 +135,12 @@ namespace Builder.IO
 
             }
 
-            Calendar calendar = new Calendar(doneintlist);
-
+            calendar = new Calendar(doneintlist);
+            
+            
             foreach (XElement elm in root.Descendants(df + "EquipmentInformation").Elements(df + "EquipmentGroup"))
             {
-                GroupEquipment tmp = new GroupEquipment(calendar, int.Parse(elm.Attribute("id").Value), elm.Attribute("name").Value);
-                foreach (XElement eg in elm.Elements(df + "EquipmentGroup"))
-                {
-                    GroupEquipment gtmp = new GroupEquipment(calendar, int.Parse(eg.Attribute("id").Value), eg.Attribute("name").Value);
-                    foreach (XElement eq in eg.Elements(df + "Equipment"))
-                    {
-                        SingleEquipment stmp = new SingleEquipment(calendar, int.Parse(eq.Attribute("id").Value), eq.Attribute("name").Value);
-                        equipments.Add(stmp.GetID(), stmp);
-                        gtmp.AddEquipment(stmp);
-                    }
-                    tmp.AddEquipment(gtmp);
-                    equipments.Add(gtmp.GetID(), gtmp);
-                }
-                equipments.Add(tmp.GetID(), tmp);
+                ReadEquipment(elm, null);
             }
 
             root = tdata.Root;
@@ -190,18 +179,39 @@ namespace Builder.IO
         }
 
 
+        private static void ReadEquipment(XElement group, GroupEquipment parent)
+        {
+            GroupEquipment tmp = new GroupEquipment(calendar, int.Parse(group.Attribute("id").Value), group.Attribute("name").Value);
+            equipments.Add(tmp.GetID(), tmp);
+            if (parent != null)
+            {
+                parent.AddEquipment(tmp);
+            }
+            
+            foreach (XElement sgroup in group.Elements(df + "EquipmentGroup")) ReadEquipment(sgroup, tmp);
+                
+            foreach (XElement eq in group.Elements(df + "Equipment"))
+            {
+                SingleEquipment stmp = new SingleEquipment(calendar, int.Parse(eq.Attribute("id").Value), eq.Attribute("name").Value);
+                equipments.Add(stmp.GetID(), stmp);
+                tmp.AddEquipment(stmp);
+                
+            }
+        }
         private static List<IOperation> ReadOperations(XElement part, Party parent, Dictionary<int, IOperation> opdic)
         {
+            Dictionary<int, List<int>> pop = new Dictionary<int, List<int>>();
             List<IOperation> tmpop = new List<IOperation>();
             foreach (XElement oper in part.Elements(df + "Operation"))
             {
-                List<IOperation> pop = new List<IOperation>();
+                List<int> tmp_ = new List<int>();
                 if (oper.Elements(df + "Previous") != null)
                 {
                     foreach (XElement prop in oper.Elements(df + "Previous"))
                     {
-                        pop.Add(opdic[int.Parse(prop.Attribute("id").Value)]);
+                        tmp_.Add(int.Parse(prop.Attribute("id").Value));
                     }
+                    pop.Add(int.Parse(oper.Attribute("id").Value), tmp_);
                 }
                 int id = int.Parse(oper.Attribute("id").Value);
                 int duration = int.Parse(oper.Attribute("duration").Value);
@@ -209,9 +219,19 @@ namespace Builder.IO
                 string name = oper.Attribute("name").Value;
                 TimeSpan duration_t=new TimeSpan(duration, 0, 0);
                 IEquipment equipment_ = equipments[group];
-                Operation tmp = new Operation(id, name,duration_t , pop, equipment_, parent);
+                Operation tmp = new Operation(id, name,duration_t , new List<IOperation>(), equipment_, parent);
                 tmpop.Add(tmp);
                 opdic.Add(id, tmp);
+            }
+            foreach (IOperation o in tmpop)
+            {
+                if (pop[o.GetID()]!=null)
+                {
+                    for(int i = 0; i < pop[o.GetID()].Count; i++)
+                    {
+                        o.AddPrevOperation(opdic[pop[o.GetID()][i]]);
+                    }
+                }
             }
             return tmpop;
 
