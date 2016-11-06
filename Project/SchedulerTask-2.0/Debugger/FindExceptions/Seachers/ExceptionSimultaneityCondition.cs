@@ -26,7 +26,7 @@ namespace Debugger.FindExceptions.Seachers
             ConsoleLogger.Log("Проверяем условие одновременного использования оборудования...");
             List<IException> exceptions = new List<IException>();
 
-            Dictionary<Decision, Decision> similarOperations = new Dictionary<Decision, Decision>();
+            List<KeyValuePair<Decision, Decision>> similarOperations = new List<KeyValuePair<Decision, Decision>>();
             // Сравниваем все операции в расписании друг с другом
             foreach (var decision in decisions)
             {
@@ -36,10 +36,10 @@ namespace Debugger.FindExceptions.Seachers
                         && decision.GetOperation().GetEquipment().GetID()
                         == otherDecision.GetOperation().GetEquipment().GetID())
                     {
-                        if (!similarOperations.ContainsKey(decision)
-                            || !similarOperations.ContainsValue(otherDecision))
+                        if(   !similarOperations.Contains(new KeyValuePair<Decision, Decision>(decision, otherDecision))
+                           && !similarOperations.Contains(new KeyValuePair<Decision, Decision>(otherDecision, decision)))
                         {
-                            similarOperations.Add(decision, otherDecision);
+                            similarOperations.Add(new KeyValuePair<Decision, Decision>(decision, otherDecision));
                         }
                     }
                 }

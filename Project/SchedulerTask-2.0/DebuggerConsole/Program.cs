@@ -63,85 +63,114 @@ namespace DebuggerConsole
         }
     }
 
-    public class CommandLineParser
+    class TestScheduleB
     {
-        private string[] comm_args;
-        private bool is_correct;
-        private string input_dir;
-        private string output_dir;
+        Dictionary<int, Operation> operations;
+        Dictionary<int, IEquipment> equipments;
+        List<Decision> decisions;
 
-        public CommandLineParser(string[] args)
+        public TestScheduleB()
         {
-            comm_args = args;
-            input_dir = "";
-            output_dir = "";
+            operations = new Dictionary<int, Operation>();
+            equipments = new Dictionary<int, IEquipment>();
+            decisions = new List<Decision>();
 
-            switch (comm_args.Length)
+            // Список исходных операций
+            //  - id операции
+            //  - Название операции
+            //  - Продолжительность операции
+            //  - список предыдущих операций
+            //  - оборудование -> Календарь, Id, название
+            //  - партия
+            operations.Add(1, new Operation(1, "Операция 1", new TimeSpan(300), new List<IOperation>(), new SingleEquipment(null, 1, "Станок 1"), null));
+            operations.Add(2, new Operation(2, "Операция 2", new TimeSpan(300), new List<IOperation>(), new SingleEquipment(null, 2, "Станок 2"), null));
+            operations.Add(3, new Operation(3, "Операция 3", new TimeSpan(300), new List<IOperation>(), new SingleEquipment(null, 2, "Станок 2"), null));
+            operations.Add(4, new Operation(4, "Недопустимая операция 4",   new TimeSpan(200), new List<IOperation>(), new SingleEquipment(null, 3, "Станок 3"), null));
+            operations.Add(5, new Operation(5, "Неиспользуемая операция 5", new TimeSpan(200), new List<IOperation>(), new SingleEquipment(null, 3, "Станок 3"), null));
+
+            // Список решений
+            decisions.Add(new Decision(new DateTime(0),   new DateTime(300), new SingleEquipment(null, 1, "Станок 1"), operations[1]));
+            decisions.Add(new Decision(new DateTime(0),   new DateTime(300), new SingleEquipment(null, 2, "Станок 2"), operations[2]));
+            decisions.Add(new Decision(new DateTime(100), new DateTime(400), new SingleEquipment(null, 2, "Станок 2"), operations[3]));
+            decisions.Add(new Decision(new DateTime(300), new DateTime(100), new SingleEquipment(null, 3, "Станок 3"), operations[4]));
+        }
+
+        public Dictionary<int, IOperation> GetOperations()
+        {
+            Dictionary<int, IOperation> out_operations = new Dictionary<int, IOperation>();
+            foreach (var operation in operations)
             {
-                case 0:
-                    comm_args = Environment.GetCommandLineArgs();
-                    if (comm_args.Length != 0)
-                    {
-                        int position = comm_args[0].LastIndexOf("\\");
-                        if (position == -1)
-                        {
-                            comm_args[0] = Directory.GetCurrentDirectory();
-                            position = comm_args[0].LastIndexOf("\\");
-                        }
-
-                        for (int i = 0; i <= position; i++)
-                        {
-                            input_dir += comm_args[0][i];
-                            output_dir += comm_args[0][i];
-                        }
-                        is_correct = true;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Не удалось получить параметры");
-                        is_correct = false;
-                    }
-                    break;
-                case 1:
-                    if (Directory.Exists(comm_args[0]))
-                    {
-                        input_dir = comm_args[0];
-                        output_dir = Directory.GetCurrentDirectory();
-                        is_correct = true;
-                    }
-                    else
-                    {
-                        is_correct = false;
-                    }
-                    break;
-                case 2:
-                    if (Directory.Exists(comm_args[0]) && Directory.Exists(comm_args[1]))
-                    {
-                        input_dir = comm_args[0];
-                        output_dir = comm_args[1];
-                        is_correct = true;
-                    }
-                    else
-                    {
-                        is_correct = false;
-                    }
-                    break;
+                out_operations.Add(operation.Key, operation.Value);
             }
+            return out_operations;
         }
 
-        public string GetInputDir()
+        public Dictionary<int, IEquipment> GetEquipment()
         {
-            return input_dir;
+            return equipments;
         }
 
-        public string GetOutputDir()
+        public List<Decision> GetDecisions()
         {
-            return output_dir;
+            return decisions;
+        }
+    }
+
+    class TestScheduleC
+    {
+        Dictionary<int, Operation> operations;
+        Dictionary<int, IEquipment> equipments;
+        List<Decision> decisions;
+
+        public TestScheduleC()
+        {
+            operations = new Dictionary<int, Operation>();
+            equipments = new Dictionary<int, IEquipment>();
+            decisions = new List<Decision>();
+
+            Operation op1 = new Operation(1, "Операция 1", new TimeSpan(300), new List<IOperation>(), new SingleEquipment(null, 1, "Станок 1"), null);
+            Operation op2 = new Operation(2, "Операция 2", new TimeSpan(300), new List<IOperation>(), new SingleEquipment(null, 1, "Станок 1"), null);
+            Operation op3 = new Operation(3, "Операция 3", new TimeSpan(200), new List<IOperation>(), new SingleEquipment(null, 1, "Станок 1"), null);
+
+            // Список предыдущих операций
+            List<IOperation> prev_operations = new List<IOperation>();
+            prev_operations.Add(op1);
+            prev_operations.Add(op2);
+            prev_operations.Add(op3);
+            Operation op4 = new Operation(4, "Операция 4", new TimeSpan(200), prev_operations, new SingleEquipment(null, 1, "Станок 1"), null);
+
+            SingleEquipment equipment = new SingleEquipment(null, 1, "Станок 1");
+
+            // Список исходных операций
+            operations.Add(1, op1);
+            operations.Add(2, op2);
+            operations.Add(3, op3);
+            operations.Add(4, op4);
+
+            // Список решений
+            decisions.Add(new Decision(new DateTime(0), new DateTime(300), equipment, operations[1]));
+            decisions.Add(new Decision(new DateTime(300), new DateTime(500), equipment, operations[3]));
+            decisions.Add(new Decision(new DateTime(500), new DateTime(700), equipment, operations[4]));
         }
 
-        public bool IsCorrect()
+        public Dictionary<int, IOperation> GetOperations()
         {
-            return is_correct;
+            Dictionary<int, IOperation> out_operations = new Dictionary<int, IOperation>();
+            foreach (var operation in operations)
+            {
+                out_operations.Add(operation.Key, operation.Value);
+            }
+            return out_operations;
+        }
+
+        public Dictionary<int, IEquipment> GetEquipment()
+        {
+            return equipments;
+        }
+
+        public List<Decision> GetDecisions()
+        {
+            return decisions;
         }
     }
 
@@ -153,11 +182,12 @@ namespace DebuggerConsole
         public struct Options
         {
             static public bool is_debug = false;
+            static public int test_id = 0;
         }
 
         static void Main(string[] args)
         {
-            CommandLineParser argsParser = new CommandLineParser(args);
+            Builder.IO.CommandLineParser argsParser = new Builder.IO.CommandLineParser(args);
             if (!argsParser.IsCorrect())
             {
                 Console.WriteLine("Неверная входная командная строка");
@@ -169,42 +199,56 @@ namespace DebuggerConsole
             ExceptionsSearch search = null;
             List<IException> exceptions = null;
             List<Decision> decisions = null;
-            List<Party> parties = null;
-            Dictionary<int, IOperation> operations = null;
-            Dictionary<int, IEquipment> equipment = null;
+            List<Party> parties = new List<Party>();
+            Dictionary<int, IOperation> operations = new Dictionary<int,IOperation>();
+            Dictionary<int, IEquipment> equipment = new Dictionary<int,IEquipment>();
             Reader reader = null;
             //Builder.IO.Reader builder_reader = null;
             Writer writer = null;
+
+            // Тестовые расписания
             if (Options.is_debug)
             {
-                TestScheduleA testA = new TestScheduleA();
-                search = new ExceptionsSearch(testA.GetOperations(), testA.GetEquipment(), testA.GetDecisions(), null);
+                switch(Options.test_id)
+                {
+                    case 0:
+                        TestScheduleA testA = new TestScheduleA();
+                        search = new ExceptionsSearch(testA.GetOperations(), testA.GetEquipment(), testA.GetDecisions(), null);
+                        break;
+                    case 1:
+                        TestScheduleB testB = new TestScheduleB();
+                        search = new ExceptionsSearch(testB.GetOperations(), testB.GetEquipment(), testB.GetDecisions(), null);
+                        break;
+                    case 2:
+                        TestScheduleC testC = new TestScheduleC();
+                        search = new ExceptionsSearch(testC.GetOperations(), testC.GetEquipment(), testC.GetDecisions(), null);
+                        break;
+                }
+
                 exceptions = search.Execute();
                 ConsoleLogger.Log("Найдено ошибок : " + exceptions.Count);
             }
 
             try
             {
-                reader = new Reader(argsParser.GetInputDir());
+                //reader = new Reader(argsParser.GetInputDir());
                 //builder_reader = new Builder.IO.Reader(argsParser.GetInputDir());
-                Builder.IO.Reader.SetFolderPath(argsParser.GetInputDir());
-                writer = new Writer(argsParser.GetOutputDir());
+                //Builder.IO.Reader.SetFolderPath(argsParser.GetInputDir());
+                //writer = new Writer(argsParser.GetOutputDir());
             }
             catch (System.IO.FileNotFoundException)
             {
                 Console.WriteLine("По указанному пути файл не найден");
-                Console.ReadKey();
                 System.Environment.Exit(1);
             }
             catch (System.ArgumentException)
             {
                 Console.WriteLine("Путь содержит недопустимые символы");
-                Console.ReadKey();
                 System.Environment.Exit(1);
             }
 
             reader.ReadData(out decisions);
-            Builder.IO.Reader.ReadData(out parties, out operations, out equipment);
+            //Builder.IO.Reader.ReadData(out parties, out operations, out equipment);
             if (decisions.Count == 0)
             {
                 Console.WriteLine("Предупреждение : Построенное расписание не содержит операций");

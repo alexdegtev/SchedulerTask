@@ -16,43 +16,29 @@ namespace BuilderConsole
     {
         static void Main(string[] args)
         {
-            if (args == null || args.GetLength(0) < 2)
+            Builder.IO.CommandLineParser argsParser = new Builder.IO.CommandLineParser(args);
+            if (!argsParser.IsCorrect())
             {
-                Console.WriteLine("Входные данные не указаны");
-                Console.ReadKey();
-                System.Environment.Exit(1);
+                Console.WriteLine("Неверная входная командная строка");
+                Environment.Exit(1);
             }
-            if (!System.IO.Directory.Exists(args[0]))
-            {
-                Console.WriteLine("Указанный путь к входным данным не существует");
-                Console.ReadKey();
-                System.Environment.Exit(1);
-            }
-            if (!System.IO.Directory.Exists(args[1]))
-            {
-                Console.WriteLine("Указанный путь к выходным данным не существует");
-                Console.ReadKey();
-                System.Environment.Exit(1);
-            }
-            //Reader reader = null;
+            Console.WriteLine("Директория с входными файлами : " + argsParser.GetInputDir());
+            Console.WriteLine("Директория для записи лога    : " + argsParser.GetOutputDir());
+
             try
             {
-                //reader = new Reader(args[0]);
-                Reader.SetFolderPath(args[0]);
+                Reader.SetFolderPath(argsParser.GetInputDir());
             }
             catch (System.IO.FileNotFoundException)
             {
                 Console.WriteLine("По указанному пути файл не найден");
-                Console.ReadKey();
                 System.Environment.Exit(1);
             }
             catch (System.ArgumentException)
             {
                 Console.WriteLine("Путь содержит недопустимые символы");
-                Console.ReadKey();
                 System.Environment.Exit(1);
             }
-
 
             List<Party> partys;
             Dictionary<int, IOperation> operations;
@@ -64,12 +50,11 @@ namespace BuilderConsole
             Writer writer = null;
             try
             {
-                 writer = new Writer(args[0],args[1]);
+                writer = new Writer(argsParser.GetInputDir(), argsParser.GetOutputDir());
             }
             catch (System.ArgumentException)
             {
                 Console.WriteLine("Путь содержит недопустимые символы");
-                Console.ReadKey();
                 System.Environment.Exit(1);
             }
             catch (System.IO.FileNotFoundException) //игнорируем ошибку т.к. файл создается райтером
