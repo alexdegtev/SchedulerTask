@@ -49,6 +49,31 @@ namespace Builder
             return false;
         }
 
+        public bool WillRelease(DateTime T, TimeSpan t, int intervalindex)
+        {
+            bool isRelease = true;
+            TimeSpan intervallasting = calendar[intervalindex].GetEndTime() - T;
+            TimeSpan tmptime = t;
+
+            if (t <= intervallasting) return true;
+
+            while (tmptime > intervallasting)
+            {
+                tmptime = tmptime - intervallasting;
+                //if (intervalindex == calendar.Count - 1) intervalindex = 0;
+                intervalindex += 1;
+                if (intervalindex < calendar.Count)
+                {
+                    intervallasting = calendar[intervalindex].GetEndTime() - calendar[intervalindex].GetStartTime();
+                }
+                else
+                {
+                    isRelease = false;
+                }
+            }
+            return isRelease;
+        }
+
         /// <summary>
         /// вернуть индекс интервала в календаре, в который попадает заданное время T
         /// если не попадает ни в один из интервалов - найти индекс ближайшего возможного
@@ -90,7 +115,6 @@ namespace Builder
                 intervalindex += 1;
                 intervallasting = calendar[intervalindex].GetEndTime() - calendar[intervalindex].GetStartTime();
             }
-
             return calendar[intervalindex].GetStartTime() + tmptime;
         }
 
@@ -110,6 +134,28 @@ namespace Builder
         public Interval GetInterval(int index)
         {
             return calendar[index];
+        }
+
+        public TimeSpan GetTimeInTwentyFourHours()
+        {
+            TimeSpan hours=new TimeSpan(0,0,0);
+            DateTime flag = new DateTime(calendar[0].GetStartTime().Year, calendar[0].GetStartTime().Month, calendar[0].GetStartTime().Day);
+            foreach (Interval i in calendar)
+            {
+                if ((i.GetEndTime().Year == flag.Year) && (i.GetEndTime().Month == flag.Month) && (i.GetEndTime().Day == flag.Day))
+                {
+                    hours = hours + (i.GetEndTime() - i.GetStartTime());
+                }
+                else
+                {
+                    if ((i.GetStartTime().Year == flag.Year) && (i.GetStartTime().Month == flag.Month) && (i.GetStartTime().Day == flag.Day))
+                    {
+                        hours = hours + ((flag + new TimeSpan(1,0,0,0)) - i.GetStartTime());
+                    }
+                    break;
+                }
+            }
+            return hours;
         }
     }
 }

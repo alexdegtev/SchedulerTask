@@ -33,6 +33,7 @@ namespace Builder.IO
         private static XDocument tdata;
         private static DateTime begin;
         private static DateTime end;
+        private static string path;
         private static string datapattern = "dd.MM.yyyy";
         private static string dtpattern = "MM.dd.yyyy H:mm:ss";
         private static Dictionary<int, IEquipment> eqdic;
@@ -55,6 +56,7 @@ namespace Builder.IO
 
         public static void SetFolderPath(string folderPath)
         {
+            path = folderPath;
             sdata = XDocument.Load(folderPath + "system.xml");
             tdata = XDocument.Load(folderPath + "tech.xml");
         }
@@ -178,7 +180,6 @@ namespace Builder.IO
             _equipments = equipments;
         }
 
-
         private static void ReadEquipment(XElement group, GroupEquipment parent)
         {
             GroupEquipment tmp = new GroupEquipment(calendar, int.Parse(group.Attribute("id").Value), group.Attribute("name").Value);
@@ -198,6 +199,7 @@ namespace Builder.IO
                 
             }
         }
+
         private static List<IOperation> ReadOperations(XElement part, Party parent, Dictionary<int, IOperation> opdic)
         {
             Dictionary<int, List<int>> pop = new Dictionary<int, List<int>>();
@@ -236,68 +238,67 @@ namespace Builder.IO
             return tmpop;
 
         }
+        
         private static Interval SeparateInterval(Interval ii, DateTime start, DateTime end, out Interval oi)
         {
             oi = new Interval(end, ii.GetEndTime());
             return new Interval(ii.GetStartTime(), start);
         }
+        
         public static void UpdateCalendars(DateTime start_data, DateTime end_data)
         {
             List<Interval> intlist = new List<Interval>();
             List<Interval> doneintlist = new List<Interval>();
+            sdata.Save(path + "system.xml");
+            sdata = XDocument.Load(path + "system.xml");
+            df = sdata.Root.Name.Namespace;
             XElement root = sdata.Root;
-            foreach (XElement elm in root.Descendants(df + "CalendarInformation"))
+            XElement elm = XElement.Parse(root.FirstNode.ToString());
+            XElement eg = XElement.Parse(elm.FirstNode.ToString());
+            IEnumerable<XElement> l = eg.Elements();
+            if (l.First().Name == df + "Include") { }
+            IEnumerable<XElement> l1 = l.Elements(df + "Include");
+            foreach (XElement inc in eg.Elements(df + "Include"))
             {
-                foreach (XElement eg in elm.Elements(df + "EquipmentGroup"))
+                DateTime tmpdata = start_data;
+                while ((tmpdata.Day != end_data.Day) || (tmpdata.Month != end_data.Month) || (tmpdata.Year != end_data.Year)) //при старой проверке из-за несовпадения часов был бесконечный цикл и вылет за границы
                 {
-                    foreach (XElement inc in eg.Elements(df + "Include"))
+                    if ((int)tmpdata.DayOfWeek == int.Parse(inc.Attribute("day_of_week").Value))
                     {
-                        DateTime tmpdata = start_data;
-                        while (tmpdata != end_data)
-                        {
-                            if ((int)tmpdata.DayOfWeek == int.Parse(inc.Attribute("day_of_week").Value))
-                            {
-                                int ind = inc.Attribute("time_period").Value.IndexOf("-");
-                                int sh = int.Parse(inc.Attribute("time_period").Value.Substring(0, 1));
-                                int eh = int.Parse(inc.Attribute("time_period").Value.Substring(ind + 1, 2));
+                        int ind = inc.Attribute("time_period").Value.IndexOf("-");
+                        int sh = int.Parse(inc.Attribute("time_period").Value.Substring(0, 1));
+                        int eh = int.Parse(inc.Attribute("time_period").Value.Substring(ind + 1, 2));
 
-                                intlist.Add(new Interval(new DateTime(tmpdata.Year, tmpdata.Month, tmpdata.Day, sh, 0, 0), new DateTime(tmpdata.Year, tmpdata.Month, tmpdata.Day, eh, 0, 0)));
-                            }
-                            tmpdata = tmpdata.AddDays(1);
-                        }
+                        intlist.Add(new Interval(new DateTime(tmpdata.Year, tmpdata.Month, tmpdata.Day, sh, 0, 0), new DateTime(tmpdata.Year, tmpdata.Month, tmpdata.Day, eh, 0, 0)));
                     }
-                    foreach (XElement exc in eg.Elements(df + "Exclude"))
+                    tmpdata = tmpdata.AddDays(1);
+                }
+            }
+            foreach (XElement exc in eg.Elements(df + "Exclude"))
+            {
+
+                foreach (Interval t in intlist)
+                {
+                    if ((int)t.GetStartTime().DayOfWeek == int.Parse(exc.Attribute("day_of_week").Value))
                     {
+                        int ind = exc.Attribute("time_period").Value.IndexOf("-");
+                        int sh = int.Parse(exc.Attribute("time_period").Value.Substring(0, 2));
+                        int eh = int.Parse(exc.Attribute("time_period").Value.Substring(ind + 1, 2));
 
-                        foreach (Interval t in intlist)
-                        {
-                            if ((int)t.GetStartTime().DayOfWeek == int.Parse(exc.Attribute("day_of_week").Value))
-                            {
-                                int ind = exc.Attribute("time_period").Value.IndexOf("-");
-                                int sh = int.Parse(exc.Attribute("time_period").Value.Substring(0, 2));
-                                int eh = int.Parse(exc.Attribute("time_period").Value.Substring(ind + 1, 2));
+                        DateTime dt = t.GetStartTime().AddHours(-t.GetStartTime().Hour);
+                        Interval tmpint;
+                        doneintlist.Add(SeparateInterval(t, dt.AddHours(sh), dt.AddHours(eh), out tmpint));
+                        doneintlist.Add(tmpint);
 
-                                DateTime dt = t.GetStartTime().AddHours(-t.GetStartTime().Hour);
-                                Interval tmpint;
-                                doneintlist.Add(SeparateInterval(t, dt.AddHours(sh), dt.AddHours(eh), out tmpint));
-                                doneintlist.Add(tmpint);
-
-                            }
-                        }
                     }
                 }
             }
 
-            foreach (XElement elm in root.Descendants(df + "EquipmentInformation").Elements(df + "EquipmentGroup"))
+            foreach (XElement eq in root.Descendants(df + "Equipment"))
             {
-                foreach (XElement eg in elm.Elements(df + "EquipmentGroup"))
-                {
-                    foreach (XElement eq in eg.Elements(df + "Equipment"))
-                    {
-                        equipments[int.Parse(eq.Attribute("id").Value)].GetCalendar().AddIntervals(doneintlist);
-                    }
-                }
+                equipments[int.Parse(eq.Attribute("id").Value)].GetCalendar().AddIntervals(doneintlist);
             }
+
         }
     }
 }
