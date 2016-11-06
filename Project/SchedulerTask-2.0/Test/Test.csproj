@@ -58,6 +58,9 @@
     <Folder Include="Builder\" />
     <Folder Include="Debugger\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="StartAllBuilderTests.bat" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using System.Collections;
+using CommonTypes.Calendar;
 
-namespace Builder.Equipment
+namespace CommonTypes.Equipment
 {
     /// <summary>
     /// Implement IEquipment
@@ -13,27 +10,26 @@ namespace Builder.Equipment
     public class SingleEquipment : IEquipment
     {
         int index;
-        Calendar ca; //календарь для текущего оборудования
-        int eqid; //id оборудования
-        bool occflag; //флаг занятости оборудования; true - свободно; false - занято;
-        string individualname;
+        ICalendar ca; //календарь для текущего оборудования
+        int eqId; //id оборудования
+        //bool occFlag; //флаг занятости оборудования; true - свободно; false - занято;
+        string individualName;
         //Dictionary<int, bool> eqtacts; //словарь часовых тактов; int - значение часа; bool - значение занятости оборудования в течение часа 
         //(true - свободно, false - занято); по умолчанию весь интервал, состоящий из тактов времени считается свободным
-        DateTime OccupyT1 = DateTime.MinValue;
-        DateTime OccupyT2 = DateTime.MinValue;
+        DateTime occupyT1 = DateTime.MinValue;
+        DateTime occupyT2 = DateTime.MinValue;
 
-        public SingleEquipment(Calendar ca, int id, string individualname)
+        public SingleEquipment(ICalendar ca, int id, string individualname)
         {
             this.ca = ca;
-            eqid = id;
-            this.individualname = individualname;
+            eqId = id;
+            this.individualName = individualname;
         }
-
 
         /// <summary>
         /// получить календарь оборудования 
         /// </summary>   
-        public Calendar GetCalendar()
+        public ICalendar GetCalendar()
         {
             return ca;
         }
@@ -41,11 +37,10 @@ namespace Builder.Equipment
         /// <summary>
         /// получить id оборудования (если оборудование групповое, то возвращается id группы оборудования)
         /// </summary>      
-        public int GetID()
+        public int GetId()
         {
-            return eqid;
+            return eqId;
         }
-
 
         /// <summary>
         /// проверка доступности оборудования в такт времени T
@@ -53,7 +48,7 @@ namespace Builder.Equipment
         /// </summary>        
         public bool IsNotOccupied(DateTime T)
         {
-            return OccupyT2 <= T;
+            return occupyT2 <= T;
         }
 
         /// <summary>
@@ -62,18 +57,16 @@ namespace Builder.Equipment
         public void OccupyEquip(DateTime t1, DateTime t2)
         {
             //GetCalendar().OccupyHours(t1, t2);
-            OccupyT1 = t1;
-            OccupyT2 = t2;
+            occupyT1 = t1;
+            occupyT2 = t2;
 
         }
-
 
         public override string ToString()
         {
             return String.Format("<Equipment id=\"{0}\" name=\"{1}\" />",
-                eqid, individualname);
+                eqId, individualName);
         }
-
         
         public IEnumerator GetEnumerator()
         {

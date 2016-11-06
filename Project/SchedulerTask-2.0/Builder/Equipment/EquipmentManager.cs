@@ -1,38 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using CommonTypes.Equipment;
+using CommonTypes.Operation;
 
 namespace Builder.Equipment
 {
    static class EquipmentManager
     {
-
         /// <summary>
-        /// Поиск свободного оборудования в списке; (возвращаем true, если находим свободное оборудование, false - иначе);
-        /// Доп. выходные параметры:
-        /// operationtime - время окончания операции (для первого случая) или  ближайшее время начала операции (для второго случая); 
+        /// Поиск свободного оборудования в списке
         /// </summary>
-        internal static bool IsFree(DateTime T, IOperation o, out DateTime operationtime, out SingleEquipment equip)
+        /// <param name="time"></param>
+        /// <param name="operation"></param>
+        /// <param name="operationTime">время окончания операции (для первого случая) или  ближайшее время начала операции (для второго случая)</param>
+        /// <param name="equipment"></param>
+        /// <returns>возвращаем true, если находим свободное оборудование, false - иначе</returns>
+        internal static bool IsFree(DateTime time, IOperation operation, out DateTime operationTime, out SingleEquipment equipment)
         {
-            TimeSpan t = o.GetDuration();
-            int intervalindex;
+            TimeSpan t = operation.GetDuration();
+            int intervalIndex;
 
-            foreach (SingleEquipment e in o.GetEquipment())
+            foreach (SingleEquipment e in operation.GetEquipment())
             {
-                if ((e.IsNotOccupied(T)) && (e.GetCalendar().IsInterval(T, out intervalindex)) && (e.GetCalendar().WillRelease(T, t, intervalindex)))
+                if ((e.IsNotOccupied(time)) && (e.GetCalendar().IsInterval(time, out intervalIndex)) && (e.GetCalendar().WillRelease(time, t, intervalIndex)))
                 {
-                    equip = e;
-                    operationtime = e.GetCalendar().GetTimeofRelease(T, t, intervalindex);
+                    equipment = e;
+                    operationTime = e.GetCalendar().GetTimeofRelease(time, t, intervalIndex);
                     return true;
                 }
             }
 
-            equip = null;
+            equipment = null;
             DateTime mintime = DateTime.MaxValue;
-            foreach (SingleEquipment e in o.GetEquipment())
-                if (e.GetCalendar().GetNearestStart(T) <= mintime) mintime = e.GetCalendar().GetNearestStart(T);
-            operationtime = mintime;
+            foreach (SingleEquipment e in operation.GetEquipment())
+                if (e.GetCalendar().GetNearestStart(time) <= mintime) mintime = e.GetCalendar().GetNearestStart(time);
+            operationTime = mintime;
 
             return false;
         }

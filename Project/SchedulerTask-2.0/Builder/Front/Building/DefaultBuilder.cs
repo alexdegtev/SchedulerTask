@@ -1,11 +1,11 @@
 ﻿using Builder.Equipment;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Builder.Events;
 using Builder.Front.Sorting;
-using Builder.IO;
+using CommonTypes.Equipment;
+using CommonTypes.Operation;
+using CommonTypes.Party;
+using System;
+using System.Collections.Generic;
 
 namespace Builder.Front.Building
 {
@@ -14,53 +14,51 @@ namespace Builder.Front.Building
     /// </summary>
     public class DefaultBuilder : IBuilder
     {
-        private List<Party> party;
+        private List<IParty> party;
         private List<IOperation> operations;
         private ISorter frontSorter;
-        //private EquipmentManager equipmentManager;
 
-        public DefaultBuilder(List<Party> party, /*EquipmentManager equipmentManager*/ ISorter frontSorter)
+        public DefaultBuilder(List<IParty> party, ISorter frontSorter)
         {
             this.party = party;
 
             // Получение операций из партий
             operations = new List<IOperation>();
-            foreach (Party i in party)
+            foreach (IParty i in party)
             {
-                TreeIterator partyIterator = i.getIterator(i);
-                while (partyIterator.next())
+                TreePartyIterator partyIterator = i.GetIterator(i);
+                while (partyIterator.Next())
                 {
-                    operations.AddRange(partyIterator.Current.getPartyOperations());
+                    operations.AddRange(partyIterator.Current.GetPartyOperations());
                 }
             }
 
-            //this.equipmentManager = equipmentManager;
             this.frontSorter = frontSorter;
         }
 
         public void Build()
         {
             EventList events = new EventList();
-            List<IOperation> operations_tmp = new List<IOperation>();
+            List<IOperation> operationsTmp = new List<IOperation>();
             foreach (IOperation operation in operations)
             {
-                operations_tmp.Add(operation);
+                operationsTmp.Add(operation);
             }
-            foreach (Party i in party)
+            foreach (IParty i in party)
             {
-                events.Add(new Event(i.getStartTimeParty()));
+                events.Add(new Event(i.GetStartTimeParty()));
             }
-            while (operations_tmp.Count != 0) 
+            while (operationsTmp.Count != 0) 
             {
                 while (events.Count != 0)
                 {
                     List<IOperation> front = new List<IOperation>();
 
                     // Формирование фронта
-                    foreach (IOperation operation in operations_tmp)
+                    foreach (IOperation operation in operationsTmp)
                     {
                         if (!operation.IsEnabled() && operation.PreviousOperationIsEnd(events[0].Time) &&
-                            DateTime.Compare(operation.GetParty().getStartTimeParty(), events[0].Time) <= 0)
+                            DateTime.Compare(operation.GetParty().GetStartTimeParty(), events[0].Time) <= 0)
                         {
                             DateTime operationTime;
                             SingleEquipment equipment;
@@ -88,7 +86,7 @@ namespace Builder.Front.Building
                         {
                             operation.SetOperationInPlan(events[0].Time, operationTime, equipment);
                             equipment.OccupyEquip(events[0].Time, operationTime);
-                            operations_tmp.Remove(operation);
+                            operationsTmp.Remove(operation);
                         }
 
                         events.Add(new Event(operationTime));
@@ -96,28 +94,26 @@ namespace Builder.Front.Building
 
                     events.RemoveFirst();
                 }
-                if (operations_tmp.Count != 0)
+                if (operationsTmp.Count != 0)
                 {
-                    DateTime new_start_data = new DateTime();
-                    DateTime new_end_data ;
-                    foreach (Party i in party)
+                    DateTime newStartData = new DateTime();
+                    foreach (IParty i in party)
                     {
-                        if (i.getEndTimeParty()>new_start_data)
+                        if (i.GetEndTimeParty()>newStartData)
                         {
-                            new_start_data = i.getEndTimeParty();
+                            newStartData = i.GetEndTimeParty();
                         }
                     }
                     double hours = 0;
-                    foreach (IOperation operation in operations_tmp)
+                    foreach (IOperation operation in operationsTmp)
                     { 
                         hours = hours + ((operation.GetDuration().TotalHours * 24)/(operation.GetEquipment().GetTimeWorkInTwentyFourHours().TotalHours));
                     }
-                    new_end_data = new_start_data + (new TimeSpan((int)hours, 0, 0));
-                    events.Add(new Event(new_start_data));
-                    Builder.IO.Reader.UpdateCalendars(new_start_data, new_end_data);
+                    DateTime newEndData = newStartData + (new TimeSpan((int)hours, 0, 0));
+                    events.Add(new Event(newStartData));
+                    IO.Reader.UpdateCalendars(newStartData, newEndData);
                 }
             }
-
         }
     }
 }

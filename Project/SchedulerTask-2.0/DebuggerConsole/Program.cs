@@ -1,27 +1,28 @@
 ﻿using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Debugger;
 using Debugger.IO;
 using Debugger.Exceptions;
-using Builder;
-using Builder.Equipment;
+using CommonTypes;
+using CommonTypes.Decision;
+using CommonTypes.Equipment;
+using CommonTypes.Operation;
+using CommonTypes.Party;
+using Debugger.FindExceptions;
 
 namespace DebuggerConsole
 {
     class TestScheduleA
     {
-        Dictionary<int, Operation> operations;
+        Dictionary<int, IOperation> operations;
         Dictionary<int, IEquipment> equipments;
-        List<Decision> decisions;
+        List<IDecision> decisions;
 
         public TestScheduleA()
         {
-            operations = new Dictionary<int, Operation>();
+            operations = new Dictionary<int, IOperation>();
             equipments = new Dictionary<int, IEquipment>();
-            decisions = new List<Decision>();
+            decisions = new List<IDecision>();
 
             // Список исходных операций
             operations.Add(1, new Operation(1, "Операция 1", new TimeSpan(200), new List<IOperation>(), new SingleEquipment(null, 1, "Станок 1"), null));
@@ -57,7 +58,7 @@ namespace DebuggerConsole
             return equipments;
         }
 
-        public List<Decision> GetDecisions()
+        public List<IDecision> GetDecisions()
         {
             return decisions;
         }
@@ -67,13 +68,13 @@ namespace DebuggerConsole
     {
         Dictionary<int, Operation> operations;
         Dictionary<int, IEquipment> equipments;
-        List<Decision> decisions;
+        List<IDecision> decisions;
 
         public TestScheduleB()
         {
             operations = new Dictionary<int, Operation>();
             equipments = new Dictionary<int, IEquipment>();
-            decisions = new List<Decision>();
+            decisions = new List<IDecision>();
 
             // Список исходных операций
             //  - id операции
@@ -110,7 +111,7 @@ namespace DebuggerConsole
             return equipments;
         }
 
-        public List<Decision> GetDecisions()
+        public List<IDecision> GetDecisions()
         {
             return decisions;
         }
@@ -120,13 +121,13 @@ namespace DebuggerConsole
     {
         Dictionary<int, Operation> operations;
         Dictionary<int, IEquipment> equipments;
-        List<Decision> decisions;
+        List<IDecision> decisions;
 
         public TestScheduleC()
         {
             operations = new Dictionary<int, Operation>();
             equipments = new Dictionary<int, IEquipment>();
-            decisions = new List<Decision>();
+            decisions = new List<IDecision>();
 
             Operation op1 = new Operation(1, "Операция 1", new TimeSpan(300), new List<IOperation>(), new SingleEquipment(null, 1, "Станок 1"), null);
             Operation op2 = new Operation(2, "Операция 2", new TimeSpan(300), new List<IOperation>(), new SingleEquipment(null, 1, "Станок 1"), null);
@@ -168,14 +169,14 @@ namespace DebuggerConsole
             return equipments;
         }
 
-        public List<Decision> GetDecisions()
+        public List<IDecision> GetDecisions()
         {
             return decisions;
         }
     }
 
     /// <summary>
-    /// Клиентсий код для отладчика.
+    /// Клиентсий код для отладчика
     /// </summary>
     class Program
     {
@@ -187,7 +188,7 @@ namespace DebuggerConsole
 
         static void Main(string[] args)
         {
-            Builder.IO.CommandLineParser argsParser = new Builder.IO.CommandLineParser(args);
+            CommandLineParser argsParser = new CommandLineParser(args);
             if (!argsParser.IsCorrect())
             {
                 Console.WriteLine("Неверная входная командная строка");
@@ -198,36 +199,38 @@ namespace DebuggerConsole
 
             ExceptionsSearch search = null;
             List<IException> exceptions = null;
-            List<Decision> decisions = null;
-            List<Party> parties = new List<Party>();
-            Dictionary<int, IOperation> operations = new Dictionary<int,IOperation>();
-            Dictionary<int, IEquipment> equipment = new Dictionary<int,IEquipment>();
+            List<IDecision> decisions = null;
+            List<IParty> parties = new List<IParty>();
+            Dictionary<int, IOperation> operations = new Dictionary<int, IOperation>();
+            Dictionary<int, IEquipment> equipment = new Dictionary<int, IEquipment>();
             Reader reader = null;
+            reader = new Reader(argsParser.GetInputDir(), argsParser.GetOutputDir());
             //Builder.IO.Reader builder_reader = null;
             Writer writer = null;
+            writer = new Writer(argsParser.GetOutputDir());
 
             // Тестовые расписания
-            if (Options.is_debug)
-            {
-                switch(Options.test_id)
-                {
-                    case 0:
-                        TestScheduleA testA = new TestScheduleA();
-                        search = new ExceptionsSearch(testA.GetOperations(), testA.GetEquipment(), testA.GetDecisions(), null);
-                        break;
-                    case 1:
-                        TestScheduleB testB = new TestScheduleB();
-                        search = new ExceptionsSearch(testB.GetOperations(), testB.GetEquipment(), testB.GetDecisions(), null);
-                        break;
-                    case 2:
-                        TestScheduleC testC = new TestScheduleC();
-                        search = new ExceptionsSearch(testC.GetOperations(), testC.GetEquipment(), testC.GetDecisions(), null);
-                        break;
-                }
+            //if (Options.is_debug)
+            //{
+            //    switch(Options.test_id)
+            //    {
+            //        case 0:
+            //            TestScheduleA testA = new TestScheduleA();
+            //            search = new ExceptionsSearch(testA.GetOperations(), testA.GetEquipment(), testA.GetDecisions(), null);
+            //            break;
+            //        case 1:
+            //            TestScheduleB testB = new TestScheduleB();
+            //            search = new ExceptionsSearch(testB.GetOperations(), testB.GetEquipment(), testB.GetDecisions(), null);
+            //            break;
+            //        case 2:
+            //            TestScheduleC testC = new TestScheduleC();
+            //            search = new ExceptionsSearch(testC.GetOperations(), testC.GetEquipment(), testC.GetDecisions(), null);
+            //            break;
+            //    }
 
-                exceptions = search.Execute();
-                ConsoleLogger.Log("Найдено ошибок : " + exceptions.Count);
-            }
+            //    exceptions = search.Execute();
+            //    ConsoleLogger.Log("Найдено ошибок : " + exceptions.Count);
+            //}
 
             try
             {
@@ -235,6 +238,7 @@ namespace DebuggerConsole
                 //builder_reader = new Builder.IO.Reader(argsParser.GetInputDir());
                 //Builder.IO.Reader.SetFolderPath(argsParser.GetInputDir());
                 //writer = new Writer(argsParser.GetOutputDir());
+                reader.ReadData(out decisions);
             }
             catch (System.IO.FileNotFoundException)
             {
@@ -247,7 +251,7 @@ namespace DebuggerConsole
                 System.Environment.Exit(1);
             }
 
-            reader.ReadData(out decisions);
+            
             //Builder.IO.Reader.ReadData(out parties, out operations, out equipment);
             if (decisions.Count == 0)
             {
@@ -268,7 +272,7 @@ namespace DebuggerConsole
 
 
             search = new ExceptionsSearch(operations, equipment, decisions, parties);
-            search.Execute();
+            exceptions = search.Execute();
             ConsoleLogger.Log("Найдено ошибок : " + exceptions.Count);
             writer.WriteLog(exceptions);
         }

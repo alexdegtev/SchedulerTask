@@ -1,0 +1,4 @@
+C:\Users\alex\Desktop\str\SchedulerTask\Project\SchedulerTask-2.0\CommonTypes\bin\Debug\CommonTypes.dll
+C:\Users\alex\Desktop\str\SchedulerTask\Project\SchedulerTask-2.0\CommonTypes\bin\Debug\CommonTypes.pdb
+C:\Users\alex\Desktop\str\SchedulerTask\Project\SchedulerTask-2.0\CommonTypes\obj\Debug\CommonTypes.dll
+C:\Users\alex\Desktop\str\SchedulerTask\Project\SchedulerTask-2.0\CommonTypes\obj\Debug\CommonTypes.pdb

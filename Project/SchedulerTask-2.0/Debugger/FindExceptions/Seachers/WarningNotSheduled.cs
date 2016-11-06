@@ -1,20 +1,16 @@
-﻿//using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Debugger;
+﻿using System.Collections.Generic;
 using Debugger.Exceptions;
-using Builder;
-using Builder.Equipment;
+using CommonTypes.Decision;
+using CommonTypes.Operation;
 
 namespace Debugger.FindExceptions.Seachers
 {
     class WarningNotSheduled : IExceptionSearch
     {
         Dictionary<int, IOperation> operations;
-        List<Decision> decisions;
+        List<IDecision> decisions;
 
-        public WarningNotSheduled(Dictionary<int, IOperation> operations, List<Decision> decisions)
+        public WarningNotSheduled(Dictionary<int, IOperation> operations, List<IDecision> decisions)
         {
             // Конструктор
             this.operations = operations;

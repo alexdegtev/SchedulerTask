@@ -1,52 +1,49 @@
-using Builder.Equipment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Xml.Linq;
-using System.Globalization;
-using Builder.TimeCalendar;
-
+using CommonTypes.Party;
+using CommonTypes.Operation;
+using CommonTypes.Equipment;
+using CommonTypes.Calendar;
 
 namespace Builder.IO
 {
     public static class Reader
     {
-        /// <summary>
-        /// Список для хранения партий
-        /// </summary>
-        private static List<Party> partys;
+        ///// <summary>
+        ///// Список для хранения партий
+        ///// </summary>
+        //private static List<IParty> partys;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private static Dictionary<int, Operation> operations;
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //private static Dictionary<int, IOperation> operations;
 
         /// <summary>
         /// 
         /// </summary>
         private static Dictionary<int, IEquipment> equipments;
 
-
-
         private static XDocument sdata;
         private static XDocument tdata;
         private static DateTime begin;
-        private static DateTime end;
+        //private static DateTime end;
         private static string path;
         private static string datapattern = "dd.MM.yyyy";
-        private static string dtpattern = "MM.dd.yyyy H:mm:ss";
-        private static Dictionary<int, IEquipment> eqdic;
-        private static Dictionary<int, IOperation> opdic;
-        private static List<Party> partlist;
+        //private static string dtpattern = "MM.dd.yyyy H:mm:ss";
+        //private static Dictionary<int, IEquipment> eqdic;
+        //private static Dictionary<int, IOperation> opdic;
+        //private static List<IParty> partlist;
         private static XNamespace df;
-        private static Calendar calendar;
+        private static ICalendar calendar;
 
 
-        /// <summary>
-        /// констуктор ридера
-        /// </summary>
-        /// <param name="folderPath"> Путь к .xml файлам.</param>
+        ///// <summary>
+        ///// констуктор ридера
+        ///// </summary>
+        ///// <param name="folderPath"> Путь к .xml файлам.</param>
         //public Reader(string folderPath)
         //{
 
@@ -57,22 +54,36 @@ namespace Builder.IO
         public static void SetFolderPath(string folderPath)
         {
             path = folderPath;
-            sdata = XDocument.Load(folderPath + "system.xml");
-            tdata = XDocument.Load(folderPath + "tech.xml");
+            try
+            {
+                sdata = XDocument.Load(folderPath + "system.xml");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("По указанному пути не найден файл system.xml");
+            }
+
+            try
+            {
+                tdata = XDocument.Load(folderPath + "tech.xml");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("По указанному пути не найден файл tech.xml");
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="partys"> Список партий.</param>
-        /// <param name="operations">Список операций.</param>
-        /// <param name="equipments">Список оборудований.</param>
-        public static void ReadData(out List<Party> partys, out Dictionary<int, IOperation> operations, out Dictionary<int, IEquipment> _equipments)
+        /// <param name="partys"> Список партий</param>
+        /// <param name="operations">Список операций</param>
+        /// <param name="equipments_">Список оборудований</param>
+        public static void ReadData(out List<IParty> partys, out Dictionary<int, IOperation> operations, out Dictionary<int, IEquipment> equipments_)
         {
             partys = null;
             operations = null;
             equipments = null;
-
 
             List<Interval> intlist = new List<Interval>();
             List<Interval> doneintlist = new List<Interval>();
@@ -88,12 +99,12 @@ namespace Builder.IO
                 if (elm.Attribute("date_begin") != null)
                 {
                     string date = elm.Attribute("date_begin").Value;
-                    DateTime.TryParseExact(date, datapattern, null, DateTimeStyles.None, out start);
+                    DateTime.TryParseExact(date, datapattern, null, System.Globalization.DateTimeStyles.None, out start);
                 }
                 if (elm.Attribute("date_end") != null)
                 {
                     string date = elm.Attribute("date_end").Value;
-                    DateTime.TryParseExact(date, datapattern, null, DateTimeStyles.None, out end);
+                    DateTime.TryParseExact(date, datapattern, null, System.Globalization.DateTimeStyles.None, out end);
                 }
                 foreach (XElement eg in elm.Elements(df + "EquipmentGroup"))
                 {
@@ -115,7 +126,6 @@ namespace Builder.IO
                     }
                     foreach (XElement exc in eg.Elements(df + "Exclude"))
                     {
-
                         foreach (Interval t in intlist)
                         {
                             if ((int)t.GetStartTime().DayOfWeek == int.Parse(exc.Attribute("day_of_week").Value))
@@ -128,13 +138,10 @@ namespace Builder.IO
                                 Interval tmpint;
                                 doneintlist.Add(SeparateInterval(t, dt.AddHours(sh), dt.AddHours(eh), out tmpint));
                                 doneintlist.Add(tmpint);
-
                             }
                         }
                     }
                 }
-
-
             }
 
             calendar = new Calendar(doneintlist);
@@ -147,43 +154,43 @@ namespace Builder.IO
 
             root = tdata.Root;
             df = root.Name.Namespace;
-            partys = new List<Party>();
+            partys = new List<IParty>();
            
             operations = new Dictionary<int, IOperation>();
-            List<IOperation> tmpop;
+            List<IOperation> tmpOperationsp;
             foreach (XElement product in root.Descendants(df + "Product"))
             {
                 foreach (XElement part in product.Elements(df + "Part"))
                 {
-                    DateTime.TryParseExact(part.Attribute("date_begin").Value, datapattern, null, DateTimeStyles.None, out begin);
-                    DateTime.TryParseExact(part.Attribute("date_end").Value, datapattern, null, DateTimeStyles.None, out end);
+                    DateTime.TryParseExact(part.Attribute("date_begin").Value, datapattern, null, System.Globalization.DateTimeStyles.None, out begin);
+                    DateTime.TryParseExact(part.Attribute("date_end").Value, datapattern, null, System.Globalization.DateTimeStyles.None, out end);
                     Party parent = new Party(begin, end, int.Parse(part.Attribute("priority").Value), part.Attribute("name").Value, int.Parse(part.Attribute("num_products").Value));
-                    tmpop = ReadOperations(part, parent, operations);
-                    foreach (IOperation op in tmpop)
+                    tmpOperationsp = ReadOperations(part, parent, operations);
+                    foreach (IOperation op in tmpOperationsp)
                     {
-                        parent.addOperationToForParty(op);
+                        parent.AddOperationToForParty(op);
                     }
                     foreach (XElement subpart in part.Elements(df + "SubPart"))
                     {
                         Party sp = new Party(subpart.Attribute("name").Value, int.Parse(subpart.Attribute("num_products").Value));
-                        tmpop = ReadOperations(subpart, parent, operations);
-                        foreach (IOperation op in tmpop)
+                        tmpOperationsp = ReadOperations(subpart, parent, operations);
+                        foreach (IOperation op in tmpOperationsp)
                         {
-                            sp.addOperationToForParty(op);
+                            sp.AddOperationToForParty(op);
                         }
-                        parent.addSubPArty(sp);
+                        parent.AddSubParty(sp);
                         //partys.Add(sp);
                     }
                     partys.Add(parent);
                 }
             }
-            _equipments = equipments;
+            equipments_ = equipments;
         }
 
         private static void ReadEquipment(XElement group, GroupEquipment parent)
         {
             GroupEquipment tmp = new GroupEquipment(calendar, int.Parse(group.Attribute("id").Value), group.Attribute("name").Value);
-            equipments.Add(tmp.GetID(), tmp);
+            equipments.Add(tmp.GetId(), tmp);
             if (parent != null)
             {
                 parent.AddEquipment(tmp);
@@ -194,9 +201,8 @@ namespace Builder.IO
             foreach (XElement eq in group.Elements(df + "Equipment"))
             {
                 SingleEquipment stmp = new SingleEquipment(calendar, int.Parse(eq.Attribute("id").Value), eq.Attribute("name").Value);
-                equipments.Add(stmp.GetID(), stmp);
+                equipments.Add(stmp.GetId(), stmp);
                 tmp.AddEquipment(stmp);
-                
             }
         }
 
@@ -227,16 +233,15 @@ namespace Builder.IO
             }
             foreach (IOperation o in tmpop)
             {
-                if (pop[o.GetID()]!=null)
+                if (pop[o.GetId()]!=null)
                 {
-                    for(int i = 0; i < pop[o.GetID()].Count; i++)
+                    for(int i = 0; i < pop[o.GetId()].Count; i++)
                     {
-                        o.AddPrevOperation(opdic[pop[o.GetID()][i]]);
+                        o.AddPrevOperation(opdic[pop[o.GetId()][i]]);
                     }
                 }
             }
             return tmpop;
-
         }
         
         private static Interval SeparateInterval(Interval ii, DateTime start, DateTime end, out Interval oi)
@@ -276,7 +281,6 @@ namespace Builder.IO
             }
             foreach (XElement exc in eg.Elements(df + "Exclude"))
             {
-
                 foreach (Interval t in intlist)
                 {
                     if ((int)t.GetStartTime().DayOfWeek == int.Parse(exc.Attribute("day_of_week").Value))
@@ -289,7 +293,6 @@ namespace Builder.IO
                         Interval tmpint;
                         doneintlist.Add(SeparateInterval(t, dt.AddHours(sh), dt.AddHours(eh), out tmpint));
                         doneintlist.Add(tmpint);
-
                     }
                 }
             }
@@ -298,8 +301,6 @@ namespace Builder.IO
             {
                 equipments[int.Parse(eq.Attribute("id").Value)].GetCalendar().AddIntervals(doneintlist);
             }
-
         }
     }
 }
-

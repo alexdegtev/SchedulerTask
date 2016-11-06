@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Builder
+namespace Builder.Events
 {
     public class Event: IComparable
     {
@@ -21,7 +18,6 @@ namespace Builder
         public DateTime Time
         {
             get { return time; }
-            set { }
         }
 
         public int CompareTo(object obj)

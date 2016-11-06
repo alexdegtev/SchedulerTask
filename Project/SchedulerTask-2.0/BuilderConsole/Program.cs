@@ -1,29 +1,26 @@
-﻿using Builder;
-using Builder.Equipment;
-using Builder.Front;
+﻿using Builder.Front;
 using Builder.IO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using CommonTypes;
+using CommonTypes.Equipment;
+using CommonTypes.Operation;
+using CommonTypes.Party;
 
 namespace BuilderConsole
 {
     /// <summary>
-    /// Клиентский код для построителя.
+    /// Клиентский код для генератора расписания
     /// </summary>
     class Program
     {
         static void Main(string[] args)
         {
-            Builder.IO.CommandLineParser argsParser = new Builder.IO.CommandLineParser(args);
+            CommandLineParser argsParser = new CommandLineParser(args);
             if (!argsParser.IsCorrect())
             {
-                Console.WriteLine("Неверная входная командная строка");
                 Environment.Exit(1);
             }
-            Console.WriteLine("Директория с входными файлами : " + argsParser.GetInputDir());
-            Console.WriteLine("Директория для записи лога    : " + argsParser.GetOutputDir());
 
             try
             {
@@ -39,14 +36,20 @@ namespace BuilderConsole
                 Console.WriteLine("Путь содержит недопустимые символы");
                 System.Environment.Exit(1);
             }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                System.Environment.Exit(1);
+            }
 
-            List<Party> partys;
+            List<IParty> partys;
             Dictionary<int, IOperation> operations;
             Dictionary<int, IEquipment> equipments;
             Reader.ReadData(out partys, out operations, out equipments);
 
             FrontBuilding frontBuilding = new FrontBuilding(partys);
             frontBuilding.Build();
+
             Writer writer = null;
             try
             {
@@ -59,7 +62,6 @@ namespace BuilderConsole
             }
             catch (System.IO.FileNotFoundException) //игнорируем ошибку т.к. файл создается райтером
             {
-                
             }
             writer.WriteData(partys);
         }

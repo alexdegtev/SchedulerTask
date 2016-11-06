@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Builder.Events
 {
@@ -10,14 +7,15 @@ namespace Builder.Events
     /// </summary>
     public class EventList
     {
-        List<Event> events;
+        private List<Event> events;
+
         public EventList()
         {
             events = new List<Event>();
         }
 
         /// <summary>
-        /// Добавление нового события. Событие будет добавлено, если отсутствует в списке.
+        /// Добавление нового события. Событие будет добавлено, если отсутствует в списке
         /// </summary>
         /// <param name="item">Новое событие</param>
         public void Add(Event item)
@@ -31,7 +29,7 @@ namespace Builder.Events
         }
 
         /// <summary>
-        /// Сортировка списка событий по невозрастанию.
+        /// Сортировка списка событий по невозрастанию
         /// </summary>
         public void Sort()
         {

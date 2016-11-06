@@ -2,16 +2,16 @@
 <InformationModel xmlns="http://tempuri.org/PersistentData.xsd" date_begin="01.10.2016 8:00:00" date_end="25.11.2016">
   <CalendarInformation date_begin="01.10.2016" date_end="25.11.2016">
     <EquipmentGroup type="01">
-      <Include day_of_week="1"  time_period="8:00:00-17:00:00" />
-      <Include day_of_week="2"  time_period="8:00:00-17:00:00" />
-      <Include day_of_week="3"  time_period="8:00:00-17:00:00" />
-      <Include day_of_week="4"  time_period="8:00:00-17:00:00" />
-      <Include day_of_week="5"  time_period="8:00:00-17:00:00" />
-      <Exclude day_of_week="1"  time_period="13:00:00-14:00:00" />
-      <Exclude day_of_week="2"  time_period="13:00:00-14:00:00" />
-      <Exclude day_of_week="3"  time_period="13:00:00-14:00:00" />
-      <Exclude day_of_week="4"  time_period="13:00:00-14:00:00" />
-      <Exclude day_of_week="5"  time_period="13:00:00-14:00:00" />
+      <Include day_of_week="1" time_period="8:00:00-17:00:00" />
+      <Include day_of_week="2" time_period="8:00:00-17:00:00" />
+      <Include day_of_week="3" time_period="8:00:00-17:00:00" />
+      <Include day_of_week="4" time_period="8:00:00-17:00:00" />
+      <Include day_of_week="5" time_period="8:00:00-17:00:00" />
+      <Exclude day_of_week="1" time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="2" time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="3" time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="4" time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="5" time_period="13:00:00-14:00:00" />
     </EquipmentGroup>
   </CalendarInformation>
   <EquipmentInformation>

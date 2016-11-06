@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Debugger;
 using Debugger.Exceptions;
-using Builder;
-using Builder.Equipment;
+using CommonTypes.Decision;
+using CommonTypes.Operation;
 
 namespace Debugger.FindExceptions.Seachers
 {
     class ExceptionOperationsChain : IExceptionSearch
     {
         Dictionary<int, IOperation> operations;
-        List<Decision> decisions;
+        List<IDecision> decisions;
 
-        public ExceptionOperationsChain(Dictionary<int, IOperation> operations, List<Decision> decisions)
+        public ExceptionOperationsChain(Dictionary<int, IOperation> operations, List<IDecision> decisions)
         {
             // Конструктор
             this.operations = operations;
@@ -59,7 +56,7 @@ namespace Debugger.FindExceptions.Seachers
                         // Предыдущей операции нет в расписании
                         exceptions.Add(new Debugger.Exceptions.Exception("R00",
                                                  "Error",
-                                                 "Было нарушено условие последовательного выполнения операций : операции " + prev_operation.GetID() + " нет в расписании",
+                                                 "Было нарушено условие последовательного выполнения операций : операции " + prev_operation.GetId() + " нет в расписании",
                                                  "",
                                                  ""));
                         max_end_date = new DateTime(0);
@@ -74,7 +71,7 @@ namespace Debugger.FindExceptions.Seachers
                                                  "Error",
                                                  "Было нарушено условие последовательного выполнения операций",
                                                  decision.GetOperation().ToString(),
-                                                 " "));
+                                                 ""));
                 }
             }
 

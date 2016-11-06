@@ -1,19 +1,16 @@
-﻿//using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Debugger;
+﻿using System.Collections.Generic;
+using CommonTypes.Decision;
+using CommonTypes.Operation;
 using Debugger.Exceptions;
-using Builder;
-using Builder.Equipment;
+
 namespace Debugger.FindExceptions.Seachers
 {
     class ExceptionInvalidStartDate : IExceptionSearch
     {
         Dictionary<int, IOperation> operations;
-        List<Decision> decisions;
+        List<IDecision> decisions;
 
-        public ExceptionInvalidStartDate(Dictionary<int, IOperation> operations, List<Decision> decisions)
+        public ExceptionInvalidStartDate(Dictionary<int, IOperation> operations, List<IDecision> decisions)
         {
             // Конструктор
             this.operations = operations;
@@ -34,14 +31,14 @@ namespace Debugger.FindExceptions.Seachers
                 // TODO : Получить доступ к дате начала расписания
                 if (decision.GetOperation().GetParty() != null)
                 {
-                    System.DateTime beginDate = decision.GetOperation().GetParty().getStartTimeParty();
+                    System.DateTime beginDate = decision.GetOperation().GetParty().GetStartTimeParty();
                     if (beginDate > startDate)
                     {
                         exceptions.Add(new Exception("V04",
                                                      "Error",
                                                      "Операция в построенном расписании не может быть начата раньше указанной даты в файле с исходными данными",
                                                      " ",
-                                                     "Номер операции : " + decision.GetOperation().GetID()));
+                                                     "Номер операции : " + decision.GetOperation().GetId()));
                     }
                 }
 
