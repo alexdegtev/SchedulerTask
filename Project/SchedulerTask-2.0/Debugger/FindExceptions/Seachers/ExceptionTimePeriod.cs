@@ -1,19 +1,14 @@
-﻿//using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Debugger;
+﻿using System.Collections.Generic;
 using Debugger.Exceptions;
-using Builder;
-using Builder.Equipment;
+using CommonTypes.Decision;
 
 namespace Debugger.FindExceptions.Seachers
 {
     class ExceptionTimePeriod : IExceptionSearch
     {
-        List<Decision> decisions;
+        List<IDecision> decisions;
 
-        public ExceptionTimePeriod(List<Decision> decisions)
+        public ExceptionTimePeriod(List<IDecision> decisions)
         {
             // Конструктор
             this.decisions = decisions;

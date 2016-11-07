@@ -2,16 +2,16 @@
 <InformationModel xmlns="http://tempuri.org/PersistentData.xsd" date_begin="01.10.2016 8:00:00" date_end="04.11.2016">
   <CalendarInformation date_begin="01.10.2016" date_end="04.11.2016">
     <EquipmentGroup type="01">
-      <Include day_of_week="1"  time_period="8:00:00-17:00:00" />
-      <Include day_of_week="2"  time_period="8:00:00-17:00:00" />
-      <Include day_of_week="3"  time_period="8:00:00-17:00:00" />
-      <Include day_of_week="4"  time_period="8:00:00-17:00:00" />
-      <Include day_of_week="5"  time_period="8:00:00-17:00:00" />
-      <Exclude day_of_week="1"  time_period="13:00:00-14:00:00" />
-      <Exclude day_of_week="2"  time_period="13:00:00-14:00:00" />
-      <Exclude day_of_week="3"  time_period="13:00:00-14:00:00" />
-      <Exclude day_of_week="4"  time_period="13:00:00-14:00:00" />
-      <Exclude day_of_week="5"  time_period="13:00:00-14:00:00" />
+      <Include day_of_week="1" time_period="8:00:00-17:00:00" />
+      <Include day_of_week="2" time_period="8:00:00-17:00:00" />
+      <Include day_of_week="3" time_period="8:00:00-17:00:00" />
+      <Include day_of_week="4" time_period="8:00:00-17:00:00" />
+      <Include day_of_week="5" time_period="8:00:00-17:00:00" />
+      <Exclude day_of_week="1" time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="2" time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="3" time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="4" time_period="13:00:00-14:00:00" />
+      <Exclude day_of_week="5" time_period="13:00:00-14:00:00" />
     </EquipmentGroup>
   </CalendarInformation>
   <EquipmentInformation>
@@ -21,10 +21,10 @@
       </EquipmentGroup>
       <EquipmentGroup id="3" name="Токарные станки класса 2" type="01" workingmode="INTERUPTIONS">
         <EquipmentGroup id="6" name="Токарные станки класса 1" type="01" workingmode="INTERUPTIONS">
-            <Equipment id="8" name="ТС1-3001-8" />
-		    <Equipment id="9" name="ТС1-3001-9" />
+          <Equipment id="8" name="ТС1-3001-8" />
+          <Equipment id="9" name="ТС1-3001-9" />
         </EquipmentGroup>
-		<Equipment id="7" name="ТС2-3001-7" />
+        <Equipment id="7" name="ТС2-3001-7" />
       </EquipmentGroup>
     </EquipmentGroup>
   </EquipmentInformation>

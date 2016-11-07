@@ -1,20 +1,16 @@
-﻿//using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Debugger;
+﻿using System.Collections.Generic;
 using Debugger.Exceptions;
-using Builder;
-using Builder.Equipment;
+using CommonTypes.Decision;
+using CommonTypes.Operation;
 
 namespace Debugger.FindExceptions.Seachers
 {
     class ExceptionSimultaneityCondition : IExceptionSearch
     {
         Dictionary<int, IOperation> operations;
-        List<Decision> decisions;
+        List<IDecision> decisions;
 
-        public ExceptionSimultaneityCondition(Dictionary<int, IOperation> operations, List<Decision> decisions)
+        public ExceptionSimultaneityCondition(Dictionary<int, IOperation> operations, List<IDecision> decisions)
         {
             // Конструктор
             this.operations = operations;
@@ -26,20 +22,20 @@ namespace Debugger.FindExceptions.Seachers
             ConsoleLogger.Log("Проверяем условие одновременного использования оборудования...");
             List<IException> exceptions = new List<IException>();
 
-            List<KeyValuePair<Decision, Decision>> similarOperations = new List<KeyValuePair<Decision, Decision>>();
+            List<KeyValuePair<IDecision, IDecision>> similarOperations = new List<KeyValuePair<IDecision, IDecision>>();
             // Сравниваем все операции в расписании друг с другом
             foreach (var decision in decisions)
             {
                 foreach (var otherDecision in decisions)
                 {
                     if (decision != otherDecision
-                        && decision.GetOperation().GetEquipment().GetID()
-                        == otherDecision.GetOperation().GetEquipment().GetID())
+                        && decision.GetOperation().GetEquipment().GetId()
+                        == otherDecision.GetOperation().GetEquipment().GetId())
                     {
-                        if(   !similarOperations.Contains(new KeyValuePair<Decision, Decision>(decision, otherDecision))
-                           && !similarOperations.Contains(new KeyValuePair<Decision, Decision>(otherDecision, decision)))
+                        if(   !similarOperations.Contains(new KeyValuePair<IDecision, IDecision>(decision, otherDecision))
+                           && !similarOperations.Contains(new KeyValuePair<IDecision, IDecision>(otherDecision, decision)))
                         {
-                            similarOperations.Add(new KeyValuePair<Decision, Decision>(decision, otherDecision));
+                            similarOperations.Add(new KeyValuePair<IDecision, IDecision>(decision, otherDecision));
                         }
                     }
                 }

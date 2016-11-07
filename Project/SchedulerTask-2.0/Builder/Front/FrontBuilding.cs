@@ -1,34 +1,30 @@
-﻿using Builder.Equipment;
-using Builder.Front.Building;
+﻿using Builder.Front.Building;
 using Builder.Front.Sorting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using CommonTypes.Party;
 
 namespace Builder.Front
 {
     public class FrontBuilding
     {
-
         public IBuilder Builder { get; set; }
         public ISorter Sorter { get; set; }
 
-        public FrontBuilding(List<Party> party/*, EquipmentManager equipmentManager*/, ISorter sorter)
+        public FrontBuilding(List<IParty> party, ISorter sorter)
         {
             Builder = new DefaultBuilder(party, sorter);
-
         }
 
-        public FrontBuilding(List<Party> party)
+        public FrontBuilding(List<IParty> party)
         {
             Builder = new DefaultBuilder(party, new SortFront());            
         }
 
-        public void setFrontBuildingBehaivor(IBuilder frontBuilding)
+        public void SetFrontBuildingBehaivor(IBuilder frontBuilder)
         {
-            this.Builder = frontBuilding;
+            Builder = frontBuilder;
         }
+
         public void Build()
         {
             Builder.Build();

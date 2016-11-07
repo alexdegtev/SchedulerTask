@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using CommonTypes.Calendar;
 
-namespace Builder.Equipment
+namespace CommonTypes.Equipment
 {
     public interface IEquipment : IEnumerable, IEnumerator
     {
-        int GetID();
-        Calendar GetCalendar();
+        int GetId();
+        ICalendar GetCalendar();
         //string ToString();
         TimeSpan GetTimeWorkInTwentyFourHours();
         //bool IsOccupied(DateTime T);

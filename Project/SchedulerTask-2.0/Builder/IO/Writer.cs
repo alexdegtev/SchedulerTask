@@ -1,27 +1,23 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Xml.Linq;
 using System.IO;
+using CommonTypes.Decision;
+using CommonTypes.Operation;
+using CommonTypes.Party;
 
 namespace Builder.IO
 {
     public class Writer
     {
-        XDocument document;
-        string folderPath;
+        private XDocument document;
+        private string folderPath;
 
         /// <summary>
-        /// конструктор Writer
+        /// Конструктор Writer
         /// </summary>
-        /// <param name="output"> Путь к сохранению. </param>
-        /// <param name="input"> Путь к входным данным </param>
-        /// 
-
-
-
+        /// <param name="output">Путь к сохранению</param>
+        /// <param name="input">Путь к входным данным</param>
         public Writer(string input, string output)
         {
             this.folderPath = output;
@@ -31,7 +27,7 @@ namespace Builder.IO
         }
 
         /// <summary>
-        /// Записать результат.
+        /// Записать результат
         /// </summary>
         /// <param name="operations"></param>
         public void WriteData(Dictionary<int, IOperation> operations)
@@ -40,9 +36,9 @@ namespace Builder.IO
             XNamespace df = root.Name.Namespace;
             foreach (KeyValuePair<int, IOperation> o in operations)
             {
-                Decision d = o.Value.GetDecision();
+                IDecision d = o.Value.GetDecision();
                 if (d == null) continue;
-                string id = Convert.ToString(d.GetOperation().GetID());
+                string id = Convert.ToString(d.GetOperation().GetId());
                 bool found = false;
                 foreach (XElement product in root.Descendants(df + "Product"))
                 {
@@ -53,7 +49,7 @@ namespace Builder.IO
                             if (op.Attribute("id").Value == id)
                             {
                                 found = true;
-                                op.Add(new XAttribute("equipment", d.GetEquipment().GetID()));
+                                op.Add(new XAttribute("equipment", d.GetEquipment().GetId()));
                                 op.Add(new XAttribute("date_begin", d.GetStartTime()));
                                 op.Add(new XAttribute("date_end", d.GetEndTime()));
                                 op.Attribute("state").Value = "SCHEDULED";
@@ -70,7 +66,7 @@ namespace Builder.IO
                                 if (op.Attribute("id").Value == id)
                                 {
                                     found = true;
-                                    op.Add(new XAttribute("equipment", d.GetEquipment().GetID()));
+                                    op.Add(new XAttribute("equipment", d.GetEquipment().GetId()));
                                     op.Add(new XAttribute("date_begin", d.GetStartTime()));
                                     op.Add(new XAttribute("date_end", d.GetEndTime()));
                                     XAttribute attr = op.Attribute("equipmentgroup");
@@ -87,7 +83,6 @@ namespace Builder.IO
                 }
             }
             document.Save(folderPath + "tech+solution.xml");
-
         }
 
         public void WriteData(List<IOperation> operations)
@@ -96,9 +91,9 @@ namespace Builder.IO
             XNamespace df = root.Name.Namespace;
             foreach (IOperation o in operations)
             {
-                Decision d = o.GetDecision();
+                IDecision d = o.GetDecision();
                 if (d == null) continue;
-                string id = Convert.ToString(d.GetOperation().GetID());
+                string id = Convert.ToString(d.GetOperation().GetId());
                 bool found = false;
                 foreach (XElement product in root.Descendants(df + "Product"))
                 {
@@ -109,9 +104,9 @@ namespace Builder.IO
                             if (op.Attribute("id").Value == id)
                             {
                                 found = true;
-                                op.Add(new XAttribute("equipment", d.GetEquipment().GetID()));
-                                op.Add(new XAttribute("date_begin", d.GetStartTime()));
-                                op.Add(new XAttribute("date_end", d.GetEndTime()));
+                                op.Add(new XAttribute("equipment", d.GetEquipment().GetId()));
+                                op.Add(new XAttribute("date_begin", d.GetStartTime().ToString()));
+                                op.Add(new XAttribute("date_end", d.GetEndTime().ToString()));
                                 op.Attribute("state").Value = "SCHEDULED";
                                 XAttribute attr = op.Attribute("equipmentgroup");
                                 attr.Remove();
@@ -126,9 +121,9 @@ namespace Builder.IO
                                 if (op.Attribute("id").Value == id)
                                 {
                                     found = true;
-                                    op.Add(new XAttribute("equipment", d.GetEquipment().GetID()));
-                                    op.Add(new XAttribute("date_begin", d.GetStartTime()));
-                                    op.Add(new XAttribute("date_end", d.GetEndTime()));
+                                    op.Add(new XAttribute("equipment", d.GetEquipment().GetId()));
+                                    op.Add(new XAttribute("date_begin", d.GetStartTime().ToString()));
+                                    op.Add(new XAttribute("date_end", d.GetEndTime().ToString()));
                                     XAttribute attr = op.Attribute("equipmentgroup");
                                     attr.Remove();
                                     op.Attribute("state").Value = "SCHEDULED";
@@ -143,17 +138,16 @@ namespace Builder.IO
                 }
             }
             document.Save(folderPath + "tech+solution.xml");
-
         }
 
-        public void WriteData(List<Party> partys)
+        public void WriteData(List<IParty> partys)
         {
             foreach (var party in partys)
             {
-                WriteData(party.getPartyOperations());
-                foreach (var part in party.getSubParty())
+                WriteData(party.GetPartyOperations());
+                foreach (var part in party.GetSubParty())
                 {
-                    WriteData(part.getPartyOperations());
+                    WriteData(part.GetPartyOperations());
                 }
             }
         }

@@ -1,44 +1,44 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Builder.TimeCalendar
+namespace CommonTypes.Calendar
 {
     public class Interval : IComparable
     {
-        DateTime starttime;
-        DateTime endtime;
-
+        private DateTime startTime;
+        private DateTime endTime;
 
         public Interval(DateTime starttime, DateTime endtime)
         {
-            this.starttime = starttime;
-            this.endtime = endtime;
+            this.startTime = starttime;
+            this.endTime = endtime;
         }
 
         public DateTime GetStartTime()
-        { return starttime; }
+        {
+            return startTime;
+        }
 
         public DateTime GetEndTime()
-        { return endtime; }
+        {
+            return endTime;
+        }
 
         public void SetStartTime(DateTime val)
         {
-            starttime = val;
+            startTime = val;
         }
 
         public void SetEndTime(DateTime val)
         {
-            endtime = val;
+            endTime = val;
         }
 
         public int CompareTo(object obj)
         {
             Interval i2 = obj as Interval;
-            if (obj == null) return 0;
+            if (i2 == null) return 0;
 
-            return DateTime.Compare(starttime, i2.starttime);
+            return DateTime.Compare(startTime, i2.startTime);
         }
     }
 }

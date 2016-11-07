@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using CommonTypes.Operation;
 
 namespace Builder.Front.Sorting
 {
     /// <summary>
-    /// Класс сортировки фронта.
+    /// Класс сортировки фронта
     /// </summary>
     public class SortFront : ISorter
     {
-        private static int comparision(IOperation a, IOperation b)
+        private static int Comparision(IOperation a, IOperation b)
         {
             int res = 0;
-            if (a.GetParty().getPriority() > b.GetParty().getPriority())
+            if (a.GetParty().GetPriority() > b.GetParty().GetPriority())
                 res = 1;
-            if (a.GetParty().getPriority() == b.GetParty().getPriority())
+            if (a.GetParty().GetPriority() == b.GetParty().GetPriority())
                 res = 0;
-            if (a.GetParty().getPriority() < b.GetParty().getPriority())
+            if (a.GetParty().GetPriority() < b.GetParty().GetPriority())
                 res = -1;
 
             return res;
@@ -25,7 +23,7 @@ namespace Builder.Front.Sorting
 
         public void Sort(List<IOperation> front)
         {
-            front.Sort(comparision);
+            front.Sort(Comparision);
         }
     }
 }

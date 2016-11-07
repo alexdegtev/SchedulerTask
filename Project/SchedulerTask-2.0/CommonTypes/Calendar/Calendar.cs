@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Builder.TimeCalendar;
 
-namespace Builder
+namespace CommonTypes.Calendar
 {
-    public interface ICalendar
-    {
-        int FindInterval(DateTime T);
-    }
-
     /// <summary>
     /// Class for calendar.
     /// </summary>
-    public class Calendar
+    public class Calendar : ICalendar
     {
-        List<Interval> calendar;
+        private List<Interval> calendar;
 
         public Calendar(List<Interval> intervallist)
         {
@@ -77,10 +69,16 @@ namespace Builder
         /// <summary>
         /// вернуть индекс интервала в календаре, в который попадает заданное время T
         /// если не попадает ни в один из интервалов - найти индекс ближайшего возможного
-        /// flag  = true, если попали в интервал false - иначе
+        /// flag = true, если попали в интервал false - иначе
         /// </summary>       
         public int FindInterval(DateTime T, out bool flag)
         {
+            if (T < calendar[0].GetStartTime())
+            {
+                flag = false;
+                return 0;
+            }
+
             for (int j = 0; j < calendar.Count; j++)
             {
                 DateTime starttime = calendar[j].GetStartTime();
@@ -96,11 +94,11 @@ namespace Builder
         }
 
         /// <summary>
-        /// вернуть время, в которое закончится выполнение операции;
-        /// T - время начала операции o;
-        /// t - длительность операции;
-        /// intervalindex - индекс интервала в календаре
-        /// </summary>   
+        /// Вернуть время, в которое закончится выполнение операции;
+        /// </summary>
+        /// <param name="T">Время начала операции o</param>
+        /// <param name="t">Длительность операции</param>
+        /// <param name="intervalindex">Индекс интервала в календаре</param>
         public DateTime GetTimeofRelease(DateTime T, TimeSpan t, int intervalindex)
         {
             TimeSpan intervallasting = calendar[intervalindex].GetEndTime() - T;
@@ -120,8 +118,8 @@ namespace Builder
 
         /// <summary>
         /// вернуть время ближайшего возможного времени начала выполнения операции
-        /// T - время начала операции o
         /// </summary> 
+        /// <param name="T">Время начала операции o</param>
         public DateTime GetNearestStart(DateTime T)
         {
             bool flag;

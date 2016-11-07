@@ -1,13 +1,12 @@
-﻿using Builder;
-using Builder.Equipment;
-using Debugger.Exceptions;
+﻿using Debugger.Exceptions;
 using Debugger.FindExceptions.Seachers;
-//using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using CommonTypes.Decision;
+using CommonTypes.Equipment;
+using CommonTypes.Operation;
+using CommonTypes.Party;
 
-namespace Debugger
+namespace Debugger.FindExceptions
 {
     public class ExceptionsSearch
     {
@@ -21,15 +20,15 @@ namespace Debugger
         /// </summary>
         Dictionary<int, IEquipment> equipments;
 
-        List<Decision> decisions;
+        List<IDecision> decisions;
 
         List<IExceptionSearch> exceptionsSeachers;
 
         List<IException> exceptions;
 
-        List<Party> partys;
+        List<IParty> partys;
 
-        public ExceptionsSearch(Dictionary<int, IOperation> operations, Dictionary<int, IEquipment> equipments, List<Decision> decisions, List<Party> partys)
+        public ExceptionsSearch(Dictionary<int, IOperation> operations, Dictionary<int, IEquipment> equipments, List<IDecision> decisions, List<IParty> partys)
         {
             this.operations = operations;
             this.equipments = equipments;
