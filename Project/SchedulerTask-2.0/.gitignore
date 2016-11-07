@@ -3,6 +3,7 @@
 SchedulerTask-2.0.v12.suo
 SchedulerTask-2.0.v11.suo
 *.suo
+
 SchedulerTask-2.0/bin/
 SchedulerTask-2.0/obj/
 Test/bin/
@@ -17,3 +18,5 @@ DebuggerConsole/obj/
 DebuggerConsole/bin/
 Test/bin/
 Test/obj/
+CommonTypes/bin/
+CommonTypes/obj/
