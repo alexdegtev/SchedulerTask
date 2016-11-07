@@ -59,6 +59,7 @@
     <Folder Include="Debugger\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="StartAllDebuggerTests.bat" />
     <None Include="StartAllBuilderTests.bat" />
   </ItemGroup>
   <Choose>

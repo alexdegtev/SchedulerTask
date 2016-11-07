@@ -160,7 +160,7 @@ namespace CommonTypes.Operation
                 foreach (IOperation o in previousOperations)
                     operationInfo += "\n<Previous id=" + o.GetId() + "/>";
 
-                operationInfo += "\n </Operation>";
+                operationInfo += "\n</Operation>";
                 return operationInfo;
             }
 

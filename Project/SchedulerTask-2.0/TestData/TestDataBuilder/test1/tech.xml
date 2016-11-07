@@ -11,10 +11,10 @@
           <Previous id="11" />
           <Previous id="12" />
         </Operation>
-	<SubPart name="Субблок X1" num_products="1">
+		<SubPart name="Субблок X1" num_products="1">
           <Operation id="14" name="Операция 4" state="NOTSCHEDULED" duration="100" equipmentgroup="2">
           </Operation>
-	</SubPart>
+		</SubPart>
       </Part>
     </Product>
   </WaresInformation>

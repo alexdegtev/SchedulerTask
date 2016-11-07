@@ -39,15 +39,15 @@ namespace Debugger.FindExceptions
             exceptionsSeachers = new List<IExceptionSearch>();
             //exceptionsSeachers.Add(new MockupException());
             exceptionsSeachers.Add(new ExceptionOperations(operations, decisions));
-            exceptionsSeachers.Add(new ExceptionEquipment());
-            exceptionsSeachers.Add(new ExceptionOperationDuration());
+            //exceptionsSeachers.Add(new ExceptionEquipment());
+            //exceptionsSeachers.Add(new ExceptionOperationDuration());
             exceptionsSeachers.Add(new ExceptionInvalidStartDate(operations, decisions));
             exceptionsSeachers.Add(new ExceptionOperationsChain(operations, decisions));
             exceptionsSeachers.Add(new ExceptionSimultaneityCondition(operations, decisions));
             exceptionsSeachers.Add(new ExceptionTimePeriod(decisions));
-            exceptionsSeachers.Add(new ExceptionInvalidDate());
-            exceptionsSeachers.Add(new WarningTimePeriod());
-            exceptionsSeachers.Add(new WarningEquipmentDowntime());
+            //exceptionsSeachers.Add(new ExceptionInvalidDate());
+            //exceptionsSeachers.Add(new WarningTimePeriod());
+            //exceptionsSeachers.Add(new WarningEquipmentDowntime());
             exceptionsSeachers.Add(new WarningNotSheduled(operations, decisions));
         }
 

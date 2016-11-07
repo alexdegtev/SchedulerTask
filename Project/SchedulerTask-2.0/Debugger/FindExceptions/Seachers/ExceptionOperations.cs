@@ -36,7 +36,7 @@ namespace Debugger.FindExceptions.Seachers
                     exceptions.Add(new Exception("V00",
                                                  "Error",
                                                  "Несоответствие набора исходных операций операциям в расписании",
-                                                 " ",
+                                                 "",
                                                  decision.ToString()));
                 }
             }

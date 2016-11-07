@@ -10,5 +10,6 @@ namespace CommonTypes.Decision
         DateTime GetEndTime();
         SingleEquipment GetEquipment();
         IOperation GetOperation();
+        bool IsSchduled();
     }
 }
