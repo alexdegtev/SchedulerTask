@@ -60,11 +60,9 @@ namespace CommonTypes.Decision
             if (IsSchduled()) isscheduled = "SCHEDULED";
             else isscheduled = "NOTSCHEDULED";
 
-            return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"{2}\" date_begin=\"{3}\" date_end=\"{4}\" equipment=\"{5}\" duration=\"{6}\"></Operation>",
+            return String.Format("Operation id=\"{0}\" name=\"{1}\" state=\"{2}\" date_begin=\"{3}\" date_end=\"{4}\" equipment=\"{5}\" duration=\"{6}\"",
                 GetOperation().GetId(), GetOperation().GetName(), isscheduled, startTime, endTime, GetEquipment().GetId(), GetOperation().GetDuration());
 
-            return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"{2}\" date_begin=\"{3}\" date_end=\"{4}\" equipment=\"{5}\" duration=\"{6}\"></Operation>",
-                equipmentId.GetId(), GetOperation().GetName(), isscheduled, startTime, endTime, GetOperation().GetEquipment().GetId(), GetOperation().GetDuration());
         }
 
 
@@ -72,6 +70,7 @@ namespace CommonTypes.Decision
         {
             return GetOperation() != null;
         }
+
     }
 
 }
