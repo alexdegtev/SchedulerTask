@@ -64,7 +64,7 @@ namespace CommonTypes.Equipment
 
         public override string ToString()
         {
-            return String.Format("<EquipmentGroup id=\"{0}\" name=\"{1}\" workingmode=\"INTERUPTIONS\" />",
+            return String.Format("EquipmentGroup id=\"{0}\" name=\"{1}\" workingmode=\"INTERUPTIONS\"",
                 eqId, name);
         }
 
