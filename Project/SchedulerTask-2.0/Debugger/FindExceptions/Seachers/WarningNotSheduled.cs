@@ -10,39 +10,29 @@ namespace Debugger.FindExceptions.Seachers
         Dictionary<int, IOperation> operations;
         List<IDecision> decisions;
 
+        // Конструктор
         public WarningNotSheduled(Dictionary<int, IOperation> operations, List<IDecision> decisions)
         {
-            // Конструктор
             this.operations = operations;
             this.decisions = decisions;
         }
 
         public List<IException> Execute()
         {
-            ConsoleLogger.Log("Ищем операции, не вошедшие в расписание...");
             List<IException> exceptions = new List<IException>();
-            bool found = false;
 
-            // Проходим по всем данным операциям
-            foreach (var operation in operations)
+            foreach (var decision in decisions)
             {
-                found = false;
-                // Каждую текущую операцию ищем в назначенных операциях
-                foreach (var decision in decisions)
-                {
-                    if (decision.GetOperation() == operation.Value)
-                        found = true;
-                }
-
-                if (!found)
+                if (!decision.IsSchduled())
                 {
                     exceptions.Add(new Exception("R04",
                                                  "Error",
                                                  "Не все операции были назначены",
-                                                 " ",
-                                                 " "));
+                                                 decision.ToString(),
+                                                 ""));
                 }
             }
+
 
             return exceptions;
         }

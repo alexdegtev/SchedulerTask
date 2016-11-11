@@ -57,11 +57,20 @@ namespace CommonTypes.Decision
         public override string ToString()
         {
             string isscheduled;
-            if (GetOperation() != null) isscheduled = "SCHEDULED";
+            if (IsSchduled()) isscheduled = "SCHEDULED";
             else isscheduled = "NOTSCHEDULED";
 
-            return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"{2}\" date_begin=\"{3}\" date_end=\"{4}\" equipment=\"{4}\" duration=\"{5}\"> </Operation>",
-                equipmentId, GetOperation().GetName(), isscheduled, startTime, endTime, GetOperation().GetEquipment(), GetOperation().GetDuration());
+            return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"{2}\" date_begin=\"{3}\" date_end=\"{4}\" equipment=\"{5}\" duration=\"{6}\"></Operation>",
+                GetOperation().GetId(), GetOperation().GetName(), isscheduled, startTime, endTime, GetEquipment().GetId(), GetOperation().GetDuration());
+
+            return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"{2}\" date_begin=\"{3}\" date_end=\"{4}\" equipment=\"{5}\" duration=\"{6}\"></Operation>",
+                equipmentId.GetId(), GetOperation().GetName(), isscheduled, startTime, endTime, GetOperation().GetEquipment().GetId(), GetOperation().GetDuration());
+        }
+
+
+        public bool IsSchduled()
+        {
+            return GetOperation() != null;
         }
     }
 

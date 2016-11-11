@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Xml.Serialization;
 
 namespace Debugger.Exceptions
@@ -14,12 +10,13 @@ namespace Debugger.Exceptions
         public string Source { get; set; }
         [XmlElement]
         public string ScheduleFile { get; set; }
+
         public ReferenseResourse() { }
 
-        public ReferenseResourse(string sourse, string schedule_file)
+        public ReferenseResourse(string sourse, string scheduleFile)
         {
             this.Source = sourse;
-            this.ScheduleFile = schedule_file;
+            this.ScheduleFile = scheduleFile;
         }
     }
 }

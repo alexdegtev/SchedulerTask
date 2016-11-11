@@ -1,10 +1,6 @@
-using Debugger.Exceptions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Xml.Serialization;
+
 namespace Debugger.Exceptions
 {
     [Serializable, XmlType("Error")]
@@ -16,21 +12,17 @@ namespace Debugger.Exceptions
         public string ErrorCode { get; set; }
         [XmlElement]
         public string ErrorStatus { get; set; }
-
-
         [XmlElement]
         public ReferenseResourse ReferenceResource { get; set; }
+
         public Exception() { }
 
-        public Exception(string error_code, string error_status, string error_message, string ReferenceResourceSourse, string ReferenceResourceScheduler)
+        public Exception(string errorCode, string errorStatus, string errorMessage, string referenceResourceSourse, string referenceResourceScheduler)
         {
-            this.ErrorCode = error_code;
-            this.ErrorStatus = error_status;
-            this.MessageError = error_message;
-            this.ReferenceResource = new ReferenseResourse(ReferenceResourceSourse, ReferenceResourceScheduler);
+            this.ErrorCode = errorCode;
+            this.ErrorStatus = errorStatus;
+            this.MessageError = errorMessage;
+            this.ReferenceResource = new ReferenseResourse(referenceResourceSourse, referenceResourceScheduler);
         }
-
-
-
     }
 }

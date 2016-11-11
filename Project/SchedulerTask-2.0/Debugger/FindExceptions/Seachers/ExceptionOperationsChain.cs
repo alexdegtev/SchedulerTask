@@ -8,64 +8,62 @@ namespace Debugger.FindExceptions.Seachers
 {
     class ExceptionOperationsChain : IExceptionSearch
     {
-        Dictionary<int, IOperation> operations;
-        List<IDecision> decisions;
+        private Dictionary<int, IOperation> operations;
+        private List<IDecision> decisions;
 
+        // Конструктор
         public ExceptionOperationsChain(Dictionary<int, IOperation> operations, List<IDecision> decisions)
         {
-            // Конструктор
             this.operations = operations;
             this.decisions = decisions;
         }
 
         public List<IException> Execute()
         {
-            ConsoleLogger.Log("Ищем ошибки в условиях последовательного выполнения операций...");
+            //ConsoleLogger.Log("Ищем ошибки в условиях последовательного выполнения операций...");
             List<IException> exceptions = new List<IException>();
 
-            DateTime max_end_date;
-            DateTime date_begin;
+            DateTime maxEndFate;
+            DateTime dateBegin;
 
-            List<IOperation> prev_operations = new List<IOperation>();
             foreach (var decision in decisions)
             {
-                date_begin = decision.GetStartTime();
-                max_end_date = new DateTime(0);
+                dateBegin = decision.GetStartTime();
+                maxEndFate = new DateTime(0);
 
                 // Получаем список всех предшествующих операций текущей операции
-                prev_operations = decision.GetOperation().GetPrevOperations();
+                List<IOperation> prevOperations = decision.GetOperation().GetPrevOperations();
 
                 // Находим для текущей операции максимальное время окончания всех её предшествующих операций
-                bool is_found;
-                foreach (var prev_operation in prev_operations)
+                foreach (var prevOperation in prevOperations)
                 {
-                    is_found = false;
+                    bool isFound = false;
                     // Находим каждую предыдущую операцию в построенном расписании
-                    foreach (var complete_decision in decisions)
+                    foreach (var completeDecision in decisions)
                     {
-                        if (complete_decision.GetOperation() == prev_operation)
+                        if (completeDecision.GetOperation() == prevOperation)
                         {
-                            is_found = true;
+                            isFound = true;
                             // Если нашли, то проверяем её время окончания
-                            if (complete_decision.GetEndTime() > max_end_date)
-                                max_end_date = decision.GetEndTime();
+                            if (completeDecision.GetEndTime() > maxEndFate)
+                                maxEndFate = completeDecision.GetEndTime();
                         }
                     }
-                    if(!is_found)
+                    if(!isFound)
                     {
                         // Предыдущей операции нет в расписании
                         exceptions.Add(new Debugger.Exceptions.Exception("R00",
                                                  "Error",
-                                                 "Было нарушено условие последовательного выполнения операций : операции " + prev_operation.GetId() + " нет в расписании",
-                                                 "",
+                                                 "Было нарушено условие последовательного выполнения операций",
+                                                 "Операции " + prevOperation.GetId() + " нет в расписании",
                                                  ""));
-                        max_end_date = new DateTime(0);
+                        maxEndFate = new DateTime(0);
                         break;
                     }
                 }
 
                 // Сверяем время завершения
-                if (date_begin < max_end_date)
+                if (dateBegin < maxEndFate)
                 {
                     exceptions.Add(new Debugger.Exceptions.Exception("R00",
                                                  "Error",
