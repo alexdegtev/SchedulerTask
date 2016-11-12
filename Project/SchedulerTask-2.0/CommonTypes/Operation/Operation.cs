@@ -149,18 +149,17 @@ namespace CommonTypes.Operation
         public override string ToString()
         {
             if (previousOperations.Count == 0)
-                return String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\" />",
+                return String.Format("Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\"",
                 id, name, duration, equipment.GetId());
 
             else
             {
-                string operationInfo = String.Format("<Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\"",
+                string operationInfo = String.Format("Operation id=\"{0}\" name=\"{1}\" state=\"NOTSCHEDULED\" duration=\"{2}\" equipmentgroup=\"{3}\"",
                 id, name, duration, equipment.GetId());
 
                 foreach (IOperation o in previousOperations)
-                    operationInfo += "\n<Previous id=" + o.GetId() + "/>";
+                    operationInfo += "\n<Previous id=" + o.GetId();
 
-                operationInfo += "\n</Operation>";
                 return operationInfo;
             }
 
