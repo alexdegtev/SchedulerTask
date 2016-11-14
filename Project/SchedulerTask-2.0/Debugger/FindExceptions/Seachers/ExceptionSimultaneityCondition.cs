@@ -2,6 +2,7 @@
 using Debugger.Exceptions;
 using CommonTypes.Decision;
 using CommonTypes.Operation;
+using CommonTypes;
 
 namespace Debugger.FindExceptions.Seachers
 {
@@ -19,6 +20,7 @@ namespace Debugger.FindExceptions.Seachers
 
         public List<IException> Execute()
         {
+            ConsoleLogger.Log("Ищем ошибки одновременного использования оборудования...");
             List<IException> exceptions = new List<IException>();
 
             foreach (var first in decisions)

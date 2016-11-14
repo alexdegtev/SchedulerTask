@@ -39,6 +39,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineParser.cs" />
+    <Compile Include="ConsoleLogger.cs" />
     <Compile Include="Decision\Decision.cs" />
     <Compile Include="Decision\IDecision.cs" />
     <Compile Include="Equipment\GroupEquipment.cs" />
