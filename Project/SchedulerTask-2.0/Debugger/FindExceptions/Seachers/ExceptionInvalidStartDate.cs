@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using CommonTypes.Decision;
 using CommonTypes.Operation;
+using CommonTypes;
 using Debugger.Exceptions;
 
 namespace Debugger.FindExceptions.Seachers
