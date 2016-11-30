@@ -1,0 +1,7 @@
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\GranttChart\bin\Debug\GranttChart.dll
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\GranttChart\bin\Debug\GranttChart.pdb
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\GranttChart\obj\Debug\GanttChart.Chart.resources
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\GranttChart\obj\Debug\GanttChart.csproj.GenerateResource.Cache
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\GranttChart\obj\Debug\GranttChart.dll
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\GranttChart\obj\Debug\GranttChart.pdb
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\GranttChart\obj\Debug\GanttChart.csprojResolveAssemblyReference.cache
