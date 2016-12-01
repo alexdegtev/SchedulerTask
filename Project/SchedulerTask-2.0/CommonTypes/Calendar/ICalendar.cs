@@ -13,5 +13,6 @@ namespace CommonTypes.Calendar
         DateTime GetNearestStart(DateTime T);
         Interval GetInterval(int index);
         TimeSpan GetTimeInTwentyFourHours();
+        TimeSpan GetRealWorkTime(DateTime startTime, DateTime endTime, out bool inFirstInterval, out bool inLastInterval);
     }
 }
