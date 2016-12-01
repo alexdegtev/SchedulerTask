@@ -13,11 +13,13 @@ namespace CommonTypes.Equipment
         private int index;
         private List<IEquipment> equipList;
         private int eqId; //id оборудования
+        int parentGroupId;//id родительской группы оборудования(на 1 уровень выше)
         private string name;
 
-        public GroupEquipment(ICalendar ca, int id, string name)
+        public GroupEquipment(ICalendar ca, int id, int parentId, string name)
         {
             eqId = id;
+            parentGroupId = parentId;
             this.name = name;
             equipList = new List<IEquipment>();
         }
@@ -46,6 +48,14 @@ namespace CommonTypes.Equipment
         public int GetId()
         {
             return eqId;
+        }
+
+        /// <summary>
+        /// получить id родительской группы оборудования(на 1 уровень выше)
+        /// </summary>
+        public int GetParentGroupId()
+        {
+            return parentGroupId;
         }
 
         /// <summary>
