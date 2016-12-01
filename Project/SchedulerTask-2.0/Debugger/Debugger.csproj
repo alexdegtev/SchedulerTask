@@ -44,7 +44,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConsoleLogger.cs" />
     <Compile Include="Exceptions\Exception.cs" />
     <Compile Include="Exceptions\ExceptionsList.cs" />
     <Compile Include="Exceptions\IException.cs" />
@@ -56,6 +55,7 @@
     <Compile Include="FindExceptions\Seachers\ExceptionOperationDuration.cs" />
     <Compile Include="FindExceptions\Seachers\ExceptionOperations.cs" />
     <Compile Include="FindExceptions\Seachers\ExceptionOperationsChain.cs" />
+    <Compile Include="FindExceptions\Seachers\ExceptionPreviousOperations.cs" />
     <Compile Include="FindExceptions\Seachers\ExceptionSimultaneityCondition.cs" />
     <Compile Include="FindExceptions\Seachers\ExceptionTimePeriod.cs" />
     <Compile Include="FindExceptions\Seachers\IExceptionSearch.cs" />

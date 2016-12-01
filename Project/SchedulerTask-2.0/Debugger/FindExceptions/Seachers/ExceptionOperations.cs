@@ -2,6 +2,7 @@
 using Debugger.Exceptions;
 using CommonTypes.Decision;
 using CommonTypes.Operation;
+using CommonTypes;
 
 namespace Debugger.FindExceptions.Seachers
 {

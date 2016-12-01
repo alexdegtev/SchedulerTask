@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Debugger.Exceptions;
 using CommonTypes.Decision;
 using CommonTypes.Operation;
+using CommonTypes;
 
 namespace Debugger.FindExceptions.Seachers
 {
@@ -20,7 +21,7 @@ namespace Debugger.FindExceptions.Seachers
 
         public List<IException> Execute()
         {
-            //ConsoleLogger.Log("Ищем ошибки в условиях последовательного выполнения операций...");
+            ConsoleLogger.Log("Ищем ошибки в условиях последовательного выполнения операций...");
             List<IException> exceptions = new List<IException>();
 
             DateTime maxEndFate;

@@ -1,22 +1,32 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace CommonTypes
 {
     public class CommandLineParser
     {
-        private string[] commArgs;
+        //private string[] commArgs;
+        private List<string> commArgs;
         private bool isCorrect;
         private string inputDir;
         private string outputDir;
+        private bool isInfologEnabled = false;
 
         public CommandLineParser(string[] args)
         {
-            commArgs = args;
+            commArgs = new List<string>();
+            foreach(var arg in args)
+            {
+                if(arg[0] == '-')
+                    setFlags(arg);
+                else
+                    commArgs.Add(arg);
+            }
             inputDir = "";
             outputDir = "";
 
-            switch (commArgs.Length)
+            switch (commArgs.Count)
             {
                 case 0:
                     isCorrect = false;
@@ -48,7 +58,6 @@ namespace CommonTypes
                     if (Directory.Exists(commArgs[0]))
                     {
                         inputDir = commArgs[0];
-                        //outputDir = Directory.GetCurrentDirectory();
                         outputDir = commArgs[0];
                         isCorrect = true;
                     }
@@ -88,5 +97,23 @@ namespace CommonTypes
         {
             return isCorrect;
         }
+
+        public bool isInfolog()
+        {
+            return isInfologEnabled;
+        }
+
+        private bool setFlags(string arg)
+        {
+            switch(arg)
+            {
+                case "-infolog":
+                    isInfologEnabled = true;
+                    return true;
+            }
+
+            return false;
+        }
+
     }
 }

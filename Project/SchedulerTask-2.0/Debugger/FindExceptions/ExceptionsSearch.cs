@@ -39,6 +39,7 @@ namespace Debugger.FindExceptions
             exceptionsSeachers = new List<IExceptionSearch>();
             //exceptionsSeachers.Add(new MockupException());
             exceptionsSeachers.Add(new ExceptionOperations(operations, decisions));
+            exceptionsSeachers.Add(new ExceptionPreviousOperations(operations, decisions));
             //exceptionsSeachers.Add(new ExceptionEquipment());
             //exceptionsSeachers.Add(new ExceptionOperationDuration());
             exceptionsSeachers.Add(new ExceptionInvalidStartDate(operations, decisions));
