@@ -86,9 +86,9 @@ namespace CommonTypes.Calendar
                 if ((T >= starttime) && (T <= endtime)) { flag = true; return j; }
             }
 
-            for (int i = 0; i < calendar.Count; i++)
+            for (int i = 0; i < calendar.Count-1; i++)
                 if ((T > calendar[i].GetEndTime()) && (T < calendar[i + 1].GetStartTime())) { flag = false; return i + 1; }
-
+            
             flag = false;
             return -1;
         }
@@ -152,6 +152,40 @@ namespace CommonTypes.Calendar
                     }
                     break;
                 }
+            }
+            return hours;
+        }
+
+        public TimeSpan GetRealWorkTime(DateTime startTime, DateTime endTime, out bool inFirstInterval,out bool inLastInterval)
+        {
+            TimeSpan hours = new TimeSpan(0, 0, 0);
+            int firstInterval = FindInterval(startTime, out inFirstInterval);
+            int lastInterval = FindInterval(endTime, out inLastInterval);
+            if ((lastInterval == -1)&&(!(inLastInterval))) { lastInterval = calendar.Count - 1; }
+            if (( startTime > calendar[calendar.Count-1].GetEndTime()) || (endTime < calendar[0].GetStartTime()))
+            {
+                return hours;
+            }
+            if (inFirstInterval)
+            {
+                hours = hours + (calendar[firstInterval].GetEndTime() - startTime);
+            }
+            else
+            {
+                hours = hours + (calendar[firstInterval].GetEndTime() - calendar[firstInterval].GetStartTime());
+            }
+            for (int i = firstInterval+1; i < lastInterval;i++)
+            {
+                hours = hours + (calendar[i].GetEndTime() - calendar[i].GetStartTime());
+            }
+            if (inLastInterval)
+            {
+                hours = hours + (endTime - calendar[lastInterval].GetStartTime());
+            }
+            else
+            {
+               
+                hours = hours + (calendar[lastInterval].GetEndTime() - calendar[lastInterval].GetStartTime());
             }
             return hours;
         }
