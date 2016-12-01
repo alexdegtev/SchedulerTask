@@ -12,6 +12,7 @@ namespace CommonTypes.Equipment
         int index;
         ICalendar ca; //календарь для текущего оборудования
         int eqId; //id оборудования
+        int parentGroupId;//id родительской группы оборудования(на 1 уровень выше)
         //bool occFlag; //флаг занятости оборудования; true - свободно; false - занято;
         string individualName;
         //Dictionary<int, bool> eqtacts; //словарь часовых тактов; int - значение часа; bool - значение занятости оборудования в течение часа 
@@ -19,10 +20,11 @@ namespace CommonTypes.Equipment
         DateTime occupyT1 = DateTime.MinValue;
         DateTime occupyT2 = DateTime.MinValue;
 
-        public SingleEquipment(ICalendar ca, int id, string individualname)
+        public SingleEquipment(ICalendar ca, int id,int parentId, string individualname)
         {
             this.ca = ca;
             eqId = id;
+            parentGroupId = parentId;
             this.individualName = individualname;
         }
 
@@ -42,6 +44,13 @@ namespace CommonTypes.Equipment
             return eqId;
         }
 
+        /// <summary>
+        /// получить id родительской группы оборудования(на 1 уровень выше)
+        /// </summary>
+        public int GetParentGroupId()
+        {
+            return parentGroupId;
+        }
         /// <summary>
         /// проверка доступности оборудования в такт времени T
         /// true - оборудование доступно; false - занято

@@ -10,6 +10,7 @@ namespace CommonTypes.Equipment
         ICalendar GetCalendar();
         //string ToString();
         TimeSpan GetTimeWorkInTwentyFourHours();
+        int GetParentGroupId();
         //bool IsOccupied(DateTime T);
         //void OccupyEquip(DateTime t1, DateTime t2);
     }
