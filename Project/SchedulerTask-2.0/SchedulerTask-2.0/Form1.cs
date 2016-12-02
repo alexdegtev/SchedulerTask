@@ -20,8 +20,11 @@ namespace SchedulerTask_2._0
         ProjectManager _mManager = null;
         public Form1()
         {
-            InitializeComponent();           
+            InitializeComponent();
 
+            _mManager = new ProjectManager();
+            chart1.Init(_mManager);
+            chart1.CreateTaskDelegate = delegate() { return new MyTask(_mManager); };
             // Init the rest of the UI
            // _InitExampleUI();           
         }
@@ -62,7 +65,7 @@ namespace SchedulerTask_2._0
         /// <param name="e"></param>
         private void button2_Click(object sender, EventArgs e)
         {
-            _mManager = new ProjectManager();
+            
 
             Random rand = new Random();
             for (int i = 0; i < 20; i++)

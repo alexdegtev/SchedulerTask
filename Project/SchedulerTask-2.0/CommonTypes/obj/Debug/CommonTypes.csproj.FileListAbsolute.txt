@@ -7,3 +7,4 @@ D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\Common
 D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\CommonTypes\bin\Debug\CommonTypes.pdb
 D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\CommonTypes\obj\Debug\CommonTypes.dll
 D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\CommonTypes\obj\Debug\CommonTypes.pdb
+D:\gitRepository\new ShedulerTask\SchedulerTask\Project\SchedulerTask-2.0\CommonTypes\obj\Debug\CommonTypes.csprojResolveAssemblyReference.cache
