@@ -189,18 +189,24 @@ namespace Builder.IO
 
         private static void ReadEquipment(XElement group, GroupEquipment parent)
         {
-            GroupEquipment tmp = new GroupEquipment(calendar, int.Parse(group.Attribute("id").Value), group.Attribute("name").Value);
-            equipments.Add(tmp.GetId(), tmp);
-            if (parent != null)
+            GroupEquipment tmp = null;
+            if (parent == null)
             {
-                parent.AddEquipment(tmp);
+               tmp = new GroupEquipment(calendar, int.Parse(group.Attribute("id").Value), -1, group.Attribute("name").Value);
             }
             
+            else
+            {
+                tmp = new GroupEquipment(calendar, int.Parse(group.Attribute("id").Value), parent.GetId(), group.Attribute("name").Value);
+                parent.AddEquipment(tmp);
+            }
+            equipments.Add(tmp.GetId(), tmp);
+
             foreach (XElement sgroup in group.Elements(df + "EquipmentGroup")) ReadEquipment(sgroup, tmp);
                 
             foreach (XElement eq in group.Elements(df + "Equipment"))
             {
-                SingleEquipment stmp = new SingleEquipment(calendar, int.Parse(eq.Attribute("id").Value), eq.Attribute("name").Value);
+                SingleEquipment stmp = new SingleEquipment(calendar, int.Parse(eq.Attribute("id").Value), parent.GetId(), eq.Attribute("name").Value);
                 equipments.Add(stmp.GetId(), stmp);
                 tmp.AddEquipment(stmp);
             }
