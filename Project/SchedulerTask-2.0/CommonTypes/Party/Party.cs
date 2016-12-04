@@ -26,7 +26,7 @@ namespace CommonTypes.Party
         //подпартии
         private List<IParty> subParty;
 
-        private TreePartyIterator iterator;
+        private TreePartyIterator iterator = null;
 
 
         /// <summary>
