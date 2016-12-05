@@ -206,7 +206,7 @@ namespace Builder.IO
                 
             foreach (XElement eq in group.Elements(df + "Equipment"))
             {
-                SingleEquipment stmp = new SingleEquipment(calendar, int.Parse(eq.Attribute("id").Value), parent.GetId(), eq.Attribute("name").Value);
+                SingleEquipment stmp = new SingleEquipment(calendar, int.Parse(eq.Attribute("id").Value), tmp.GetId(), eq.Attribute("name").Value);
                 equipments.Add(stmp.GetId(), stmp);
                 tmp.AddEquipment(stmp);
             }
