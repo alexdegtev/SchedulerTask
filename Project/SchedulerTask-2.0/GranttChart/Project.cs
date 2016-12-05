@@ -25,6 +25,7 @@ namespace GanttChart
     {
         HashSet<T> _mRegister = new HashSet<T>();
         List<T> _mRootTasks = new List<T>();
+        List<T> _mCriticalTask = new List<T>();
         Dictionary<T, List<T>> _mTaskGroups = new Dictionary<T, List<T>>();
         Dictionary<T, HashSet<T>> _mDependents = new Dictionary<T, HashSet<T>>();
         Dictionary<T, HashSet<R>> _mResources = new Dictionary<T, HashSet<R>>();
@@ -92,6 +93,24 @@ namespace GanttChart
                 _mResources[task] = new HashSet<R>();
                 _mParentOfChild[task] = null;
             }
+        }
+
+        /// <summary>
+        /// add critical task
+        /// </summary>
+        /// <param name="task"></param>
+        public void AddCritical(T task)
+        {
+            _mCriticalTask.Add(task);
+
+        }
+        /// <summary>
+        /// Clear All Task
+        /// </summary>
+        public void ClearAll()
+        {
+            _mRegister.Clear();
+            _mRootTasks.Clear();
         }
 
         /// <summary>
@@ -497,6 +516,15 @@ namespace GanttChart
         {
             get { return _mDependents.Where(x => _mDependents[x.Key].Count > 0).Select(x => x.Key); }
         }
+        /// <summary>
+        /// Get crtitikal Task
+        /// </summary>
+        /// <returns></returns>
+        public List<T> getCriticalTask()
+        {
+            return _mCriticalTask;
+
+        }
 
         /// <summary>
         /// Enumerate list of critical paths in Project
@@ -768,39 +796,6 @@ namespace GanttChart
         }
 
         /// <summary>
-        /// Set the percentage complete of the specified task from 0.0f to 1.0f.
-        /// No effect on group tasks as they will get the aggregated percentage complete of all child tasks
-        /// </summary>
-        /// <param name="task"></param>
-        /// <param name="complete"></param>
-        public void SetComplete(T task, float complete)
-        {
-            if (_mRegister.Contains(task)
-                && complete != task.Complete
-                && !this.IsGroup(task) // not a group
-                && !_mSplitTasks.ContainsKey(task) // not a split task
-                )
-            {
-                _SetCompleteHelper(task, complete);
-
-                _RecalculateComplete();
-            }
-        }
-
-        /// <summary>
-        /// Set whether to collapse the specified group task. No effect on regular tasks.
-        /// </summary>
-        /// <param name="task"></param>
-        /// <param name="collasped"></param>
-        public void SetCollapse(T task, bool collasped)
-        {
-            if (_mRegister.Contains(task) && this.IsGroup(task))
-            {
-                task.IsCollapsed = collasped;
-            }
-        }
-
-        /// <summary>
         /// Split the specified task into consecutive parts part1 and part2.
         /// </summary>
         /// <param name="task">The regular task to split which has duration of at least 2 to make two parts of 1 time unit duration each.</param>
@@ -824,8 +819,7 @@ namespace GanttChart
                 _mRegister.Add(part1);  // register part1
                 _mResources[part1] = new HashSet<R>(); // create container for holding resource
 
-                // add part1 to split task
-                task.Complete = 0.0f; // reset the complete status
+                // add part1 to split task                
                 var parts = _mSplitTasks[task] = new List<T>(2);
                 parts.Add(part1);
                 _mSplitTaskOfPart[part1] = task; // make a reverse lookup
@@ -1223,68 +1217,6 @@ namespace GanttChart
             }
         }
 
-        private void _SetCompleteHelper(T task, float value)
-        {
-            if (task.Complete != value)
-            {
-                if (value > 1) value = 1;
-                else if (value < 0) value = 0;
-                task.Complete = value;
-
-                if (_mSplitTaskOfPart.ContainsKey(task))
-                {
-                    var split = _mSplitTaskOfPart[task];
-                    var parts = _mSplitTasks[split];
-                    float complete = 0;
-                    int duration = 0;
-                    foreach (var part in parts)
-                    {
-                        complete += part.Complete * part.Duration;
-                        duration += part.Duration;
-                    }
-                    split.Complete = complete / duration;
-                }
-            }
-        }
-
-        private void _RecalculateComplete()
-        {
-            Stack<T> groups = new Stack<T>();
-            foreach (var task in _mRootTasks.Where(x => this.IsGroup(x)))
-            {
-                _RecalculateCompletedHelper(task);
-            }
-        }
-
-        private float _RecalculateCompletedHelper(T groupOrSplit)
-        {
-            float t_complete = 0;
-            int t_duration = 0;
-
-            if (_mSplitTasks.ContainsKey(groupOrSplit))
-            {
-                foreach (var part in _mSplitTasks[groupOrSplit])
-                {
-                    t_complete += part.Complete * part.Duration;
-                    t_duration += part.Duration;
-                }
-            }
-            else
-            {
-                foreach (var member in this.ChildrenOf(groupOrSplit))
-                {
-                    t_duration += member.Duration;
-                    if (this.IsGroup(member)) t_complete += _RecalculateCompletedHelper(member) * member.Duration;
-                    else t_complete += member.Complete * member.Duration;
-                }
-            }
-
-            groupOrSplit.Complete = t_complete / t_duration;
-
-
-            return groupOrSplit.Complete;
-        }
-
         private void _RecalculateDependantsOf(T precedent)
         {
             // affect decendants
@@ -1306,7 +1238,6 @@ namespace GanttChart
 
         private void _RecalculateAncestorsScheduleHelper(T group)
         {
-            float t_complete = 0;
             int t_duration = 0;
             var start = int.MaxValue;
             var end = int.MinValue;
@@ -1316,14 +1247,12 @@ namespace GanttChart
                     _RecalculateAncestorsScheduleHelper(member);
 
                 t_duration += member.Duration;
-                t_complete += member.Complete * member.Duration;
                 if (member.Start < start) start = member.Start;
                 if (member.End > end) end = member.End;
             }
 
             this._SetStartHelper(group, start);
             this._SetEndHelper(group, end);
-            this._SetCompleteHelper(group, t_complete / t_duration);
         }
 
         private void _RecalculateSlack()
@@ -1336,12 +1265,6 @@ namespace GanttChart
                 {
                     // slack until the earliest dependant needs to start
                     var min = this.DirectDependantsOf(task).Min(x => x.Start);
-                    task.Slack = min - task.End - 1;
-                }
-                else
-                {
-                    // no dependants, so we have all the time until the last task ends
-                    task.Slack = max_end - task.End;
                 }
             }
         }

@@ -17,7 +17,7 @@ namespace Debugger.IO
         }
         public void ReadData(out Exceptions.ExceptionsList e)
         {
-            
+
 
             using (XmlReader reader = XmlReader.Create(input + "exceptions.xml"))
             {

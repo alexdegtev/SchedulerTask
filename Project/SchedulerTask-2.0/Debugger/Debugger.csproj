@@ -62,6 +62,7 @@
     <Compile Include="FindExceptions\Seachers\WarningEquipmentDowntime.cs" />
     <Compile Include="FindExceptions\Seachers\WarningNotSheduled.cs" />
     <Compile Include="FindExceptions\Seachers\WarningTimePeriod.cs" />
+    <Compile Include="IO\logreader.cs" />
     <Compile Include="IO\Reader.cs" />
     <Compile Include="IO\Writer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
