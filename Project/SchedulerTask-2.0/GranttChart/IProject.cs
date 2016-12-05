@@ -16,27 +16,15 @@ namespace GanttChart
         /// </summary>
         public Task()
         {
-            Complete = 0.0f;
             Start = 0;
             End = 1;
             Duration = 1;
-            Slack = 0;
         }
 
         /// <summary>
         /// Get or set the Name of this Task
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Indicate whether this task is collapsed such that sub tasks are hidden from view. Only groups can be collasped.
-        /// </summary>
-        public bool IsCollapsed { get; set; }
-
-        /// <summary>
-        /// Get or set the pecentage complete of this task, expressed in float between 0.0 and 1.0f.
-        /// </summary>
-        public float Complete { get; internal set; }
 
         /// <summary>
         /// Get the start time of this Task relative to the project start
@@ -54,17 +42,12 @@ namespace GanttChart
         public int Duration { get; internal set; }
 
         /// <summary>
-        /// Get the amount of slack (free float)
-        /// </summary>
-        public int Slack { get; internal set; }
-
-        /// <summary>
         /// Convert this Task to a descriptive string
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[Name = {0}, Start = {1}, End = {2}, Duration = {3}, Complete = {4}]", Name, Start, End, Duration, Complete);
+            return string.Format("[Name = {0}, Start = {1}, End = {2}, Duration = {3}]", Name, Start, End, Duration);
         }
     }
 
@@ -102,6 +85,8 @@ namespace GanttChart
         /// </summary>
         /// <param name="task"></param>
         void Delete(T task);
+
+        void ClearAll();
         /// <summary>
         /// Group the member task under the group task. Group task cannot have relations.
         /// </summary>
@@ -227,13 +212,13 @@ namespace GanttChart
         /// </summary>
         /// <param name="task"></param>
         /// <param name="complete"></param>
-        void SetComplete(T task, float complete);
+        //void SetComplete(T task, float complete);
         /// <summary>
         /// Set whether to collapse the specified group task. No effect on regular tasks.
         /// </summary>
         /// <param name="group"></param>
         /// <param name="collasped"></param>
-        void SetCollapse(T group, bool collasped);
+        //void SetCollapse(T group, bool collasped);
         /// <summary>
         /// Set the "now" time. Its value is the number of timescale units after the start time.
         /// </summary>

@@ -27,11 +27,11 @@ namespace GanttChart
             // Factory values
             HeaderOneHeight = 32;
             HeaderTwoHeight = 20;
-            HeaderThreeHeigt = 20;
+            HeaderThreeHeigt = 40;
             BarSpacing = 26;
             BarHeight = 20;
-            BarWidth = 100;
-            BarWidthHours = 100 / 24;
+            BarWidth = 20;
+            BarWidthHours = 0;
             this.DoubleBuffered = true;
             var viewport = new ControlViewport(this);
             viewport.WheelDelta = BarSpacing;
@@ -52,15 +52,24 @@ namespace GanttChart
                 Border = Pens.Maroon,
                 BackFill = Brushes.MediumSlateBlue,
                 ForeFill = Brushes.YellowGreen,
-                SlackFill = new System.Drawing.Drawing2D.HatchBrush(System.Drawing.Drawing2D.HatchStyle.LightDownwardDiagonal, Color.Blue, Color.Transparent)
+                SlackFill = new System.Drawing.Drawing2D.HatchBrush(System.Drawing.Drawing2D.HatchStyle.LightDownwardDiagonal, Color.YellowGreen, Color.Transparent)
             };
             CriticalTaskFormat = new GanttChart.TaskFormat()
             {
                 Color = Brushes.Black,
                 Border = Pens.Maroon,
                 BackFill = Brushes.Crimson,
-                ForeFill = Brushes.YellowGreen,
+                ForeFill = Brushes.Red,
                 SlackFill = new System.Drawing.Drawing2D.HatchBrush(System.Drawing.Drawing2D.HatchStyle.LightDownwardDiagonal, Color.Red, Color.Transparent)
+            };
+
+            WarningTaskForamt = new GanttChart.TaskFormat()
+            {
+                Color = Brushes.Black,
+                Border = Pens.Maroon,
+                BackFill = Brushes.Crimson,
+                ForeFill = Brushes.Yellow,
+                SlackFill = new System.Drawing.Drawing2D.HatchBrush(System.Drawing.Drawing2D.HatchStyle.LightDownwardDiagonal, Color.Yellow, Color.Transparent)
             };
             HeaderFormat = new GanttChart.HeaderFormat()
             {
@@ -143,7 +152,7 @@ namespace GanttChart
         /// <summary>
         /// 
         /// </summary>
-        [DefaultValue(100/24)]
+        [DefaultValue(100 / 24)]
         public int BarWidthHours { get; set; }
 
         /// <summary>
@@ -155,6 +164,11 @@ namespace GanttChart
         /// Get or set format for critical Tasks
         /// </summary>
         public TaskFormat CriticalTaskFormat { get; set; }
+
+        /// <summary>
+        /// Get or set format for warning Tasks
+        /// </summary>
+        public TaskFormat WarningTaskForamt { get; set; }
 
         /// <summary>
         /// Get or set format for headers
@@ -460,7 +474,7 @@ namespace GanttChart
             {
                 var rect = _mChartTaskRects[task];
                 _mViewport.X = rect.Left - this.BarWidth;
-                _mViewport.Y = rect.Top - this.HeaderOneHeight - this.HeaderTwoHeight - this.HeaderThreeHeigt;
+                _mViewport.Y = rect.Top - this.HeaderOneHeight - this.HeaderTwoHeight;
             }
         }
 
@@ -496,40 +510,6 @@ namespace GanttChart
                 this._Draw(e.Graphics, e.ClipRectangle);
         }
 
-  
-        /// <summary>
-        /// Raises the System.Windows.Forms.Control.MouseMove event
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            // Hot tracking
-            var task = _GetTaskUnderMouse(e.Location);
-            if (_mMouseEntered != null && task == null)
-            {
-                OnTaskMouseOut(new TaskMouseEventArgs(_mMouseEntered, RectangleF.Empty, e.Button, e.Clicks, e.X, e.Y, e.Delta));
-                _mMouseEntered = null;
-
-            }
-            else if (_mMouseEntered == null && task != null)
-            {
-                _mMouseEntered = task;
-                OnTaskMouseOver(new TaskMouseEventArgs(_mMouseEntered, _mChartTaskHitRects[task], e.Button, e.Clicks, e.X, e.Y, e.Delta));
-            }
-
-            // Dragging
-            if (AllowTaskDragDrop && _mDragSource != null)
-            {
-                Task target = task;
-                if (target == _mDragSource) target = null;
-                RectangleF targetRect = target == null ? RectangleF.Empty : _mChartTaskHitRects[target];
-                int row = _DeviceCoordToChartRow(e.Location.Y);
-                OnTaskMouseDrag(new TaskDragDropEventArgs(_mDragStartLocation, _mDragLastLocation, _mDragSource, _mChartTaskHitRects[_mDragSource], target, targetRect, row, e.Button, e.Clicks, e.X, e.Y, e.Delta));
-                _mDragLastLocation = e.Location;
-            }
-
-            base.OnMouseMove(e);
-        }
 
         /// <summary>
         /// Raises the System.Windows.Forms.Control.MouseClick event
@@ -569,214 +549,12 @@ namespace GanttChart
             base.OnMouseDown(e);
         }
 
-        /// <summary>
-        /// Raises the System.Windows.Forms.Control.MouseUp event
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnMouseUp(MouseEventArgs e)
-        {
-            // Drop task
-            if (AllowTaskDragDrop && _mDragSource != null)
-            {
-                var target = _GetTaskUnderMouse(e.Location);
-                if (target == _mDragSource) target = null;
-                var targetRect = target == null ? RectangleF.Empty : _mChartTaskHitRects[target];
-                int row = _DeviceCoordToChartRow(e.Location.Y);
-                OnTaskMouseDrop(new TaskDragDropEventArgs(_mDragStartLocation, _mDragLastLocation, _mDragSource, _mChartTaskHitRects[_mDragSource], target, targetRect, row, e.Button, e.Clicks, e.X, e.Y, e.Delta));
-                _mDragSource = null;
-                _mDragLastLocation = Point.Empty;
-                _mDragStartLocation = Point.Empty;
-            }
-
-            base.OnMouseUp(e);
-        }
-
-        /// <summary>
-        /// Raises the System.Windows.Forms.Control.MouseDoubleClick event
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnMouseDoubleClick(MouseEventArgs e)
-        {
-            var task = _GetTaskUnderMouse(e.Location);
-            if (task != null)
-            {
-                OnTaskMouseDoubleClick(new TaskMouseEventArgs(task, _mChartTaskHitRects[task], e.Button, e.Clicks, e.X, e.Y, e.Delta));
-            }
-
-            base.OnMouseDoubleClick(e);
-        }
 
         #endregion UserControl Events
 
-      
-    #region Chart Events
-        /// <summary>
-        /// Raises the TaskMouseOver event
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnTaskMouseOver(TaskMouseEventArgs e)
-        {
-            if (TaskMouseOver != null)
-                TaskMouseOver(this, e);
 
-            this.Cursor = Cursors.Hand;
+        #region Chart Events
 
-            var task = e.Task;
-            if (_mProject.IsPart(e.Task)) task = _mProject.SplitTaskOf(task);
-            if (_mTaskToolTip.ContainsKey(task))
-            {
-                _mOverlay.ShowToolTip(_mViewport.DeviceToWorldCoord(e.Location), _mTaskToolTip[task]);
-                this.Invalidate();
-            }
-        }
-        /// <summary>
-        /// Raises the TaskMouseOver event
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnTaskMouseOut(TaskMouseEventArgs e)
-        {
-            if (TaskMouseOut != null)
-                TaskMouseOut(this, e);
-
-            this.Cursor = Cursors.Default;
-
-            _mOverlay.HideToolTip();
-            this.Invalidate();
-        }
-
-        /// <summary>
-        /// Raises the TaskMouseDrag( event
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnTaskMouseDrag(TaskDragDropEventArgs e)
-        {
-            // fire listeners
-            if (TaskMouseDrag != null)
-                TaskMouseDrag(this, e);
-
-            // Default drag behaviors **********************************
-            if (e.Button == System.Windows.Forms.MouseButtons.Middle)
-            {
-                var complete = e.Source.Complete + (float)(e.X - e.PreviousLocation.X) / (e.Source.Duration * this.BarWidth);
-                _mProject.SetComplete(e.Source, complete);
-            }
-            else if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                if (e.Target == null)
-                {
-                    var delta = (e.PreviousLocation.X - e.StartLocation.X);
-                    _mOverlay.DraggedRect = e.SourceRect;
-                    _mOverlay.DraggedRect.Width += delta;
-                }
-                else // drop targetting (join)
-                {
-                    _mOverlay.DraggedRect = e.TargetRect;
-                    _mOverlay.Row = int.MinValue;
-                }
-            }
-            else if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                _mOverlay.Clear();
-
-                if (e.Target == null)
-                {
-                    if (Control.ModifierKeys == Keys.Shift)
-                    {
-                        // insertion line
-                        _mOverlay.Row = e.Row;
-                    }
-                    else
-                    {
-                        // displacing horizontally
-                        _mOverlay.DraggedRect = e.SourceRect;
-                        _mOverlay.DraggedRect.Offset((e.X - e.StartLocation.X) / this.BarWidth * this.BarWidth, 0);
-                    }
-                }
-                else // drop targetting (subtask / predecessor)
-                {
-                    _mOverlay.DraggedRect = e.TargetRect;
-                    _mOverlay.Row = int.MinValue;
-                }
-            }
-            this.Invalidate();
-        }
-        /// <summary>
-        /// Raises the TaskMouseDrop event
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnTaskMouseDrop(TaskDragDropEventArgs e)
-        {
-            // Fire event
-            if (TaskMouseDrop != null)
-                TaskMouseDrop(this, e);
-
-            var delta = (e.PreviousLocation.X - e.StartLocation.X) / this.BarWidth;
-
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                if (e.Target == null)
-                {
-                    if (Control.ModifierKeys == Keys.Shift)
-                    {
-                        // insert
-                        int from;
-                        Task source = e.Source;
-                        if (_mProject.IsPart(source)) source = _mProject.SplitTaskOf(source);
-                        if (this.TryGetRow(source, out from))
-                            _mProject.Move(source, e.Row - from);
-                    }
-                    else
-                    {
-                        // displace horizontally
-                        var start = e.Source.Start + delta;
-                        _mProject.SetStart(e.Source, start);
-                    }
-                }
-                else // have drop target
-                {
-                    if (Control.ModifierKeys == Keys.Shift)
-                    {
-                        _mProject.Relate(e.Target, e.Source);
-                    }
-                    else if (Control.ModifierKeys == Keys.Alt)
-                    {
-                        var source = e.Source;
-                        if (_mProject.IsPart(source)) source = _mProject.SplitTaskOf(source);
-                        if (_mProject.ParentOf(source) == e.Target)
-                        {
-                            _mProject.Ungroup(e.Target, e.Source);
-                        }
-                        else
-                        {
-                            _mProject.Unrelate(e.Target, source);
-                        }
-                    }
-                    else
-                    {
-                        _mProject.Group(e.Target, e.Source);
-                    }
-                }
-            }
-            else if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                if (e.Target == null)
-                {
-                    var duration = e.Source.Duration + delta;
-                    _mProject.SetDuration(e.Source, duration);
-                }
-                else // have target then we do a join
-                {
-                    _mProject.Join(e.Target, e.Source);
-                }
-            }
-
-            _mOverlay.Clear();
-            this.Invalidate();
-        }
-        /// <summary>
-        /// Raises the TaskMouseClick event
-        /// </summary>
-        /// <param name="e"></param>
         protected virtual void OnTaskMouseClick(TaskMouseEventArgs e)
         {
             if (TaskMouseClick != null)
@@ -784,55 +562,14 @@ namespace GanttChart
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                if (Control.ModifierKeys == Keys.Shift)
-                {
-                    _mSelectedTasks.Add(e.Task);
-                }
-                else
-                {
-                    OnTaskDeselecting(e);
-                    _mSelectedTasks.Add(e.Task);
-                }
+                OnTaskDeselecting(e);
+                _mSelectedTasks.Add(e.Task);
                 OnTaskSelected(e);
             }
-            else if (e.Button == System.Windows.Forms.MouseButtons.Middle)
-            {
-                if (Control.ModifierKeys == Keys.Shift)
-                {
-                    var newtask = CreateTaskDelegate();
-                    _mProject.Add(newtask);
-                    _mProject.SetStart(newtask, e.Task.Start);
-                    _mProject.SetDuration(newtask, 5);
-                    if (_mProject.IsPart(e.Task)) _mProject.Move(newtask, _mProject.IndexOf(_mProject.SplitTaskOf(e.Task)) + 1 - _mProject.IndexOf(newtask));
-                    else _mProject.Move(newtask, _mProject.IndexOf(e.Task) + 1 - _mProject.IndexOf(newtask));
-                }
-                else if (Control.ModifierKeys == Keys.Alt)
-                    _mProject.Delete(e.Task);
-            }
-            this.Invalidate();
-        }
-        /// <summary>
-        /// Raises the TaskMouseDoubleClick event
-        /// </summary>
-        /// <param name="e"></param>
-        protected virtual void OnTaskMouseDoubleClick(TaskMouseEventArgs e)
-        {
-            if (TaskMouseDoubleClick != null)
-                TaskMouseDoubleClick(this, e);
-
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
-                e.Task.IsCollapsed = !e.Task.IsCollapsed;
-            }
-            else if (e.Button == System.Windows.Forms.MouseButtons.Right)
-            {
-                int duration = (int)((_mViewport.DeviceToWorldCoord(e.Location).X - e.Rectangle.Left) / this.BarWidth);
-                if (_mProject.IsPart(e.Task)) _mProject.Split(e.Task, new Task(), duration);
-                else _mProject.Split(e.Task, CreateTaskDelegate(), CreateTaskDelegate(), duration);
-            }
 
             this.Invalidate();
         }
+
         /// <summary>
         /// Raises the TaskSelected event
         /// </summary>
@@ -865,8 +602,8 @@ namespace GanttChart
         }
 
         #endregion Chart Events
-    
-        
+
+
 
         #region OverlayPainter
         private ChartOverlay _mOverlay = new ChartOverlay();
@@ -1004,7 +741,7 @@ namespace GanttChart
             int row = 0;
             foreach (var task in _mProject.Tasks)
             {
-                if (!_mProject.AncestorsOf(task).Any(x => x.IsCollapsed))
+                if (!_mProject.AncestorsOf(task).Any(x => true))
                 {
                     int y_coord = row * this.BarSpacing + this.HeaderTwoHeight + this.HeaderOneHeight + this.HeaderThreeHeigt + (this.BarSpacing - this.BarHeight) / 2;
                     RectangleF taskRect;
@@ -1035,7 +772,7 @@ namespace GanttChart
                     // Compute Slack Rectangles
                     if (this.ShowSlack)
                     {
-                        var slackRect = new RectangleF(task.End * this.BarWidth + this.BarWidth / 2, y_coord, task.Slack * this.BarWidth, this.BarHeight);
+                        var slackRect = new RectangleF(task.End * this.BarWidth + this.BarWidth / 2, y_coord, this.BarWidth, this.BarHeight);
                         _mChartSlackRects.Add(task, slackRect);
                     }
 
@@ -1085,18 +822,18 @@ namespace GanttChart
                 h2LabelRects.Add(new RectangleF(x, h2LabelRect_Y, this.BarWidth, this.HeaderTwoHeight));
                 columns.Add(new RectangleF(x, columns_Y, this.BarWidth, _mViewport.Rectangle.Height));
 
-               for (int i = (int)(_mViewport.X - _mViewport.X % this.BarWidth); i < _mViewport.Rectangle.Right; i += this.BarWidth/4)
-               {
-                    dates2.Add(curDate);
-                    h3LabelRects.Add(new RectangleF(i, h3LabelRect_Y, this.BarWidth/4, this.HeaderTwoHeight));
-                    columns2.Add(new RectangleF(i, columns2_Y, this.BarWidth/4, _mViewport.Rectangle.Height));
-              
-               }
+                /* for (int i = (int)(_mViewport.X - _mViewport.X % this.BarWidth); i < _mViewport.Rectangle.Right; i += this.BarWidth / 4)
+                 {
+                     dates2.Add(curDate);
+                     h3LabelRects.Add(new RectangleF(i, h3LabelRect_Y, this.BarWidth / 4, this.HeaderTwoHeight));
+                     columns2.Add(new RectangleF(i, columns2_Y, this.BarWidth / 4, _mViewport.Rectangle.Height));
 
+                 }
+                 */
                 __NextColumn(ref curDate);
             }
 
-           
+
 
 
             _mHeaderInfo.H1Rect = h1Rect;
@@ -1171,7 +908,7 @@ namespace GanttChart
 
                 // Paint overlays
                 ChartPaintEventArgs paintargs = new ChartPaintEventArgs(graphics, clipRect, this);
-               // OnPaintOverlay(paintargs);
+                // OnPaintOverlay(paintargs);
 
                 _mOverlay.Paint(paintargs);
             }
@@ -1304,7 +1041,8 @@ namespace GanttChart
         {
             var viewRect = _mViewport.Rectangle;
             int row = 0;
-            var crit_task_set = new HashSet<Task>(_mProject.CriticalPaths.SelectMany(x => x));
+            //var crit_task_set = new HashSet<Task>(_mProject.CriticalPaths.SelectMany(x => x));   
+            var crit_task_set = _mProject.getCriticalTask();
             var pen = new Pen(Color.Gray);
             float labelMargin = this.BarWidth / 2.0f + 3.0f;
             pen.DashStyle = DashStyle.Dot;
@@ -1347,13 +1085,6 @@ namespace GanttChart
                         }
                     }
 
-                    // draw slack
-                    if (this.ShowSlack && task.Complete < 1.0f)
-                    {
-                        var slackrect = _mChartSlackRects[task];
-                        if (viewRect.IntersectsWith(slackrect))
-                            graphics.FillRectangle(e.Format.SlackFill, slackrect);
-                    }
                 }
 
                 row++;
@@ -1414,7 +1145,7 @@ namespace GanttChart
         private void __DrawRegularTaskAndGroup(Graphics graphics, TaskPaintEventArgs e, Task task, RectangleF taskRect)
         {
             var fill = taskRect;
-            fill.Width = (int)(fill.Width * task.Complete);
+            fill.Width = (int)(fill.Width);
             graphics.FillRectangle(e.Format.BackFill, taskRect);
             graphics.FillRectangle(e.Format.ForeFill, fill);
             graphics.DrawRectangle(e.Format.Border, taskRect);
@@ -1425,7 +1156,7 @@ namespace GanttChart
                 var rod = new RectangleF(taskRect.Left, taskRect.Top, taskRect.Width, taskRect.Height / 2);
                 graphics.FillRectangle(Brushes.Black, rod);
 
-                if (!task.IsCollapsed)
+                if (true)
                 {
                     // left bracket
                     graphics.FillPolygon(Brushes.Black, new PointF[] {
@@ -1458,7 +1189,7 @@ namespace GanttChart
             graphics.FillRectangles(e.Format.BackFill, taskRects);
 
             // Draw % complete indicators
-            graphics.FillRectangles(e.Format.ForeFill, parts.Select(x => new RectangleF(x.Value.X, x.Value.Y, x.Value.Width * x.Key.Complete, x.Value.Height)).ToArray());
+            graphics.FillRectangles(e.Format.ForeFill, parts.Select(x => new RectangleF(x.Value.X, x.Value.Y, x.Value.Width, x.Value.Height)).ToArray());
 
             // Draw border
             graphics.DrawRectangles(e.Format.Border, taskRects);
