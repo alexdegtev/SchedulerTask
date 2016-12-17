@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace SchedulerTask_2._0
     public partial class Form1 : Form
     {
 
-        OverlayPainter _mOverlay = new OverlayPainter();
+        //OverlayPainter _mOverlay = new OverlayPainter();
 
         ProjectManager _mManager = null;
 
@@ -53,9 +54,8 @@ namespace SchedulerTask_2._0
 
         void _mChart_TaskSelected(object sender, TaskMouseEventArgs e)
         {
-            propertyGrid1.SelectedObjects = chart1.SelectedTasks.Select(x => _mManager.IsPart(x) ? _mManager.SplitTaskOf(x) : x).ToArray();
-            listView1.Items.Clear();
-            listView1.Items.AddRange(_mManager.ResourcesOf(e.Task).Select(x => new ListViewItem(((MyResource)x).Name)).ToArray());
+            propertyGrid1.SelectedObjects = chart1.SelectedTasks.Select(x => _mManager.IsPart(x) ? _mManager.SplitTaskOf(x) : x).ToArray();            
+
         }
 
         /// <summary>
@@ -113,6 +113,7 @@ namespace SchedulerTask_2._0
         {
 
         }
+
         /// <summary>
         /// Анализ/ поиск ошибок
         /// </summary>
@@ -270,7 +271,7 @@ namespace SchedulerTask_2._0
 
             foreach (IDecision decision in decisions)
             {
-                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName() + " id= " + decision.GetOperation().GetId() };
+                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName() + " id= " + decision.GetOperation().GetId(), EqID = decision.GetEquipment().ToString() };
                 _mManager.Add(task);
                 var startTime = decision.GetStartTime() - _mManager.Start;
                 var endTime = decision.GetEndTime() - decision.GetStartTime();
@@ -278,11 +279,10 @@ namespace SchedulerTask_2._0
                 _mManager.SetDuration(task, (int)Math.Round(endTime.TotalDays));
             }
 
-            var task1 = new MyTask(_mManager) { Name = "My Test Task" };
-
-            _mManager.Add(task1);            
-            _mManager.SetStart(task1, 15);
-            _mManager.SetDuration(task1, 6);
+            //var task1 = new MyTask(_mManager) { Name = "My Test Task" };
+            //_mManager.Add(task1);            
+            //_mManager.SetStart(task1, 15);
+            //_mManager.SetDuration(task1, 6);
         }//add tasks
 
         private void scheduleAnalysis()
@@ -303,82 +303,21 @@ namespace SchedulerTask_2._0
 
 
         private FolderBrowserDialog folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-        private OpenFileDialog openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-
-        
+        private OpenFileDialog openFileDialog1 = new System.Windows.Forms.OpenFileDialog();        
 
         List<IParty> parties = new List<IParty>();
         Dictionary<int, IOperation> operations = new Dictionary<int, IOperation>();
         Dictionary<int, IEquipment> equipment = new Dictionary<int, IEquipment>();
         List<IDecision> decisions = null;
         List<IException> exceptions = null;
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            //Process.Start("../../../BuilderConsole/bin/Debug/BuilderConsole.exe");
+            //this.Close();
+        }
         
     }
-
-    #region overlay painter
-    /// <summary>
-    /// An example of how to encapsulate a helper painter for painter additional features on Chart
-    /// </summary>
-    /// 
-
-    public class OverlayPainter
-    {
-        /// <summary>
-        /// Hook such a method to the chart paint event listeners
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void ChartOverlayPainter(object sender, ChartPaintEventArgs e)
-        {
-            // Don't want to print instructions to file
-            if (this.PrintMode) return;
-
-            var g = e.Graphics;
-            var chart = e.Chart;
-
-            // Demo: Static billboards begin -----------------------------------
-            // Demonstrate how to draw static billboards
-            // "push matrix" -- save our transformation matrix
-            e.Chart.BeginBillboardMode(e.Graphics);
-
-            // draw mouse command instructions
-            int margin = 300;
-            int left = 20;
-            var color = chart.HeaderFormat.Color;
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine("THIS IS DRAWN BY A CUSTOM OVERLAY PAINTER TO SHOW DEFAULT MOUSE COMMANDS.");
-            builder.AppendLine("*******************************************************************************************************");
-            builder.AppendLine("Left Click - Select task and display properties in PropertyGrid");
-            builder.AppendLine("Left Mouse Drag - Change task starting point");
-            builder.AppendLine("Right Mouse Drag - Change task duration");
-            builder.AppendLine("Middle Mouse Drag - Change task complete percentage");
-            builder.AppendLine("Left Doubleclick - Toggle collaspe on task group");
-            builder.AppendLine("Right Doubleclick - Split task into task parts");
-            builder.AppendLine("Left Mouse Dragdrop onto another task - Group drag task under drop task");
-            builder.AppendLine("Right Mouse Dragdrop onto another task part - Join task parts");
-            builder.AppendLine("SHIFT + Left Mouse Dragdrop onto another task - Make drop task precedent of drag task");
-            builder.AppendLine("ALT + Left Dragdrop onto another task - Ungroup drag task from drop task / Remove drop task from drag task precedent list");
-            builder.AppendLine("SHIFT + Left Mouse Dragdrop - Order tasks");
-            builder.AppendLine("SHIFT + Middle Click - Create new task");
-            builder.AppendLine("ALT + Middle Click - Delete task");
-            builder.AppendLine("Left Doubleclick - Toggle collaspe on task group");
-            var size = g.MeasureString(builder.ToString(), e.Chart.Font);
-            var background = new Rectangle(left, chart.Height - margin, (int)size.Width, (int)size.Height);
-            background.Inflate(10, 10);
-            g.FillRectangle(new System.Drawing.Drawing2D.LinearGradientBrush(background, Color.LightYellow, Color.Transparent, System.Drawing.Drawing2D.LinearGradientMode.Vertical), background);
-            g.DrawRectangle(Pens.Brown, background);
-            g.DrawString(builder.ToString(), chart.Font, color, new PointF(left, chart.Height - margin));
-
-
-            // "pop matrix" -- restore the previous matrix
-            e.Chart.EndBillboardMode(e.Graphics);
-            // Demo: Static billboards end -----------------------------------
-        }
-
-        public bool PrintMode { get; set; }
-    }
-    #endregion overlay painter
-
 
     #region custom task and resource
     /// <summary>
