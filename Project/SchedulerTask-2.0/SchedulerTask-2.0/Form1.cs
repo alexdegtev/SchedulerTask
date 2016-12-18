@@ -66,6 +66,7 @@ namespace SchedulerTask_2._0
         private void button1_Click(object sender, EventArgs e)
         {
             this.folderName = selectedPath();
+            textBoxPath.Text = folderName;
         }
         /// <summary>
         /// Построить расписание
@@ -121,7 +122,7 @@ namespace SchedulerTask_2._0
         /// <param name="e"></param>
         private void button4_Click(object sender, EventArgs e)
         {
-
+                   
         }
 
         ///Меню.
@@ -264,19 +265,25 @@ namespace SchedulerTask_2._0
             //MessageBox.Show(parties[0].GetStartTimeParty().ToString());
             var span = parties[0].GetEndTimeParty() - _mManager.Start;//DateTime.Parse("2016, 01, 21") - _mManager.Start;//директивный срок   
 
-            _mManager.Now = (int)Math.Round(span.TotalDays) -1 ; // set the "Now" marker at the correct date
+            _mManager.Now = (int)Math.Round(span.TotalDays) -1; // set the "Now" marker at the correct date
 
 
             _mManager.ClearAll();
 
-            foreach (IDecision decision in decisions)
+            var deadline = parties[0].GetEndTimeParty();
+
+            foreach (var decision in decisions)
             {
-                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName() + " id= " + decision.GetOperation().GetId(), EqID = decision.GetEquipment().ToString() };
+                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName().ToString(), EqID = decision.GetEquipment().ToString() };
                 _mManager.Add(task);
                 var startTime = decision.GetStartTime() - _mManager.Start;
                 var endTime = decision.GetEndTime() - decision.GetStartTime();
                 _mManager.SetStart(task, (int)Math.Round(startTime.TotalDays));
                 _mManager.SetDuration(task, (int)Math.Round(endTime.TotalDays));
+                if (decision.GetEndTime() > deadline)
+                {
+                    critTask.Add(task);
+                }
             }
 
             //var task1 = new MyTask(_mManager) { Name = "My Test Task" };
@@ -286,9 +293,27 @@ namespace SchedulerTask_2._0
         }//add tasks
 
         private void scheduleAnalysis()
+        { 
+            foreach (var task in critTask)
+            {
+                _mManager.AddCritical(task);
+            }
+        }
+
+        private void runConsoleApp()
         {
-            //_mManager.AddCritical(task1);
-            //_mManager.
+            var startInfo = new ProcessStartInfo
+            {
+                //имя файла
+                FileName = "..\\BuilderConsole\\bin\\Debug\\BuilderConsole.exe",
+                //окно
+                WindowStyle = ProcessWindowStyle.Normal,
+                //аргументы
+                Arguments = folderName
+            };
+
+            //запуск процесса
+            Process.Start(startInfo);    
         }
 
         private bool checkPath(string fileName)
@@ -310,13 +335,18 @@ namespace SchedulerTask_2._0
         Dictionary<int, IEquipment> equipment = new Dictionary<int, IEquipment>();
         List<IDecision> decisions = null;
         List<IException> exceptions = null;
+        List<Task> critTask = new List<Task>();
 
+        /// <summary>
+        /// Analysis 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button4_Click_1(object sender, EventArgs e)
         {
-            //Process.Start("../../../BuilderConsole/bin/Debug/BuilderConsole.exe");
-            //this.Close();
-        }
-        
+            scheduleAnalysis();            
+            chart1.Refresh();            
+        }        
     }
 
     #region custom task and resource
