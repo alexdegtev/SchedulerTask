@@ -103,27 +103,19 @@ namespace SchedulerTask_2._0
             chart1.TimeScaleDisplay = TimeScaleDisplay.DayOfMonth; // Set the chart to display days of week in header
             _mManager.TimeScale = TimeScale.Day;
             chart1.TaskSelected += new EventHandler<TaskMouseEventArgs>(_mChart_TaskSelected);
+            chart1.Refresh();
         }
 
         /// <summary>
-        /// Визуализировать
+        /// Analysis 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button3_Click(object sender, EventArgs e)
+        private void button4_Click_1(object sender, EventArgs e)
         {
-
-        }
-
-        /// <summary>
-        /// Анализ/ поиск ошибок
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button4_Click(object sender, EventArgs e)
-        {
-                   
-        }
+            scheduleAnalysis();
+            chart1.Refresh();
+        }        
 
         ///Меню.
         private void выбратьДиректориюToolStripMenuItem_Click(object sender, EventArgs e)
@@ -274,7 +266,7 @@ namespace SchedulerTask_2._0
 
             foreach (var decision in decisions)
             {
-                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName().ToString(), EqID = decision.GetEquipment().ToString() };
+                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName().ToString(), EqID = decision.GetEquipment().ToString(), Start1 = decision.GetStartTime(), End1 = decision.GetEndTime() };
                 _mManager.Add(task);
                 var startTime = decision.GetStartTime() - _mManager.Start;
                 var endTime = decision.GetEndTime() - decision.GetStartTime();
@@ -336,17 +328,7 @@ namespace SchedulerTask_2._0
         List<IDecision> decisions = null;
         List<IException> exceptions = null;
         List<Task> critTask = new List<Task>();
-
-        /// <summary>
-        /// Analysis 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void button4_Click_1(object sender, EventArgs e)
-        {
-            scheduleAnalysis();            
-            chart1.Refresh();            
-        }        
+        
     }
 
     #region custom task and resource
