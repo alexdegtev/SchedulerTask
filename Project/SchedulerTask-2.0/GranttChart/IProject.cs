@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -24,22 +25,63 @@ namespace GanttChart
         /// <summary>
         /// Get or set the Name of this Task
         /// </summary>
+        [DisplayName("Название")]
+        [Description("Имя операции")]
+        [Category("1.Идентификация")]
+        [ReadOnly(true)]
         public string Name { get; set; }
 
         /// <summary>
         /// Get the start time of this Task relative to the project start
         /// </summary>
+        [DisplayName("Начало")]
+        [Description("Дата начала операции, ")]
+        [Category("2.Временные характеристики(програмные)")]
+        [ReadOnly(true)]
         public int Start { get; internal set; }
+
+        [DisplayName("Начало")]
+        [Description("Дата окончания операции")]
+        [Category("3.Временные характеристики(дата/время)")]
+        [ReadOnly(true)]       
+        public DateTime Start1 { get;  set; }
 
         /// <summary>
         /// Get the end time of this Task relative to the project start
         /// </summary>
+        [DisplayName("Завершено ")]
+        [Description("Дата окончания операции")]
+        [Category("2.Временные характеристики(програмные)")]
+        [ReadOnly(true)]        
+        
         public int End { get; internal set; }
+
+
+        [DisplayName("Завершено")]
+        [Description("Дата окончания операции")]
+        [Category("3.Временные характеристики(дата/время)")]
+        [ReadOnly(true)]        
+        
+        public DateTime End1  { get; set; }
 
         /// <summary>
         /// Get the duration of this Task
         /// </summary>
+        [DisplayName("Длительность")]
+        [Description("Длительность выполнения операции (в днях)")]
+        [Category("2.Временные характеристики")]
+        [ReadOnly(true)]
         public int Duration { get; internal set; }
+
+       
+        /// <summary>
+        /// Get EqID of this Task
+        /// </summary>
+        [DisplayName("Оборудование")]
+        [Description("Оборудование на котором выполнялась операция")]
+        [Category("4.Технические характеристики")]
+        [ReadOnly(true)]
+        public string EqID { get; set; }
 
         /// <summary>
         /// Convert this Task to a descriptive string
@@ -47,7 +89,7 @@ namespace GanttChart
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[Name = {0}, Start = {1}, End = {2}, Duration = {3}]", Name, Start, End, Duration);
+            return string.Format("[Название = {0}, Старт = {1}, Конец = {2}, Длительность = {3}], Оборудование = {4}", Name, Start, End, Duration, EqID);
         }
     }
 

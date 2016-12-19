@@ -26,6 +26,7 @@ namespace GanttChart
         HashSet<T> _mRegister = new HashSet<T>();
         List<T> _mRootTasks = new List<T>();
         List<T> _mCriticalTask = new List<T>();
+        List<T> _mTasks = new List<T>();
         Dictionary<T, List<T>> _mTaskGroups = new Dictionary<T, List<T>>();
         Dictionary<T, HashSet<T>> _mDependents = new Dictionary<T, HashSet<T>>();
         Dictionary<T, HashSet<R>> _mResources = new Dictionary<T, HashSet<R>>();
@@ -92,9 +93,14 @@ namespace GanttChart
                 _mDependents[task] = new HashSet<T>();
                 _mResources[task] = new HashSet<R>();
                 _mParentOfChild[task] = null;
+                _mTasks.Add(task);
             }
         }
 
+        public List<T> getTasks(){
+            return _mTasks;
+        }
+ 
         /// <summary>
         /// add critical task
         /// </summary>

@@ -923,6 +923,15 @@ namespace GanttChart
 
         private void _DrawHeader(Graphics graphics, Rectangle clipRect)
         {
+            // draw "Now" line
+            /*
+            float xf = (_mProject.Now + 1.5f) * BarWidth;
+            var pen = new Pen(Color.Yellow);//директивный срок
+            pen.Width = 4.5f;
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+            graphics.DrawLine(pen, new PointF(xf, _mViewport.Y), new PointF(xf, _mViewport.Rectangle.Bottom));
+            */            
+
             var info = _mHeaderInfo;
             var viewRect = _mViewport.Rectangle;
             var e = new HeaderPaintEventArgs(graphics, clipRect, this, this.Font, this.HeaderFormat);
@@ -953,17 +962,16 @@ namespace GanttChart
 
                 // draw h1 label and rects
                 __DrawHeaderOne(graphics, i, e, h2textrect);
-            }
-
-            // draw "Now" line
-            float xf = (_mProject.Now + 1.5f) * BarWidth;
-            var pen = new Pen(Color.Yellow);//директивный срок
-            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-            graphics.DrawLine(pen, new PointF(xf, _mViewport.Y), new PointF(xf, _mViewport.Rectangle.Bottom));
+            }                       
         }
 
         private void _DrawColumns(Graphics graphics)
         {
+            //draw Now Line
+            var pattern1 = new System.Drawing.Drawing2D.HatchBrush(HatchStyle.ForwardDiagonal, Color.Red, Color.LightPink);
+            graphics.FillRectangle(pattern1, new Rectangle((_mProject.Now + 1) * BarWidth, HeaderOneHeight + HeaderTwoHeight, BarWidth, Convert.ToInt32(_mViewport.WorldHeight) + 50));
+            
+            
             // draw column lines
             graphics.DrawRectangles(this.HeaderFormat.Border, _mHeaderInfo.Columns.ToArray());
 
