@@ -16,6 +16,7 @@ namespace Debugger.FindExceptions.Seachers
         public WarningEquipmentDowntime(List<IDecision> dlist, Dictionary<int,IOperation> opdic)
         {
             this.opdic = opdic;
+            this.dlist = dlist;
             //doit
         }
 
