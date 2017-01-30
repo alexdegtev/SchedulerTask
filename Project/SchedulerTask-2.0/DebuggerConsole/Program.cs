@@ -24,10 +24,10 @@ namespace DebuggerConsole
                 Console.WriteLine("Неверная входная командная строка");
                 Environment.Exit(1);
             }
-            if(!argsParser.isInfolog())
-            {
-                ConsoleLogger.Enable();
-            }
+            //if(!argsParser.isInfolog())
+            //{
+            //    ConsoleLogger.Enable();
+            //}
 
             List<IParty> parties = new List<IParty>();
             Dictionary<int, IOperation> operations = new Dictionary<int, IOperation>();
