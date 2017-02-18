@@ -21,8 +21,20 @@ namespace Builder.Equipment
 
             foreach (SingleEquipment e in operation.GetEquipment())
             {
-                if ((e.IsNotOccupied(time)) && (e.GetCalendar().IsInterval(time, out intervalIndex)) && (e.GetCalendar().WillRelease(time, t, intervalIndex)))
+                if ((e.IsNotOccupied(time)) && (e.GetCalendar().IsInterval(time, out intervalIndex)))
                 {
+                    if (!(e.GetCalendar().WillRelease(time, t, intervalIndex)))
+                    {
+                        DateTime newStartData = new DateTime();
+                        if ( operation.GetParty().GetEndTimeParty() > newStartData)
+                            {
+                                newStartData = operation.GetParty().GetEndTimeParty();
+                            }
+                        double hours = 0;
+                        hours = hours + ((operation.GetDuration().TotalHours * 24) / (operation.GetEquipment().GetTimeWorkInTwentyFourHours().TotalHours));
+                        DateTime newEndData = newStartData + (new TimeSpan((int)hours, 0, 0));
+                        IO.Reader.UpdateCalendars(newStartData, newEndData);
+                    }
                     equipment = e;
                     operationTime = e.GetCalendar().GetTimeofRelease(time, t, intervalIndex);
                     return true;
