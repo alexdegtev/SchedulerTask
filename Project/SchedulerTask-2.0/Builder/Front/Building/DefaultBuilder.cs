@@ -87,9 +87,8 @@ namespace Builder.Front.Building
                             operation.SetOperationInPlan(events[0].Time, operationTime, equipment);
                             equipment.OccupyEquip(events[0].Time, operationTime);
                             operationsTmp.Remove(operation);
+                            events.Add(new Event(operationTime));
                         }
-
-                        events.Add(new Event(operationTime));
                     }
 
                     events.RemoveFirst();
