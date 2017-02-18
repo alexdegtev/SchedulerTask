@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<InformationModel date_begin="01.04.2016 8:00:00" date_end="04.05.2016 17:00:00" xmlns= "http://tempuri.org/VariableData.xsd">
+<InformationModel date_begin="10.04.2016 8:00:00" date_end="04.05.2016 17:00:00" xmlns= "http://tempuri.org/VariableData.xsd">
   <WaresInformation>
     <Product name="Стойка X">
       <Part name="Стойка X01-1" num_products="1" num_plate="1" priority="1" date_begin="10.04.2016" date_end="04.05.2016">
