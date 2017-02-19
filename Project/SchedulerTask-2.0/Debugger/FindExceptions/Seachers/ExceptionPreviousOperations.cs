@@ -48,8 +48,8 @@ namespace Debugger.FindExceptions.Seachers
                             exceptions.Add(new Exception("V03",
                                                  "Error",
                                                  "Несоответствие набора исходных операций операциям в расписании",
-                                                 prevOperation.ToString(),
-                                                 ""));
+                                                 "Предшествующая не назначенная операция : " + prevOperation.ToString(),
+                                                 "Текущая операция : " + decision.GetOperation().ToString()));
                         }
                     }
                 }

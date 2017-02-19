@@ -24,14 +24,15 @@ namespace Debugger.FindExceptions.Seachers
            
             foreach (var decision in decisions)
             {
-                if (decision.GetEndTime() < operations[decision.GetOperation().GetId()].GetParty().GetEndTimeParty())
+                System.DateTime directTime = operations[decision.GetOperation().GetId()].GetParty().GetEndTimeParty();
+                if (decision.GetEndTime() > directTime)
                 {
                     
                     exceptions.Add(new Exception("D00",
                                                  "Warning",
                                                  "В построенном расписании имеется нарушение директивного срока",
-                                                 decision.ToString(),
-                                                 ""));
+                                                 "Назначенная операция :" + decision.ToString(),
+                                                 "Директивный срок : " + directTime.ToString()));
                 }
             }
 
