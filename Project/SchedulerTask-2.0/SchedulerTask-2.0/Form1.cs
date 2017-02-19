@@ -16,6 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Debugger.Exceptions;
 
 
 
@@ -54,7 +55,7 @@ namespace SchedulerTask_2._0
 
         void _mChart_TaskSelected(object sender, TaskMouseEventArgs e)
         {
-            propertyGrid1.SelectedObjects = chart1.SelectedTasks.Select(x => _mManager.IsPart(x) ? _mManager.SplitTaskOf(x) : x).ToArray();            
+            propertyGrid1.SelectedObjects = chart1.SelectedTasks.Select(x => x).ToArray();            
 
         }
 
@@ -259,29 +260,25 @@ namespace SchedulerTask_2._0
 
             _mManager.Now = (int)Math.Round(span.TotalDays) -1; // set the "Now" marker at the correct date
 
-
             _mManager.ClearAll();
 
             var deadline = parties[0].GetEndTimeParty();
 
             foreach (var decision in decisions)
             {
-                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName().ToString(), EqID = decision.GetEquipment().ToString(), Start1 = decision.GetStartTime(), End1 = decision.GetEndTime() };
+                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName().ToString(), EqID = decision.GetEquipment().ToString(), Start1 = decision.GetStartTime(), End1 = decision.GetEndTime(), DurationFull = (decision.GetEndTime() - decision.GetStartTime()) };
                 _mManager.Add(task);
                 var startTime = decision.GetStartTime() - _mManager.Start;
-                var endTime = decision.GetEndTime() - decision.GetStartTime();
-                _mManager.SetStart(task, (int)Math.Round(startTime.TotalDays));
-                _mManager.SetDuration(task, (int)Math.Round(endTime.TotalDays));
+                var endTime = decision.GetEndTime() - decision.GetStartTime();                
+                _mManager.SetStart(task, (int)(startTime.TotalDays));
+                _mManager.SetDuration(task, (int)(endTime.TotalDays));
                 if (decision.GetEndTime() > deadline)
                 {
                     critTask.Add(task);
                 }
             }
 
-            //var task1 = new MyTask(_mManager) { Name = "My Test Task" };
-            //_mManager.Add(task1);            
-            //_mManager.SetStart(task1, 15);
-            //_mManager.SetDuration(task1, 6);
+            
         }//add tasks
 
         private void scheduleAnalysis()
@@ -289,7 +286,11 @@ namespace SchedulerTask_2._0
             foreach (var task in critTask)
             {
                 _mManager.AddCritical(task);
+                //_mManager.AddWartingTask(task);
             }
+            
+            //Debugger.IO.LogReader reader = new Debugger.IO.LogReader(folderName);
+            //Debugger.Exceptions.ExceptionsList list = reader.ReadData(out new ExceptionsList);
         }
 
         private void runConsoleApp()
@@ -328,6 +329,7 @@ namespace SchedulerTask_2._0
         List<IDecision> decisions = null;
         List<IException> exceptions = null;
         List<Task> critTask = new List<Task>();
+        List<Task> warningTask = new List<Task>();
         
     }
 

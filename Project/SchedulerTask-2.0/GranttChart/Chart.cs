@@ -1051,6 +1051,7 @@ namespace GanttChart
             int row = 0;
             //var crit_task_set = new HashSet<Task>(_mProject.CriticalPaths.SelectMany(x => x));   
             var crit_task_set = _mProject.getCriticalTask();
+            var warning_task_set = _mProject.getWarningTask();
             var pen = new Pen(Color.Gray);
             float labelMargin = this.BarWidth / 2.0f + 3.0f;
             pen.DashStyle = DashStyle.Dot;
@@ -1065,7 +1066,10 @@ namespace GanttChart
                 {
                     // Crtical Path
                     bool critical = crit_task_set.Contains(task);
+                    bool warning = warning_task_set.Contains(task);
                     if (critical) e = new TaskPaintEventArgs(graphics, clipRect, this, task, row, critical, this.Font, this.CriticalTaskFormat);
+                    else if (warning)
+                        e = new TaskPaintEventArgs(graphics, clipRect, this, task, row, critical, this.Font, this.WarningTaskForamt);
                     else e = new TaskPaintEventArgs(graphics, clipRect, this, task, row, critical, this.Font, this.TaskFormat);
                     if (PaintTask != null) PaintTask(this, e);
 
