@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 
 namespace Debugger.IO
 {
-    class LogReader
+    public class LogReader
     {
         string input;
         public LogReader(string input)

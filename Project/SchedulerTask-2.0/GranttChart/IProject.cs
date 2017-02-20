@@ -33,36 +33,29 @@ namespace GanttChart
 
         /// <summary>
         /// Get the start time of this Task relative to the project start
-        /// </summary>
-        [DisplayName("Начало")]
-        [Description("Дата начала операции, ")]
-        [Category("2.Временные характеристики(програмные)")]
-        [ReadOnly(true)]
+        /// </summary>        
+        [Browsable(false)]
         public int Start { get; internal set; }
 
         [DisplayName("Начало")]
         [Description("Дата окончания операции")]
-        [Category("3.Временные характеристики(дата/время)")]
-        [ReadOnly(true)]       
-        public DateTime Start1 { get;  set; }
+        [Category("2.Временные характеристики")]
+        [ReadOnly(true)]
+        public DateTime Start1 { get; set; }
 
         /// <summary>
         /// Get the end time of this Task relative to the project start
-        /// </summary>
-        [DisplayName("Завершено ")]
-        [Description("Дата окончания операции")]
-        [Category("2.Временные характеристики(програмные)")]
-        [ReadOnly(true)]        
-        
+        /// </summary>        
+        [Browsable(false)]
         public int End { get; internal set; }
 
 
         [DisplayName("Завершено")]
         [Description("Дата окончания операции")]
-        [Category("3.Временные характеристики(дата/время)")]
-        [ReadOnly(true)]        
-        
-        public DateTime End1  { get; set; }
+        [Category("2.Временные характеристики")]
+        [ReadOnly(true)]
+
+        public DateTime End1 { get; set; }
 
         /// <summary>
         /// Get the duration of this Task
@@ -71,9 +64,19 @@ namespace GanttChart
         [Description("Длительность выполнения операции (в днях)")]
         [Category("2.Временные характеристики")]
         [ReadOnly(true)]
+        [Browsable(false)]
         public int Duration { get; internal set; }
 
-       
+        /// <summary>
+        /// Длительность
+        /// </summary>
+        [DisplayName("Длительность")]
+        [Description("Длительность выполнения операции (день.часы:минуты:секунды)")]
+        [Category("2.Временные характеристики")]
+        [ReadOnly(true)]
+        public TimeSpan DurationFull { get; set; }
+
+
         /// <summary>
         /// Get EqID of this Task
         /// </summary>
@@ -89,7 +92,7 @@ namespace GanttChart
         /// <returns></returns>
         public override string ToString()
         {
-            return string.Format("[Название = {0}, Старт = {1}, Конец = {2}, Длительность = {3}], Оборудование = {4}", Name, Start, End, Duration, EqID);
+            return string.Format("[Название = {0}, Старт = {1}, Конец = {2}, Длительность = {3}], Оборудование = {4}", Name, Start1, End1, Duration, EqID);
         }
     }
 

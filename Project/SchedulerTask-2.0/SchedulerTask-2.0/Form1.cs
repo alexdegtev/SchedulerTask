@@ -19,6 +19,7 @@ using System.Windows.Forms;
 
 
 
+
 namespace SchedulerTask_2._0
 {
     public partial class Form1 : Form
@@ -54,7 +55,7 @@ namespace SchedulerTask_2._0
 
         void _mChart_TaskSelected(object sender, TaskMouseEventArgs e)
         {
-            propertyGrid1.SelectedObjects = chart1.SelectedTasks.Select(x => _mManager.IsPart(x) ? _mManager.SplitTaskOf(x) : x).ToArray();            
+            propertyGrid1.SelectedObjects = chart1.SelectedTasks.Select(x => x).ToArray();            
 
         }
 
@@ -259,37 +260,60 @@ namespace SchedulerTask_2._0
 
             _mManager.Now = (int)Math.Round(span.TotalDays) -1; // set the "Now" marker at the correct date
 
-
             _mManager.ClearAll();
 
             var deadline = parties[0].GetEndTimeParty();
 
+            reader = new Debugger.IO.LogReader(folderName);
+            reader.ReadData(out list);            
+
             foreach (var decision in decisions)
             {
-                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName().ToString(), EqID = decision.GetEquipment().ToString(), Start1 = decision.GetStartTime(), End1 = decision.GetEndTime() };
+                var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName().ToString(), EqID = decision.GetEquipment().ToString(), Start1 = decision.GetStartTime(), End1 = decision.GetEndTime(), DurationFull = (decision.GetEndTime() - decision.GetStartTime()) };
                 _mManager.Add(task);
                 var startTime = decision.GetStartTime() - _mManager.Start;
-                var endTime = decision.GetEndTime() - decision.GetStartTime();
-                _mManager.SetStart(task, (int)Math.Round(startTime.TotalDays));
-                _mManager.SetDuration(task, (int)Math.Round(endTime.TotalDays));
+                var endTime = decision.GetEndTime() - decision.GetStartTime();                
+                _mManager.SetStart(task, (int)(startTime.TotalDays));
+                _mManager.SetDuration(task, (int)(endTime.TotalDays));
+
+                foreach (var exeption in list.getExeptionList())
+                {
+                    if (exeption.ErrorStatus.Equals("Warning"))
+                    {
+                        if (exeption.ReferenceResource.ScheduleFile.Equals(decision.GetOperation().GetName().ToString()))
+                        {
+                            warningTask.Add(task);
+                        }
+                    }
+                    else if (exeption.ErrorStatus.Equals("Error"))
+                    {
+                        if (exeption.ReferenceResource.ScheduleFile.Equals(decision.GetOperation().GetName().ToString()))
+                        {
+                            critTask.Add(task);
+                        }
+                    }
+                }
+
                 if (decision.GetEndTime() > deadline)
                 {
-                    critTask.Add(task);
+                   warningTask.Add(task);
                 }
             }
 
-            //var task1 = new MyTask(_mManager) { Name = "My Test Task" };
-            //_mManager.Add(task1);            
-            //_mManager.SetStart(task1, 15);
-            //_mManager.SetDuration(task1, 6);
+            
         }//add tasks
 
         private void scheduleAnalysis()
         { 
             foreach (var task in critTask)
             {
-                _mManager.AddCritical(task);
+                _mManager.AddCritical(task);                
             }
+            foreach (var task in warningTask)
+            {
+                _mManager.AddWartingTask(task);
+            }
+
         }
 
         private void runConsoleApp()
@@ -328,6 +352,9 @@ namespace SchedulerTask_2._0
         List<IDecision> decisions = null;
         List<IException> exceptions = null;
         List<Task> critTask = new List<Task>();
+        List<Task> warningTask = new List<Task>();
+        Debugger.Exceptions.ExceptionsList list = new ExceptionsList();
+        Debugger.IO.LogReader reader;// = new Debugger.IO.LogReader(folderName);
         
     }
 

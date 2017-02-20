@@ -60,7 +60,7 @@ namespace Debugger.FindExceptions
                 exceptions.AddRange(search.Execute());
 
             return exceptions;
-        }
+        } 
     }
 }
 

@@ -26,6 +26,7 @@ namespace GanttChart
         HashSet<T> _mRegister = new HashSet<T>();
         List<T> _mRootTasks = new List<T>();
         List<T> _mCriticalTask = new List<T>();
+        List<T> _mWarningTask = new List<T>();
         List<T> _mTasks = new List<T>();
         Dictionary<T, List<T>> _mTaskGroups = new Dictionary<T, List<T>>();
         Dictionary<T, HashSet<T>> _mDependents = new Dictionary<T, HashSet<T>>();
@@ -110,6 +111,15 @@ namespace GanttChart
             _mCriticalTask.Add(task);
 
         }
+        /// <summary>
+        /// add warning task
+        /// </summary>
+        /// <param name="task"></param>
+        public void AddWartingTask(T task)
+        {
+            _mWarningTask.Add(task);
+        }
+
         /// <summary>
         /// Clear All Task
         /// </summary>
@@ -530,6 +540,11 @@ namespace GanttChart
         {
             return _mCriticalTask;
 
+        }
+
+        public List<T> getWarningTask() 
+        {
+            return _mWarningTask;
         }
 
         /// <summary>
@@ -1120,7 +1135,7 @@ namespace GanttChart
 
                     // assign end value
                     task.End = value;
-                    task.Duration = task.End - task.Start;
+                    task.Duration = task.End - task.Start;                    
 
                     _RecalculateDependantsOf(task);
 
