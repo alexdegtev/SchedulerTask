@@ -8,6 +8,10 @@ namespace Debugger.Exceptions
         public string CollectionName;
         private List<Exception> exceptions;
 
+        public ExceptionsList()
+        {
+            this.exceptions = new List<Exception>();
+        }
         public ExceptionsList(List<IException> exceptions)
         {
             this.exceptions = new List<Exception>();
@@ -61,6 +65,11 @@ namespace Debugger.Exceptions
         IEnumerator IEnumerable.GetEnumerator()
         {
             return exceptions.GetEnumerator();
+        }
+
+        public List<Exception> getExeptionList()
+        {
+            return exceptions;
         }
     }
 }

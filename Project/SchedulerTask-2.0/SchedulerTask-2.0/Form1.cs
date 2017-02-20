@@ -16,7 +16,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Debugger.Exceptions;
+
 
 
 
@@ -264,6 +264,9 @@ namespace SchedulerTask_2._0
 
             var deadline = parties[0].GetEndTimeParty();
 
+            reader = new Debugger.IO.LogReader(folderName);
+            reader.ReadData(out list);            
+
             foreach (var decision in decisions)
             {
                 var task = new MyTask(_mManager) { Name = decision.GetOperation().GetName().ToString(), EqID = decision.GetEquipment().ToString(), Start1 = decision.GetStartTime(), End1 = decision.GetEndTime(), DurationFull = (decision.GetEndTime() - decision.GetStartTime()) };
@@ -272,9 +275,28 @@ namespace SchedulerTask_2._0
                 var endTime = decision.GetEndTime() - decision.GetStartTime();                
                 _mManager.SetStart(task, (int)(startTime.TotalDays));
                 _mManager.SetDuration(task, (int)(endTime.TotalDays));
+
+                foreach (var exeption in list.getExeptionList())
+                {
+                    if (exeption.ErrorStatus.Equals("Warning"))
+                    {
+                        if (exeption.ReferenceResource.ScheduleFile.Equals(decision.GetOperation().GetName().ToString()))
+                        {
+                            warningTask.Add(task);
+                        }
+                    }
+                    else if (exeption.ErrorStatus.Equals("Error"))
+                    {
+                        if (exeption.ReferenceResource.ScheduleFile.Equals(decision.GetOperation().GetName().ToString()))
+                        {
+                            critTask.Add(task);
+                        }
+                    }
+                }
+
                 if (decision.GetEndTime() > deadline)
                 {
-                    critTask.Add(task);
+                   warningTask.Add(task);
                 }
             }
 
@@ -285,12 +307,13 @@ namespace SchedulerTask_2._0
         { 
             foreach (var task in critTask)
             {
-                _mManager.AddCritical(task);
-                //_mManager.AddWartingTask(task);
+                _mManager.AddCritical(task);                
             }
-            
-            //Debugger.IO.LogReader reader = new Debugger.IO.LogReader(folderName);
-            //Debugger.Exceptions.ExceptionsList list = reader.ReadData(out new ExceptionsList);
+            foreach (var task in warningTask)
+            {
+                _mManager.AddWartingTask(task);
+            }
+
         }
 
         private void runConsoleApp()
@@ -330,6 +353,8 @@ namespace SchedulerTask_2._0
         List<IException> exceptions = null;
         List<Task> critTask = new List<Task>();
         List<Task> warningTask = new List<Task>();
+        Debugger.Exceptions.ExceptionsList list = new ExceptionsList();
+        Debugger.IO.LogReader reader;// = new Debugger.IO.LogReader(folderName);
         
     }
 
